@@ -13,7 +13,8 @@ sudo chown -R www-data storage/
 sudo chmod -R 777 storage/
 sudo chown -R www-data public/
 
-
+* Ademas ejecutar lo siguiente para crear el archivo raiz donde se guardaran los documetos
+php artisan make:link
 
 
 
