@@ -21,11 +21,9 @@ class TipoDocumento extends Migration
         {
             $tabla->id('IdTipoDocumento');
             $tabla->string('Nombre');
-            $tabla->text('Descripcion');
+            $tabla->text('Descripcion')->nullable();
             $tabla->date('FechaCreacion');
             $tabla->integer('Estado')->default(1);
-
-            //$tabla->primary('IdTipoDocumento');
         });
     }
 

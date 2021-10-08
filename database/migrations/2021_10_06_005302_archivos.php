@@ -27,7 +27,6 @@ class Archivos extends Migration
             $tabla->date('FechaModificacion')->nullable();
             $tabla->integer('Estado')->default(1);
 
-            //$tabla->primary('IdDocumento');
             $tabla->foreign('IdDocumento')->references('IdDocumento')->on('Documentos');
         });
     }

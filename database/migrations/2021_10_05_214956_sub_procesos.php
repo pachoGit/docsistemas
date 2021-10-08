@@ -26,7 +26,6 @@ class SubProcesos extends Migration
             $tabla->date('FechaCreacion');
             $tabla->integer('Estado')->default(1);
 
-            //$tabla->primary('IdSubProceso');
             $tabla->foreign('IdProceso')->references('IdProceso')->on('Procesos');
         });
     }

@@ -26,7 +26,6 @@ class GrupoDocumentos extends Migration
             $tabla->date('FechaCreacion');
             $tabla->integer('Estado')->default(1);
 
-            //$tabla->primary('IdGrupoDocumento');
             $tabla->foreign('IdSubProceso')->references('IdSubProceso')->on('SubProcesos');
         });
     }

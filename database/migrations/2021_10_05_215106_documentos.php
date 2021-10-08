@@ -28,7 +28,6 @@ class Documentos extends Migration
             $tabla->date('FechaCreacion');
             $tabla->integer('Estado')->default(1);
 
-            //$tabla->primary('IdDocumento');
             $tabla->foreign('IdGrupoDocumento')->references('IdGrupoDocumento')->on('GrupoDocumentos');
             $tabla->foreign('IdTipoDocumento')->references('IdTipoDocumento')->on('TipoDocumento');
             $tabla->foreign('IdUnidad')->references('IdUnidad')->on('Unidades');

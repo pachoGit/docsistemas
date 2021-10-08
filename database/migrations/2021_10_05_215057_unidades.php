@@ -22,8 +22,6 @@ class Unidades extends Migration
             $tabla->string('Nombre');
             $tabla->date('FechaCreacion');
             $tabla->integer('Estado')->default(1);
-
-            //$tabla->primary('IdUnidad');
         });
     }
 

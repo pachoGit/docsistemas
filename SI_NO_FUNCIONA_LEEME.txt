@@ -13,8 +13,24 @@ sudo chown -R www-data storage/
 sudo chmod -R 777 storage/
 sudo chown -R www-data public/
 
+************** PASOS PARA DAR INICIO AL USO DEL SISTEMA **************
+
 * Ademas ejecutar lo siguiente para crear el archivo raiz donde se guardaran los documetos
-php artisan make:link
+php artisan storage:link
+
+* Generar la base de datos
+php artisan migrate:fresh --seed
+
+    * Si con el anterior comando la base de datos no se ha llenado con los valores predeterminados, ejecute lo siguiente
+    php artisan db:seed
+    
+    * Si con el comando anterior aun no se llena, tedran que ejecutarlo manualmente, para ello ejecute lo siguiente
+    php artisan db:seed --class=ProcesosSeeder
+    php artisan db:seed --class=SubProcesosSeeder
+    php artisan db:seed --class=UnidadesSeeder
+    php artisan db:seed --class=EstandaresSeeder
+    php artisan db:seed --class=TipoDocumentoSeeder
+
 
 
 

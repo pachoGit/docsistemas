@@ -25,7 +25,6 @@ class DocPorEstand extends Migration
             $tabla->date('FechaCreacion');
             $tabla->integer('Estado')->default(1);
 
-            //$tabla->primary('IdDocPorEstand');
             $tabla->foreign('IdDocumento')->references('IdDocumento')->on('Documentos');
             $tabla->foreign('IdEstandar')->references('IdEstandar')->on('Estandares');
         });

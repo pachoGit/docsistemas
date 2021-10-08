@@ -21,11 +21,9 @@ class Estandares extends Migration
         {
             $tabla->id('IdEstandar');
             $tabla->integer('Numero');
-            $tabla->string('Nombre');
+            $tabla->string('Nombre')->nullable();
             $tabla->date('FechaCreacion');
             $tabla->integer('Estado')->default(1);
-
-            //$tabla->primary('IdEstandar');
         });
     }
 
