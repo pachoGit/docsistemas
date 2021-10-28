@@ -20,10 +20,10 @@ class SubProcesos extends Migration
         Schema::create('SubProcesos', function (Blueprint $tabla)
         {
             $tabla->id('IdSubProceso');
-            $tabla->unsignedBigInteger('IdProceso');
-            $tabla->string('Nombre');
-            $tabla->string('Ubicacion');
-            $tabla->date('FechaCreacion');
+            $tabla->unsignedBigInteger('IdProceso')->nullable();
+            $tabla->string('Nombre')->nullable();
+            $tabla->string('Ubicacion')->nullable();
+            $tabla->date('FechaCreacion')->nullable();
             $tabla->integer('Estado')->default(1);
 
             $tabla->foreign('IdProceso')->references('IdProceso')->on('Procesos');

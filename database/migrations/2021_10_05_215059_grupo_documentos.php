@@ -20,10 +20,11 @@ class GrupoDocumentos extends Migration
         Schema::create('GrupoDocumentos', function (Blueprint $tabla)
         {
             $tabla->id('IdGrupoDocumento');
-            $tabla->unsignedBigInteger('IdSubProceso');
-            $tabla->string('Nombre');
-            $tabla->string('Ubicacion');
-            $tabla->date('FechaCreacion');
+            $tabla->unsignedBigInteger('IdSubProceso')->nullable();
+            $tabla->string('Nombre')->nullable();
+            $tabla->string('Descripcion')->nullable();
+            $tabla->string('Ubicacion')->nullable();
+            $tabla->date('FechaCreacion')->nullable();
             $tabla->integer('Estado')->default(1);
 
             $tabla->foreign('IdSubProceso')->references('IdSubProceso')->on('SubProcesos');

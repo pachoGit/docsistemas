@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="{{ asset('docsistemas/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('docsistemas/plugins/daterangepicker/daterangepicker.css') }}">
 	<link rel="stylesheet" href="{{ asset('docsistemas/plugins/summernote/summernote-bs4.min.css') }}">
+	@yield('css')
     </head>
 
 
@@ -34,7 +35,7 @@
 			<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 		    </li>
 		    <li class="nav-item d-none d-sm-inline-block">
-			<a href="index.html" class="nav-link">Inicio</a>
+			<a href="{{ route('inicio') }}" class="nav-link">Inicio</a>
 		    </li>
 		</ul>
 
@@ -118,79 +119,62 @@
 			    <li class="nav-header">PROCESOS</li>
 
 			    <li class="nav-item">
-				<a href="pages/calendar.html" class="nav-link active">
+				@if (isset($item_inicio))
+				    <a href="{{ route('inicio') }}" class="nav-link active">
+				@else
+				    <a href="{{ route('inicio') }}" class="nav-link">
+				@endif
 				    <i class="nav-icon far fa-calendar-alt"></i>
+
 				    <p>
 					Inicio
 				    </p>
 				</a>
 			    </li>
 
-			    <li class="nav-item">
-				<a href="#" class="nav-link">
-				    <i class="nav-icon fas fa-tachometer-alt"></i>
-				    <p>
-					Procesos estratégicos
-					<i class="right fas fa-angle-left"></i>
-				    </p>
-				</a>
+			    @php
+			    $procesos = session('menu');
+			    $iconos = ['fa-chart-pie', 'fa-columns', 'fa-plus-square', 'fa-edit'];
+			    $iicono = 0;
+			    @endphp
 
-				<ul class="nav nav-treeview">
-				    <x-item-menu-simple href="#" contenido="Planificación del programa de estudio"/>
-				    <x-item-menu-simple href="#" contenido="Gestión de perfil de egresado"/>
-				</ul>
+			    @foreach ($procesos as $proceso => $subprocesos)
+				<li class="nav-item">
+				    @if ($item_proceso_activo === $proceso)
+					<x-item-menu-desplegable
+					    contenido="{{ $proceso }}"
+					    :icono="$iconos[$iicono++]"
+					    estado="active"
+					/>
+				    @else
+					<x-item-menu-desplegable
+					    contenido="{{ $proceso }}"
+					    :icono="$iconos[$iicono++]"
+					    estado=""
+					/>
+				    @endif
+				    
+				    <ul class="nav nav-treeview">
+					@foreach ($subprocesos as $subproceso)
+					    @if ($item_subproceso_activo === $subproceso['Nombre'])
+						<x-item-menu-simple
+						    href="{{ route('subproceso-versubprocesos', $subproceso['IdSubProceso']) }}"
+						    contenido="{{ $subproceso['Nombre'] }}"
+						    estado="active"
+						/>
+					    @else
+						<x-item-menu-simple
+						    href="{{ route('subproceso-versubprocesos', $subproceso['IdSubProceso']) }}"
+						    contenido="{{ $subproceso['Nombre'] }}"
+						    estado=""
+						/>
+					    @endif
+					@endforeach
+				    </ul>
 
-			    </li>
+				</li>
+			    @endforeach
 
-			    <li class="nav-item">
-				<a href="#" class="nav-link">
-				    <i class="nav-icon fas fa-copy"></i>
-				    <p>
-					Procesos misionales
-					<i class="fas fa-angle-left right"></i>
-				    </p>
-				</a>
-				<ul class="nav nav-treeview">
-				    <x-item-menu-simple href="#" contenido="Enseñanza y aprendizaje"/>
-				    <x-item-menu-simple href="#" contenido="I + D + I"/>
-				    <x-item-menu-simple href="#" contenido="Responsabilidad Social"/>
-				    <x-item-menu-simple href="#" contenido="Docencia"/>
-				    <x-item-menu-simple href="#" contenido="Seguimiento a estudiantes"/>
-				    <x-item-menu-simple href="#" contenido="Seguimiento a egresados"/>
-				</ul>
-
-			    </li>
-
-			    <li class="nav-item">
-				<a href="#" class="nav-link">
-				    <i class="nav-icon fas fa-chart-pie"></i>
-				    <p>
-					Procesos de apoyo
-					<i class="right fas fa-angle-left"></i>
-				    </p>
-				</a>
-				<ul class="nav nav-treeview">
-				    <x-item-menu-simple href="#" contenido="Bienestar universitario"/>
-				    <x-item-menu-simple href="#" contenido="Recursos humanos"/>
-				    <x-item-menu-simple href="#" contenido="Infraestructura y mantenimiento"/>
-				    <x-item-menu-simple href="#" contenido="Gestión Financiera"/>
-				</ul>
-
-			    </li>
-
-			    <li class="nav-item">
-				<a href="#" class="nav-link">
-				    <i class="nav-icon fas fa-tree"></i>
-				    <p>
-					Procesos de evaluación y control
-					<i class="fas fa-angle-left right"></i>
-				    </p>
-				</a>
-				<ul class="nav nav-treeview">
-				    <x-item-menu-simple href="#" contenido="Aseguramiento de calidad"/>
-				</ul>
-
-			    </li>
 			</ul>
 
 		    </nav>
@@ -268,6 +252,7 @@
 	<script src="{{ asset('docsistemas/dist/js/adminlte.js') }}"></script>
 	<script src="{{ asset('docsistemas/dist/js/demo.js') }}"></script>
 	<script src="{{ asset('docsistemas/dist/js/pages/dashboard.js') }}"></script>
+	@yield('js')
     </body>
 </html>
 

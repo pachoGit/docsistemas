@@ -20,9 +20,9 @@ class Estandares extends Migration
         Schema::create('Estandares', function (Blueprint $tabla)
         {
             $tabla->id('IdEstandar');
-            $tabla->integer('Numero');
+            $tabla->integer('Numero')->nullable();
             $tabla->string('Nombre')->nullable();
-            $tabla->date('FechaCreacion');
+            $tabla->date('FechaCreacion')->nullable();
             $tabla->integer('Estado')->default(1);
         });
     }

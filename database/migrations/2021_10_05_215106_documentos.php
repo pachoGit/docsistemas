@@ -20,12 +20,16 @@ class Documentos extends Migration
         Schema::create('Documentos', function (Blueprint $tabla)
         {
             $tabla->id('IdDocumento');
-            $tabla->unsignedBigInteger('IdGrupoDocumento');
-            $tabla->unsignedBigInteger('IdTipoDocumento');
-            $tabla->unsignedBigInteger('IdUnidad');
-            $tabla->string('Nombre');
-            $tabla->string('Ubicacion');
-            $tabla->date('FechaCreacion');
+            $tabla->unsignedBigInteger('IdGrupoDocumento')->nullable();
+            $tabla->unsignedBigInteger('IdTipoDocumento')->nullable();
+            $tabla->unsignedBigInteger('IdUnidad')->nullable();
+            $tabla->string('Codigo')->nullable();
+            $tabla->string('Nombre')->nullable();
+            $tabla->string('UbicacionVirtual')->nullable();
+            $tabla->string('UbicacionFisica')->nullable();
+            $tabla->unsignedInteger('Version')->nullable();
+            $tabla->date('FechaAprovacion')->nullable();
+            $tabla->date('FechaCreacion')->nullable();
             $tabla->integer('Estado')->default(1);
 
             $tabla->foreign('IdGrupoDocumento')->references('IdGrupoDocumento')->on('GrupoDocumentos');

@@ -19,8 +19,8 @@ class Unidades extends Migration
         Schema::create('Unidades', function (Blueprint $tabla)
         {
             $tabla->id('IdUnidad');
-            $tabla->string('Nombre');
-            $tabla->date('FechaCreacion');
+            $tabla->string('Nombre')->nullable();
+            $tabla->date('FechaCreacion')->nullable();
             $tabla->integer('Estado')->default(1);
         });
     }

@@ -20,9 +20,9 @@ class Procesos extends Migration
         Schema::create('Procesos', function (Blueprint $tabla)
         {
             $tabla->id('IdProceso');
-            $tabla->string('Nombre');
+            $tabla->string('Nombre')->nullable();
             $tabla->string('Ubicacion')->nullable();
-            $tabla->date('FechaCreacion');
+            $tabla->date('FechaCreacion')->nullable();
             $tabla->integer('Estado')->default(1);
         });
     }

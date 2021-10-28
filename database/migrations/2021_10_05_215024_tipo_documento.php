@@ -20,9 +20,9 @@ class TipoDocumento extends Migration
         Schema::create('TipoDocumento', function (Blueprint $tabla)
         {
             $tabla->id('IdTipoDocumento');
-            $tabla->string('Nombre');
+            $tabla->string('Nombre')->nullable();
             $tabla->text('Descripcion')->nullable();
-            $tabla->date('FechaCreacion');
+            $tabla->date('FechaCreacion')->nullable();
             $tabla->integer('Estado')->default(1);
         });
     }

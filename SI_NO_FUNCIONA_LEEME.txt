@@ -4,18 +4,14 @@ Algunas consideraciones cuando se usa en entornos Linux
 sudo a2enmod rewrite
 sudo systemctl restart apache2.service
 
-* El usuario 'www-data' (en Ubuntu) debe tener permisos para las carpetas 'public' y 'storage'
-* Ubicarse en la raiz del proyecto (/var/www/html/docsistemas) y ejecutar lo siguiente:
-* NOTA: Para otros entornos que no sean Ubuntu...averiguar el usuario ya que puede que no
-*       sea 'www-data'
+* Dar permisos a las siguientes carpetas
 
-sudo chown -R www-data storage/
 sudo chmod -R 777 storage/
-sudo chown -R www-data public/
+sudo chmod -R 777 public/
 
 ************** PASOS PARA DAR INICIO AL USO DEL SISTEMA **************
 
-* Ademas ejecutar lo siguiente para crear el archivo raiz donde se guardaran los documetos
+* Ejecutar lo siguiente para crear el archivo raiz donde se guardaran los documetos
 php artisan storage:link
 
 * Generar la base de datos
@@ -30,8 +26,6 @@ php artisan migrate:fresh --seed
     php artisan db:seed --class=UnidadesSeeder
     php artisan db:seed --class=EstandaresSeeder
     php artisan db:seed --class=TipoDocumentoSeeder
-
-
-
+    php artisan db:seed --class=GrupoDocumentosSeeder
 
 

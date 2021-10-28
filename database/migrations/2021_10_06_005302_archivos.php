@@ -20,10 +20,12 @@ class Archivos extends Migration
         Schema::create('Archivos', function (Blueprint $tabla)
         {
             $tabla->id('IdArchivo');
-            $tabla->unsignedBigInteger('IdDocumento');
-            $tabla->string('Nombre');
-            $tabla->string('Ubicacion');
-            $tabla->date('FechaCreacion');
+            $tabla->unsignedBigInteger('IdDocumento')->nullable();
+            $tabla->string('Nombre')->nullable();
+            $tabla->string('UbicacionVirtual')->nullable();
+            $tabla->unsignedInteger('Version')->nullable();
+            $tabla->date('FechaCreacion')->nullable();
+            $tabla->date('FechaAprovacion')->nullable();
             $tabla->date('FechaModificacion')->nullable();
             $tabla->integer('Estado')->default(1);
 

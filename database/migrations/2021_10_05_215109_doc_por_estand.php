@@ -20,9 +20,9 @@ class DocPorEstand extends Migration
         Schema::create('DocPorEstand', function (Blueprint $tabla)
         {
             $tabla->id('IdDocPorEstand');
-            $tabla->unsignedBigInteger('IdDocumento');
-            $tabla->unsignedBigInteger('IdEstandar');
-            $tabla->date('FechaCreacion');
+            $tabla->unsignedBigInteger('IdDocumento')->nullable();
+            $tabla->unsignedBigInteger('IdEstandar')->nullable();
+            $tabla->date('FechaCreacion')->nullable();
             $tabla->integer('Estado')->default(1);
 
             $tabla->foreign('IdDocumento')->references('IdDocumento')->on('Documentos');
