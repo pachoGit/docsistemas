@@ -46,7 +46,7 @@ class SubProcesosSeeder extends Seeder
 
             // SubProcesos de los Procesos de Evaluacion y Control
             [
-                ['Nombre' => 'Aseguramiento de Calidad', 'Ubicacion' => 'public/raiz/Apoyo/AsCalidad', 'FechaCreacion' => $fecha]
+                ['Nombre' => 'Aseguramiento de Calidad', 'Ubicacion' => 'public/raiz/EvalControl/AsCalidad', 'FechaCreacion' => $fecha]
             ]
         ];
 
