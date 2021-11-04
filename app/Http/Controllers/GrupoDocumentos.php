@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\GrupoDocumentosModelo;
 use App\Http\Controllers\Util;
@@ -31,6 +32,7 @@ class GrupoDocumentos extends Controller
                  'FechaCreacion' => Util::retFechaCreacion()];
 
         $this->moGrupoDocumentos->create($data);
+        $this->crearCarpeta($ubicacion);
         return redirect()->route('subproceso-versubprocesos', $idSubProceso)
                          ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha creado el grupo de documentos correctamente']);
     }
@@ -62,10 +64,32 @@ class GrupoDocumentos extends Controller
         ]);
     }
 
+    /**
+     * Generar la ubicacion de la carpeta de un grupo de documentos
+     *
+     * @var $idSubProceso - Id del subproceso al que pertenece el nuevo grupo de documentos
+     * @var $nombre       - Nombre de la carpeta del nuevo grupo de documentos
+     *
+     * @return string     - Ruta completa de la nueva carpeta
+     */
     private function generarUbicacion($idSubProceso, $nombre)
     {
         $ubicacion = Util::retUbicacionDeSubProceso($idSubProceso);
         $ubicacion .= '/' . Util::eliminarEspacios($nombre);
         return $ubicacion;
+    }
+
+    /**
+     * Crear una carpeta para un grupo de documentos
+     *
+     * @var $ruta   - Ruta de la carpeta de un grupo de documentos
+     *
+     * @return bool
+     */
+    private function crearCarpeta($ruta)
+    {
+        // Explicado en el archivo LEEME.md y database/seeders/GrupoDocumentosSeeder.php
+        $ruta = str_replace('raiz/', '', $ruta);
+        return Storage::makeDirectory($ruta);
     }
 }
