@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 use App\Models\GrupoDocumentosModelo;
 use App\Http\Controllers\Util;
@@ -24,15 +23,15 @@ class GrupoDocumentos extends Controller
         $descripcion = $solicitud->input('descripcion');
         $ubicacion = $this->generarUbicacion($idSubProceso, $nombre);
 
-
         $data = ['IdSubProceso'  => $idSubProceso, 
                  'Nombre'        => $nombre,
                  'Descripcion'   => $descripcion,
                  'Ubicacion'     => $ubicacion,
                  'FechaCreacion' => Util::retFechaCreacion()];
 
+        // TODO: Gestionar errores
+        Util::crearCarpeta($ubicacion);
         $this->moGrupoDocumentos->create($data);
-        $this->crearCarpeta($ubicacion);
         return redirect()->route('subproceso-versubprocesos', $idSubProceso)
                          ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha creado el grupo de documentos correctamente']);
     }
@@ -76,20 +75,11 @@ class GrupoDocumentos extends Controller
     {
         $ubicacion = Util::retUbicacionDeSubProceso($idSubProceso);
         $ubicacion .= '/' . Util::eliminarEspacios($nombre);
+        if (!is_dir($ubicacion))
+            return $ubicacion;
+        // Si la ubicacion (la carpeta) ya existe, agregamos la fecha y hora de
+        // creacion al nombre de la carpeta
+        $ubicacion .= '-' . Util::retFechaHora();
         return $ubicacion;
-    }
-
-    /**
-     * Crear una carpeta para un grupo de documentos
-     *
-     * @var $ruta   - Ruta de la carpeta de un grupo de documentos
-     *
-     * @return bool
-     */
-    private function crearCarpeta($ruta)
-    {
-        // Explicado en el archivo LEEME.md y database/seeders/GrupoDocumentosSeeder.php
-        $ruta = str_replace('raiz/', '', $ruta);
-        return Storage::makeDirectory($ruta);
     }
 }

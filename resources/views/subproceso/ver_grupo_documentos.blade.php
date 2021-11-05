@@ -68,7 +68,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="card-body">
 			    <div class="form-group">
 				<label for="nombre">Nombre del grupo</label>
-				<input type="text" class="form-control" name="nombre" id="nombre" minlength="3" maxlength="255" placeholder="Nombre del nuevo grupo de documentos">
+				<input type="text" class="form-control" name="nombre" id="nombre" minlength="3" maxlength="255" placeholder="Nombre del nuevo grupo de documentos" required>
 			    </div>
 			    <div class="form-group">
 				<label>Descripción del grupo</label>

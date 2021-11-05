@@ -34,7 +34,7 @@ class GrupoDocumentosSeeder extends Seeder
                 [
                     'IdSubProceso' => $subProceso->IdSubProceso,
                     'Nombre'       => 'Todos',
-                    'Descripcion'  => 'Todos los archivos del proceso de' . $subProceso->Nombre,
+                    'Descripcion'  => 'Todos los archivos del proceso de ' . $subProceso->Nombre,
                     'Ubicacion'    => $subProceso->Ubicacion . '/Todos',
                     'FechaCreacion' => $fecha
                 ]

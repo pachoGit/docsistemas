@@ -31,7 +31,11 @@ Route::post('grupo/crear/{IdSubProceso}', [GrupoDocumentos::class, 'crear'])->na
 Route::post('grupo/editar/{IdGrupoDocumento}', [GrupoDocumentos::class, 'editar'])->name('grupo-editar');
 Route::get('grupo/eliminar/{IdGrupoDocumento}', [GrupoDocumentos::class, 'eliminar'])->name('grupo-eliminar');
 
+/* Documentos */
+
 Route::get('documentos/todos/{IdGrupoDocumento}', [Documentos::class, 'todos'])->name('documentos-todos');
 Route::post('documentos/crear/{IdGrupoDocumento}', [Documentos::class, 'crear'])->name('documentos-crear');
 
 Route::get('documentos/vistacrear/{IdGrupoDocumento}', [Documentos::class, 'vistaCrear'])->name('documentos-vcrear');
+
+/* Fin Documentos */

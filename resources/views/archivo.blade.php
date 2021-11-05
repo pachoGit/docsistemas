@@ -1,3 +1,11 @@
+@php
+
+$item_inicio = 'active';
+$item_proceso_activo = '';
+$item_subproceso_activo = '';
+
+@endphp
+
 @extends('esqueleto/esqueleto')
 
 @section('titulo-pagina', 'Archivos')

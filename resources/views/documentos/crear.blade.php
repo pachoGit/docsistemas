@@ -15,21 +15,36 @@ $item_subproceso_activo = $subProceso->Nombre;
 
     <div class="card card-primary">
 	<div class="card-header">
-            <h3 class="card-title">Nuevo documento</h3>
+            <h3 class="card-title">Nuevo documento ({{ $grupo->Nombre }})</h3>
 	</div>
 
-	<form>
+	<form method="post" action="{{ route('documentos-crear', $grupo->IdGrupoDocumento) }}" enctype="multipart/form-data">
+	    @csrf
+	    @method('post')
             <div class="card-body">
 		<div class="row">
 		    <div class="col-md-6">
 			<div class="form-group">
 			    <label for="codigo">Código del documento</label>
-			    <input type="text" class="form-control" id="codigo" placeholder="Ingrese el código del documento" maxlength="255">
+			    <input type="text" class="form-control" id="codigo" name="codigo" placeholder="Ingrese el código del documento" maxlength="255" minlength="1" required>
 			</div>
+		    </div>
 
+		    <div class="col-md-6">
+			<div class="form-group">
+			    <label for="nombre">Nombre del documento</label>
+			    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del documento" maxlength="255" minlength="3" required>
+			</div>
+		    </div>
+		    
+		</div>
+
+		<div class="row">
+
+		    <div class="col-md-4">
 			<div class="form-group">
 			    <label>Tipo de documento</label>
-			    <select name="tipo" class="form-control select2bs4" style="width: 100%;">
+			    <select name="tipo" class="form-control select2bs4" style="width: 100%;" required>
 				@foreach ($tipos as $tipo)
 				    <option value="{{ $tipo->IdTipoDocumento }}">{{ $tipo->Nombre }}</option>
 				@endforeach
@@ -37,29 +52,36 @@ $item_subproceso_activo = $subProceso->Nombre;
 			</div>
 		    </div>
 
-		    <div class="col-md-6">
-			<div class="form-group">
-			    <label for="nombre">Nombre del documento</label>
-			    <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre del documento" maxlength="255" minlength="3">
-			</div>
-
+		    <div class="col-md-4">
 			<div class="form-group">
 			    <label>Unidad</label>
-			    <select name="unidad" class="form-control select2bs4" style="width: 100%;">
+			    <select name="unidad" class="form-control select2bs4" style="width: 100%;" required>
 				@foreach ($unidades as $unidad)
 				    <option value="{{ $unidad->IdUnidad }}">{{ $unidad->Nombre }}</option>
 				@endforeach
 			    </select>
 			</div>
 		    </div>
-		    
+
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <label>Estandares</label>
+			    <select name="estandares[]" class="select2bs4" multiple data-placeholder="Seleccione los estandares"
+				    style="width: 100%;" required>
+				@foreach ($estandares as $estandar)
+				<option value="{{ $estandar->IdEstandar }}">{{ $estandar->Numero . '. ' . $estandar->Nombre }}</option>
+				@endforeach
+			    </select>
+			</div>
+		    </div>
+
 		</div>
 
 		<div class="row">
 		    <div class="col-md-4">
 			<div class="form-group">
-			    <label for="ubicacion">Ubicación del documento</label>
-			    <input type="text" class="form-control" id="ubicacion" placeholder="Ingrese el ubicación del documento" maxlength="255">
+			    <label for="ubicacion-fisica">Ubicación física del documento</label>
+			    <input type="text" class="form-control" id="ubicacion-fisica" placeholder="Ingrese el ubicación del documento" maxlength="255" minlength="3" name="ubicacion-fisica">
 			</div>
 		    </div>
 
@@ -67,7 +89,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label>Fecha de aprovación:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input type="text" class="form-control datetimepicker-input" data-target="#reservationdate"/>
+				<input type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" required/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
@@ -78,18 +100,18 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="version">Versión del documento</label>
-			    <input type="number" class="form-control" id="version" min="0" placeholder="Ingrese la versión del documento">
+			    <input type="number" class="form-control" id="version" min="0" placeholder="Ingrese la versión del documento" name="version">
 			</div>
 		    </div>
 
 		</div>
 
                 <div class="form-group">
-		    <label for="archivo">Subir archivo</label>
+		    <label for="exampleInputFile">Subir archivo</label>
 		    <div class="input-group">
 			<div class="custom-file">
-			    <input name="archivo" type="file" class="custom-file-input" id="archivo" accept="application/pdf, application/msword, .doc, .docx">
-			    <label class="custom-file-label" for="archivo">Elija el archivo</label>
+			    <input name="archivo" type="file" class="custom-file-input" id="exampleInputFile" accept="application/pdf, application/msword, .doc, .docx .pdf" required>
+			    <label class="custom-file-label" for="exampleInputFile">Elija el archivo</label>
 			</div>
 			<div class="input-group-append">
 			    <span class="input-group-text">Subir</span>
@@ -101,10 +123,22 @@ $item_subproceso_activo = $subProceso->Nombre;
 
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Aceptar</button>
-                <button type="button" class="btn btn-secondary">Cancelar</button>
+                <a href="{{ route('documentos-todos', $grupo->IdGrupoDocumento) }}" class="btn btn-secondary">Cancelar</a>
             </div>
 	</form>
     </div>
+
+    <!-- Errores -->
+    @if ($errors->any())
+	@foreach ($errors->all() as $error)
+	    <div class="toasts-top-right fixed col-md-6" id="alerta">
+		<x-alerta tipo="danger" titulo='Error'>
+		    {{ $error }}
+		</x-alerta>
+	    </div>
+	@endforeach
+    @endif
+    <!-- Errores/ -->
 
 @endsection()
 
@@ -115,29 +149,30 @@ $item_subproceso_activo = $subProceso->Nombre;
     <link rel="stylesheet" href="{{ asset('docsistemas/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('docsistemas/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css') }}">
     <link rel="stylesheet" href="{{ asset('docsistemas/plugins/bs-stepper/css/bs-stepper.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('docsistemas/plugins/dropzone/min/dropzone.min.css') }}">
 @endsection()
 
 @section('js')
-    <script src="{{ asset('docsistemas/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <script src="{{ asset('docsistemas/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') }}"></script>
     <script src="{{ asset('docsistemas/plugins/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('docsistemas/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
     <script src="{{ asset('docsistemas/plugins/inputmask/jquery.inputmask.min.js') }}"></script>
     <script src="{{ asset('docsistemas/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
     <script src="{{ asset('docsistemas/plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
     <script src="{{ asset('docsistemas/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
-
+    <script src="{{ asset('docsistemas/plugins/dropzone/min/dropzone.min.js') }}"></script>
     <script>
      $(function () {
+
+	 bsCustomFileInput.init();
+
 	 //Initialize Select2 Elements
 	 $('.select2').select2()
 
-	 $('.select2bs4').select2({                                                                                                          
-	     theme: 'bootstrap4'                                                                                                               
+	 //Initialize Select2 Elements
+	 $('.select2bs4').select2({
+	     theme: 'bootstrap4'
 	 })
-
-	 $(function () {
-	     bsCustomFileInput.init();
-	 });
 
 	 //Datemask dd/mm/yyyy
 	 $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
@@ -148,7 +183,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 	 //Date picker
 	 $('#reservationdate').datetimepicker({
-             format: 'L'
+             format: 'YYYY-MM-DD'
 	 });
 
 	 //Date and time picker
@@ -191,6 +226,14 @@ $item_subproceso_activo = $subProceso->Nombre;
 	 //Bootstrap Duallistbox
 	 $('.duallistbox').bootstrapDualListbox()
 
+	 //Colorpicker
+	 $('.my-colorpicker1').colorpicker()
+	 //color picker with addon
+	 $('.my-colorpicker2').colorpicker()
+
+	 $('.my-colorpicker2').on('colorpickerChange', function(event) {
+	     $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
+	 })
 
 	 $("input[data-bootstrap-switch]").each(function(){
 	     $(this).bootstrapSwitch('state', $(this).prop('checked'));
@@ -201,7 +244,61 @@ $item_subproceso_activo = $subProceso->Nombre;
      document.addEventListener('DOMContentLoaded', function () {
 	 window.stepper = new Stepper(document.querySelector('.bs-stepper'))
      })
+     // DropzoneJS Demo Code Start
+     Dropzone.autoDiscover = false
 
+     // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+     var previewNode = document.querySelector("#template")
+     previewNode.id = ""
+     var previewTemplate = previewNode.parentNode.innerHTML
+     previewNode.parentNode.removeChild(previewNode)
+
+     var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+	 url: "/target-url", // Set the url
+						    thumbnailWidth: 80,
+						    thumbnailHeight: 80,
+						    parallelUploads: 20,
+						    previewTemplate: previewTemplate,
+						    autoQueue: false, // Make sure the files aren't queued until manually added
+						    previewsContainer: "#previews", // Define the container to display the previews
+						    clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+     })
+
+     myDropzone.on("addedfile", function(file) {
+	 // Hookup the start button
+	 file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file) }
+     })
+
+     // Update the total progress bar
+     myDropzone.on("totaluploadprogress", function(progress) {
+	 document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
+     })
+
+     myDropzone.on("sending", function(file) {
+	 // Show the total progress bar when upload starts
+	 document.querySelector("#total-progress").style.opacity = "1"
+	 // And disable the start button
+	 file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
+     })
+
+     // Hide the total progress bar when nothing's uploading anymore
+     myDropzone.on("queuecomplete", function(progress) {
+	 document.querySelector("#total-progress").style.opacity = "0"
+     })
+
+     // Setup the buttons for all transfers
+     // The "add files" button doesn't need to be setup because the config
+     // `clickable` has already been specified.
+     document.querySelector("#actions .start").onclick = function() {
+	 myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
+     }
+     document.querySelector("#actions .cancel").onclick = function() {
+	 myDropzone.removeAllFiles(true)
+     }
+     // DropzoneJS Demo Code End
+
+     // Para las alertas
+     $("#alerta").hide(5000);
     </script>
 
 @endsection()
