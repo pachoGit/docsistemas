@@ -23,6 +23,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			</a>
 		    </h3>
 		</div>
+
 		<!-- /.card-header -->
 		<div class="card-body">
                     <table id="example1" class="table table-bordered table-striped">
@@ -32,27 +33,27 @@ $item_subproceso_activo = $subProceso->Nombre;
 				<th>Nombre</th>
 				<th>Tipo</th>
 				<th>Fecha de Aprovación</th>
-				<th>Nro Versión</th>
+				<th>Versión Actual</th>
 			    </tr>
 			</thead>
 			<tbody>
-			    <tr>
-				<td>Trident</td>
-				<td>Internet
-				    Explorer 4.0
-				</td>
-				<td>Win 95+</td>
-				<td> 4</td>
-				<td>X</td>
-			    </tr>
+			    @foreach ($documentos as $documento)
+				<tr>
+				    <td>{{ $documento->Codigo }}</td>
+				    <td>{{ $documento->Nombre }}</td>
+				    <td>{{ $documento->Tipo }}</td>
+				    <td>{{ $documento->FechaAprovacion }}</td>
+				    <td>{{ $documento->Version }}</td>
+				</tr>
+			    @endforeach
 			</tbody>
 			<tfoot>
 			    <tr>
-				<th>Rendering engine</th>
-				<th>Browser</th>
-				<th>Platform(s)</th>
-				<th>Engine version</th>
-				<th>CSS grade</th>
+				<th>Código</th>
+				<th>Nombre</th>
+				<th>Tipo</th>
+				<th>Fecha de Aprovación</th>
+				<th>Versión Actual</th>
 			    </tr>
 			</tfoot>
                     </table>
@@ -63,6 +64,22 @@ $item_subproceso_activo = $subProceso->Nombre;
         </div>
         <!-- /.col -->
     </div>
+
+    @php
+    var_dump($documentos->toArray());
+    @endphp
+
+
+    @if (($info = session('Informacion')))
+	@if ($info['Estado'] === 'Correcto')
+	    <div class="toasts-top-right fixed col-md-6" id="alerta">
+		<x-alerta tipo="success" titulo='Éxito'>
+		    {{ $info['Mensaje'] }}
+		</x-alerta>
+	    </div>
+	@endif
+    @endif
+
 
 @endsection()
 
@@ -97,6 +114,10 @@ $item_subproceso_activo = $subProceso->Nombre;
 	     "responsive": true,
 	 });
      });
+
+     // Ocultar la alerta
+     $("#alerta").hide(5000);
+     
     </script>
 
 

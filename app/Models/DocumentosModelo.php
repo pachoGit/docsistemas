@@ -15,6 +15,10 @@ class DocumentosModelo extends Model
 
     protected $primaryKey = 'IdDocumento';
 
+    protected $fillable = ['IdGrupoDocumento', 'IdTipoDocumento', 'IdUnidad', 'Codigo',
+                           'Nombre', 'UbicacionVirtual', 'UbicacionFisica', 'Version',
+                           'FechaAprovacion', 'FechaCreacion', 'Estado'];
+
     public $timestamps = false;
     
     /**

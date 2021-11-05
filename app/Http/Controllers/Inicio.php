@@ -18,7 +18,6 @@ class Inicio extends Controller
                
     public function index()
     {
-        // Generamos los datos que siempre estan disponibles en todas las vistas
         $this->generarDataDefecto();
         return view('inicio');
     }
