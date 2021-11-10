@@ -35,6 +35,9 @@ Route::get('grupo/eliminar/{IdGrupoDocumento}', [GrupoDocumentos::class, 'elimin
 
 Route::get('documentos/todos/{IdGrupoDocumento}', [Documentos::class, 'todos'])->name('documentos-todos');
 Route::post('documentos/crear/{IdGrupoDocumento}', [Documentos::class, 'crear'])->name('documentos-crear');
+Route::get('documentos/ver/{IdDocumento}', [Documentos::class, 'ver'])->name('documentos-ver');
+Route::post('documentos/editar/{IdDocumento}', [Documentos::class, 'editar'])->name('documentos-editar');
+Route::post('documentos/eliminar/{IdDocumento}', [Documentos::class, 'eliminar'])->name('documentos-eliminar');
 
 Route::get('documentos/vistacrear/{IdGrupoDocumento}', [Documentos::class, 'vistaCrear'])->name('documentos-vcrear');
 
