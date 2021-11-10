@@ -74,7 +74,7 @@ class Util extends Controller
      */
     public static function retFechaHora()
     {
-        return date('Y-m-d_H-i-s');
+        return date('Y-m-d-H-i-s');
     }
 
     /**
@@ -107,7 +107,7 @@ class Util extends Controller
         $nombre = Util::eliminarEspacios($nombre);
         // Eliminamos la extension del archivo para renombrar el archivo
         $nombre = substr($nombre, 0, strrpos($nombre, $archivo->extension()) - 1);
-        $nombre .= ':' . Util::retFechaHora() . '-v' . $version . '.' . $archivo->extension();
+        $nombre .= '_' . Util::retFechaHora() . '-v' . $version . '.' . $archivo->extension();
         return $nombre;
     }
 }

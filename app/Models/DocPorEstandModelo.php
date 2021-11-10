@@ -45,4 +45,15 @@ class DocPorEstandModelo extends Model
                     ->where('IdDocumento', $idDocumento)
                     ->get();
     }
+
+    public function presentarDe($idDocumento)
+    {
+        return $this->join('Documentos', 'Documentos.IdDocumento', '=', 'DocPorEstand.IdDocumento')
+                    ->join('Estandares', 'Estandares.IdEstandar',  '=', 'DocPorEstand.IdEstandar')
+                    ->where('DocPorEstand.Estado', 1)
+                    ->where('DocPorEstand.IdDocumento', $idDocumento)
+                    ->select('Estandares.Nombre as Estandar',
+                             'Estandares.Numero as Numero')
+                    ->get();
+    }
 }

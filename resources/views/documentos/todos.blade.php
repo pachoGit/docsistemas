@@ -29,46 +29,68 @@ $item_subproceso_activo = $subProceso->Nombre;
                     <table id="example1" class="table table-bordered table-striped">
 			<thead>
 			    <tr>
+				<th>Ver</th>
+				<th>Historial</th>
 				<th>Código</th>
 				<th>Nombre</th>
 				<th>Tipo</th>
+				<th>Unidad</th>
 				<th>Fecha de Aprovación</th>
+				<th>Fecha de Creación</th>
 				<th>Versión Actual</th>
+				<th>Estado</th>
+				<th>Acciones</th>
 			    </tr>
 			</thead>
+
 			<tbody>
 			    @foreach ($documentos as $documento)
 				<tr>
+				    <td><a href="{{ route('documentos-ver', $documento->IdDocumento) }}" type="button" class="btn btn-primary btn-block" title="Ver documento"><i class="fa fa-eye"></i></a></td>
+				    <td><a href="" type="button" class="btn btn-primary btn-block" title="Ver historial"><i class="fa fa-book"></i></a></td>
 				    <td>{{ $documento->Codigo }}</td>
-				    <td>{{ $documento->Nombre }}</td>
-				    <td>{{ $documento->Tipo }}</td>
+				    <td>{{ $documento->DNombre }}</td>
+				    <td>{{ $documento->TNombre }}</td>
+				    <td>{{ $documento->UNombre }}</td>
 				    <td>{{ $documento->FechaAprovacion }}</td>
+				    <td>{{ $documento->FechaCreacion }}</td>
 				    <td>{{ $documento->Version }}</td>
+				    <td class="text-center"><button type="button" class="btn btn-success" title="Activo"><i class="fa fa-check"></i></button></td>
+				    <td class="text-center">
+					<div class="btn-group">
+					    <a type="button" class="btn btn-secondary" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i></a>
+					    <a type="button" class="btn btn-warning" title="Editar documento"><i class="fas fa-pencil-alt"></i></a>
+					    <a type="button" class="btn btn-danger" title="Eliminar documento"><i class="fas fa-trash"></i></a>
+					</div>
+				    </td>
 				</tr>
 			    @endforeach
 			</tbody>
+
 			<tfoot>
 			    <tr>
+				<th>Ver</th>
+				<th>Historial</th>
 				<th>Código</th>
 				<th>Nombre</th>
 				<th>Tipo</th>
+				<th>Unidad</th>
 				<th>Fecha de Aprovación</th>
+				<th>Fecha de Creación</th>
 				<th>Versión Actual</th>
+				<th>Estado</th>
+				<th>Acciones</th>
 			    </tr>
 			</tfoot>
                     </table>
 		</div>
 		<!-- /.card-body -->
+
             </div>
             <!-- /.card -->
         </div>
         <!-- /.col -->
     </div>
-
-    @php
-    var_dump($documentos->toArray());
-    @endphp
-
 
     @if (($info = session('Informacion')))
 	@if ($info['Estado'] === 'Correcto')
@@ -79,7 +101,6 @@ $item_subproceso_activo = $subProceso->Nombre;
 	    </div>
 	@endif
     @endif
-
 
 @endsection()
 

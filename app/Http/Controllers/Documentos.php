@@ -59,19 +59,34 @@ class Documentos extends Controller
      */
     public function todos($idGrupoDocumento)
     {
-        $documentos = $this->moGrupoDocumentos->find($idGrupoDocumento)->documentos;
+        $documentos = $this->moDocumentos->presentarTodos($idGrupoDocumento);
         $grupo = $this->moGrupoDocumentos->find($idGrupoDocumento);
         $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
         $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
-        return view('documentos/todos', ['documentos'   => $documentos,
-                                         'grupo'        => $grupo,
-                                         'subProceso'   => $subProceso,
-                                         'procesoPadre' => $procesoPadre]);
+
+        $data = ['documentos'   => $documentos,
+                 'grupo'        => $grupo,
+                 'subProceso'   => $subProceso,
+                 'procesoPadre' => $procesoPadre];
+
+        return view('documentos/todos', $data);
     }
 
-    public function ver()
+    public function ver($idDocumento)
     {
-        
+        $documento = $this->moDocumentos->presentarDe($idDocumento)->first();
+        $estandares = $this->moDocPorEstand->presentarDe($idDocumento);
+        $grupo = $this->moGrupoDocumentos->find($documento->IdGrupoDocumento);
+        $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
+        $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
+
+        $data = ['documento'    => $documento,
+                 'estandares'   => $estandares,
+                 'grupo'        => $grupo,
+                 'subProceso'   => $subProceso,
+                 'procesoPadre' => $procesoPadre];
+
+        return view('documentos/ver', $data);
     }
 
     /**
@@ -136,14 +151,14 @@ class Documentos extends Controller
         
     }
 
-    public function editar()
+    public function editar($idDocumento)
     {
         
     }
 
-    public function eliminar()
+    public function eliminar($idDocumento)
     {
-        
+        return 'Esto es para eliminar el documento: ' . $idDocumento;
     }
 
     public function vistaCrear($idGrupoDocumento)
