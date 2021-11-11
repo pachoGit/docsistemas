@@ -121,6 +121,28 @@ $item_subproceso_activo = $subProceso->Nombre;
 			</div>
 
 		    </div>
+		    @else
+		    <div class="col-md-6">
+			<div class="form-group">
+			    <label for="estandares">Estandares</label>
+			    <textarea id="estandares" class="form-control" cols="30" id="" name="" rows="5" disabled>
+@foreach ($estandares as $estandar)
+{{ $estandar->Numero . '. ' . $estandar->Estandar }}
+@endforeach
+			    </textarea>
+			</div>
+
+		    </div>
+
+		    <div class="col-md-6">
+			<div class="form-group">
+			    <label for="estandares">Motivo de la eliminación</label>
+			    <textarea id="estandares" class="form-control" cols="30" id="" name="" rows="5" disabled>Razon aqui
+			    </textarea>
+			</div>
+
+		    </div>
+		    
 		    @endif
 
 		</div>

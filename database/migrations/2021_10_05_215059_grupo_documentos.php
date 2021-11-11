@@ -22,7 +22,7 @@ class GrupoDocumentos extends Migration
             $tabla->id('IdGrupoDocumento');
             $tabla->unsignedBigInteger('IdSubProceso')->nullable();
             $tabla->string('Nombre')->nullable();
-            $tabla->string('Descripcion')->nullable();
+            $tabla->text('Descripcion')->nullable();
             $tabla->string('Ubicacion')->nullable();
             $tabla->date('FechaCreacion')->nullable();
             $tabla->integer('Estado')->default(1);

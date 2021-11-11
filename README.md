@@ -36,6 +36,7 @@ _Si con el anterior comando la base de datos no se ha llenado con los valores pr
 `php artisan db:seed`
     
 _Si con el comando anterior aun no se llena, tendra que ejecutarlo manualmente, para ello ejecute en orden lo siguiente_
+
 `php artisan db:seed --class=ProcesosSeeder`  
 `php artisan db:seed --class=SubProcesosSeeder`  
 `php artisan db:seed --class=UnidadesSeeder`  

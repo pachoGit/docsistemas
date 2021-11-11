@@ -43,11 +43,13 @@ class DocumentosModelo extends Model
      */
     public function presentarTodos($idGrupoDocumento)
     {
-        return $this->join('TipoDocumento', 'Documentos.IdTipoDocumento', '=', 'TipoDocumento.IdTipoDocumento')
-                    ->join('Unidades',      'Documentos.IdUnidad',    '=', 'Unidades.IdUnidad')
-                    ->select('Documentos.Nombre as DNombre',
-                             'Unidades.Nombre as UNombre',
-                             'TipoDocumento.Nombre as TNombre',
+        return $this->where('GrupoDocumentos.IdGrupoDocumento', $idGrupoDocumento)
+                    ->join('TipoDocumento',   'Documentos.IdTipoDocumento',  '=', 'TipoDocumento.IdTipoDocumento')
+                    ->join('Unidades',        'Documentos.IdUnidad',         '=', 'Unidades.IdUnidad')
+                    ->join('GrupoDocumentos', 'Documentos.IdGrupoDocumento', '=', 'GrupoDocumentos.IdGrupoDocumento')
+                    ->select('Documentos.Nombre',
+                             'Unidades.Nombre as Unidad',
+                             'TipoDocumento.Nombre as Tipo',
                              'Documentos.IdDocumento',
                              'Documentos.IdGrupoDocumento',
                              'Documentos.Codigo',

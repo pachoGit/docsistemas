@@ -4,11 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class Archivo extends Controller
+class Archivos extends Controller
 {
     public function index()
     {
         return view('archivo');
+    }
+
+    /**
+     * Mostrar todos los archivos con 'Estado = 1'
+     *
+     * @var $idDocumento - Id del documento
+     *
+     * @return view
+     *
+     */
+    public function todos($idDocumento)
+    {
+        return 'Esto es para ver los archivos de ' . $idDocumento;
     }
 
     public function guardar(Request $solicitud)
