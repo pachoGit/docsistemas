@@ -18,8 +18,13 @@ $item_subproceso_activo = $subProceso->Nombre;
             <div class="card">
 		<div class="card-header">
                     <h3 class="card-title">
-			<a href="{{ route('documentos-vcrear', $grupo->IdGrupoDocumento) }}" type="button" class="btn btn-block btn-outline-primary">
+			<a href="{{ route('documentos-vcrear', $grupo->IdGrupoDocumento) }}" type="button" class="btn btn-block btn-primary">
 			    <i class="fa fa-plus"></i> Nuevo Documento
+			</a>
+		    </h3>
+		    <h3 class="card-tools">
+			<a href="{{ route('subproceso-versubprocesos', $subProceso->IdSubProceso) }}" type="button" class="btn btn-block btn-secondary">
+			    <i class="fa fa-angle-left"></i> Volver
 			</a>
 		    </h3>
 		</div>
@@ -46,23 +51,33 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<tbody>
 			    @foreach ($documentos as $documento)
 				<tr>
-				    <td><a href="{{ route('documentos-ver', $documento->IdDocumento) }}" type="button" class="btn btn-primary btn-block" title="Ver documento"><i class="fa fa-eye"></i></a></td>
-				    <td><a href="" type="button" class="btn btn-primary btn-block" title="Ver historial"><i class="fa fa-book"></i></a></td>
+				    @if ($documento->Estado === 1)
+					<td><a href="{{ route('documentos-ver', $documento->IdDocumento) }}" type="button" class="btn btn-primary btn-block" title="Ver documento"><i class="fa fa-eye"></i></a></td>
+					<td><a href="{{ route('archivos-todos', $documento->IdDocumento) }}" type="button" class="btn btn-primary btn-block" title="Ver historial"><i class="fa fa-book"></i></a></td>
+				    @else
+					<td><a href="{{ route('documentos-ver', $documento->IdDocumento) }}" type="button" class="btn btn-danger btn-block" title="Ver documento"><i class="fa fa-eye"></i></a></td>
+					<td><a href="{{ route('archivos-todos', $documento->IdDocumento) }}" type="button" class="btn btn-danger btn-block" title="Ver historial"><i class="fa fa-book"></i></a></td>
+				    @endif
 				    <td>{{ $documento->Codigo }}</td>
-				    <td>{{ $documento->DNombre }}</td>
-				    <td>{{ $documento->TNombre }}</td>
-				    <td>{{ $documento->UNombre }}</td>
+				    <td>{{ $documento->Nombre }}</td>
+				    <td>{{ $documento->Tipo }}</td>
+				    <td>{{ $documento->Unidad }}</td>
 				    <td>{{ $documento->FechaAprovacion }}</td>
 				    <td>{{ $documento->FechaCreacion }}</td>
 				    <td>{{ $documento->Version }}</td>
-				    <td class="text-center"><button type="button" class="btn btn-success" title="Activo"><i class="fa fa-check"></i></button></td>
-				    <td class="text-center">
-					<div class="btn-group">
-					    <a type="button" class="btn btn-secondary" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i></a>
-					    <a type="button" class="btn btn-warning" title="Editar documento"><i class="fas fa-pencil-alt"></i></a>
-					    <a type="button" class="btn btn-danger" title="Eliminar documento"><i class="fas fa-trash"></i></a>
-					</div>
-				    </td>
+				    @if ($documento->Estado === 1)
+					<td class="text-center"><button type="button" class="btn btn-success" title="Activo"><i class="fa fa-check"></i></button></td>
+					<td class="text-center">
+					    <div class="btn-group">
+						<a type="button" class="btn btn-secondary" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i></a>
+						<a href="{{ route('documentos-veditar',  $documento->IdDocumento) }}" type="button" class="btn btn-warning" title="Editar documento"><i class="fas fa-pencil-alt"></i></a>
+						<a type="button" class="btn btn-danger" id="eliminar" title="Eliminar documento" data-toggle="modal" data-target="#modal-eliminar" data-action="{{ route('documentos-eliminar', $documento->IdDocumento) }}" data-nombre="{{ $documento->Nombre }}"><i class="fas fa-trash"></i></a>
+					    </div>
+					</td>
+				    @else
+					<td class="text-center"><button type="button" class="btn btn-danger" title="Eliminado"><i class="fa fa-trash"></i></button></td>
+					<td class="text-center"></td>
+				    @endif
 				</tr>
 			    @endforeach
 			</tbody>
@@ -102,6 +117,33 @@ $item_subproceso_activo = $subProceso->Nombre;
 	@endif
     @endif
 
+    <div class="modal fade" id="modal-eliminar">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+		<div class="card card-danger">
+		    <div class="card-header">
+			<h3 class="card-title">Eliminar documento</h3>
+		    </div>
+		    <form method="post" action="">
+			@csrf
+			@method('post')
+			<div class="card-body">
+			    <div class="form-group">
+				<label>Motivo (opcional)</label>
+				<textarea class="form-control" rows="3" name="motivo" placeholder="Ingrese el motivo de eliminar el documento..." maxlength="510"></textarea>
+			    </div>
+			</div>
+			<div class="card-footer">
+			    <button type="submit" class="btn btn-danger">Eliminar</button>
+			    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+			</div>
+		    </form>
+		</div>
+	    </div>
+	</div>
+    </div>
+
+
 @endsection()
 
 @section('js')
@@ -138,6 +180,17 @@ $item_subproceso_activo = $subProceso->Nombre;
 
      // Ocultar la alerta
      $("#alerta").hide(5000);
+
+     // Eliminar el documento
+     $("#modal-eliminar").on("show.bs.modal", (evento) => {
+	 let boton = evento.relatedTarget; // El boton de eliminar que se presiono
+	 let form_action = boton.getAttribute("data-action");
+	 let nombre = boton.getAttribute("data-nombre");
+	 let titulo = $("#modal-eliminar").find(".card-title");
+	 let formulario = $("#modal-eliminar").find("form");
+	 titulo.text("Eliminar documento - " + nombre);
+	 formulario.attr("action", form_action);
+     });
      
     </script>
 

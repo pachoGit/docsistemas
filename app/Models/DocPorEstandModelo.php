@@ -53,7 +53,8 @@ class DocPorEstandModelo extends Model
                     ->where('DocPorEstand.Estado', 1)
                     ->where('DocPorEstand.IdDocumento', $idDocumento)
                     ->select('Estandares.Nombre as Estandar',
-                             'Estandares.Numero as Numero')
+                             'Estandares.Numero as Numero',
+                             'Estandares.IdEstandar')
                     ->get();
     }
 }

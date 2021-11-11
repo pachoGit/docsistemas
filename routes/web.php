@@ -3,10 +3,10 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Inicio;
-use App\Http\Controllers\Archivo;
 use App\Http\Controllers\SubProceso;
 use App\Http\Controllers\GrupoDocumentos;
 use App\Http\Controllers\Documentos;
+use App\Http\Controllers\Archivos;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +20,6 @@ use App\Http\Controllers\Documentos;
 */
 
 Route::get('/', [Inicio::class, 'index'])->name('inicio');
-
-Route::get('archivo', [Archivo::class, 'index'])->name('archivo-index');
-Route::post('archivo', [Archivo::class, 'guardar'])->name('archivo-guardar');
 
 //Route::get('subproceso', [SubProceso::class, 'index']);
 Route::get('subproceso/{IdSubProceso}', [SubProceso::class, 'verGrupoDocumentos'])->name('subproceso-versubprocesos');
@@ -40,5 +37,11 @@ Route::post('documentos/editar/{IdDocumento}', [Documentos::class, 'editar'])->n
 Route::post('documentos/eliminar/{IdDocumento}', [Documentos::class, 'eliminar'])->name('documentos-eliminar');
 
 Route::get('documentos/vistacrear/{IdGrupoDocumento}', [Documentos::class, 'vistaCrear'])->name('documentos-vcrear');
+Route::get('documentos/vistaditar/{IdDocumento}', [Documentos::class, 'vistaEditar'])->name('documentos-veditar');
 
 /* Fin Documentos */
+
+/* Archivos */
+Route::get('archivos/todos/{IdDocumento}', [Archivos::class, 'todos'])->name('archivos-todos');
+
+/* Fin Archivos */

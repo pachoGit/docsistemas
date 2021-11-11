@@ -156,9 +156,17 @@ class Documentos extends Controller
         
     }
 
-    public function eliminar($idDocumento)
+    public function eliminar(Request $solicitud, $idDocumento)
     {
-        return 'Esto es para eliminar el documento: ' . $idDocumento;
+        $motivo = $solicitud->input('motivo');
+        // TODO: Guardar el motivo
+        $documento = $this->moDocumentos->find($idDocumento);
+        $documento->Estado = 0;
+        //$documento->MotivoEliminado = $motivo;
+        $documento->save();
+
+        return redirect()->route('documentos-todos', $documento->IdGrupoDocumento)
+                         ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha eliminado el documento correctamente']);
     }
 
     public function vistaCrear($idGrupoDocumento)
@@ -179,6 +187,32 @@ class Documentos extends Controller
 
         return view('documentos/crear', $data);
     }
+
+    public function vistaEditar($idDocumento)
+    {
+        $documento = $this->moDocumentos->find($idDocumento);
+        $grupo = $this->moGrupoDocumentos->find($documento->IdGrupoDocumento);
+        $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
+        $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
+        $tipoDocumento = $this->moTipoDocumento->todo();
+        $unidades = $this->moUnidades->todo();
+        $estandares = $this->moEstandares->todo();
+        $docEstandares = $this->moDocPorEstand->presentarDe($idDocumento);
+
+        //return var_dump($docEstandares->toArray());
+
+        $data = ['grupo'         => $grupo,
+                 'subProceso'    => $subProceso,
+                 'procesoPadre'  => $procesoPadre,
+                 'tipos'         => $tipoDocumento,
+                 'unidades'      => $unidades,
+                 'estandares'    => $estandares,
+                 'documento'     => $documento,
+                 'docEstandares' => $docEstandares];
+
+        return view('documentos/editar', $data);
+    }
+
 
     private function validar(Request $solicitud)
     {
