@@ -23,6 +23,10 @@ class GrupoDocumentos extends Controller
         $descripcion = $solicitud->input('descripcion');
         $ubicacion = $this->generarUbicacion($idSubProceso, $nombre);
 
+        if ($nombre === 'Todos' || $nombre === 'Otros') // Estos nombres son reservados
+        return redirect()->route('subproceso-versubprocesos', $idSubProceso)
+                         ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'No puede usar este nombre (' . $nombre . '), por favor ingrese otro']);
+
         $data = ['IdSubProceso'  => $idSubProceso, 
                  'Nombre'        => $nombre,
                  'Descripcion'   => $descripcion,
@@ -41,6 +45,10 @@ class GrupoDocumentos extends Controller
         $this->validar($solicitud);
         $nombre = $solicitud->input('nombre');
         $descripcion = $solicitud->input('descripcion');
+
+        if ($nombre === 'Todos' || $nombre === 'Otros') // Estos nombres son reservados
+            return redirect()->route('subproceso-versubprocesos', $idSubProceso)
+                             ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'No puede usar este nombre (' . $nombre . '), por favor ingrese otro']);
 
         $grupo = $this->moGrupoDocumentos->find($idGrupoDocumento);
         $grupo->Nombre = $nombre;

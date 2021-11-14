@@ -28,7 +28,9 @@ class ArchivosModelo extends Model
      */
     public function todo()
     {
-        return $this->where('Estado', 1)->get();
+        return $this->where('Estado', 1)
+                    ->orderBy('FechaCreacion', 'desc')
+                    ->get();
     }
 
     /**
@@ -44,6 +46,7 @@ class ArchivosModelo extends Model
     {
         return $this->where('Estado', 1)
                     ->where('IdDocumento', $idDocumento)
+                    ->orderBy('FechaCreacion', 'desc')
                     ->get();
     }
 }

@@ -8,115 +8,41 @@ $item_subproceso_activo = $subProceso->Nombre;
 @extends('esqueleto/esqueleto')
 
 @section('titulo-pagina')
-    Editar documento de {{ $subProceso->Nombre }}
+    Nueva versión para {{ $documento->Nombre }}
 @endsection()
 
 @section('contenido')
 
+    <div class="callout callout-info">
+	<h5>
+	    <i class="fas fa-info"></i> Nota: 
+	    Al crear un nuevo archivo, este será la versión más reciente, es decir, reemplazará a la versión actual
+	</h5>
+    </div>
+
     <div class="card card-primary">
 	<div class="card-header">
-            <h3 class="card-title">Editar documento ({{ $grupo->Nombre }})</h3>
+            <h3 class="card-title">Nueva versión</h3>
 	</div>
 
-	<form method="post" action="{{ route('documentos-editar', $documento->IdDocumento) }}">
+	<form method="post" action="{{ route('archivos-crear', $documento->IdDocumento) }}" enctype="multipart/form-data">
 	    @csrf
 	    @method('post')
             <div class="card-body">
 		<div class="row">
 		    <div class="col-md-6">
 			<div class="form-group">
-			    <label for="codigo">Código del documento</label>
-			    <input type="text" value="{{ $documento->Codigo }}" class="form-control" id="codigo" name="codigo" placeholder="Ingrese el código del documento" maxlength="255" minlength="1" required>
+			    <label for="codigo">Número de versión</label>
+			    <input value="{{ $documento->Version + 1 }}" type="number" class="form-control" id="version" name="version" placeholder="Ingrese el número de versión" min="0" required>
 			</div>
 		    </div>
+
 
 		    <div class="col-md-6">
 			<div class="form-group">
-			    <label for="nombre">Nombre del documento</label>
-			    <input type="text" value="{{ $documento->Nombre }}" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del documento" maxlength="255" minlength="3" required>
-			</div>
-		    </div>
-		    
-		</div>
-
-		<div class="row">
-
-		    <div class="col-md-4">
-			<div class="form-group">
-			    <label>Tipo de documento</label>
-			    <select name="tipo" class="form-control select2bs4" style="width: 100%;" required>
-				@foreach ($tipos as $tipo)
-				    @if ($tipo->IdTipoDocumento === $documento->IdTipoDocumento)
-					<option value="{{ $tipo->IdTipoDocumento }}" selected>{{ $tipo->Nombre }}</option>
-				    @else
-					<option value="{{ $tipo->IdTipoDocumento }}">{{ $tipo->Nombre }}</option>
-				    @endif
-				@endforeach
-			    </select>
-			</div>
-		    </div>
-
-		    <div class="col-md-4">
-			<div class="form-group">
-			    <label>Unidad</label>
-			    <select name="unidad" class="form-control select2bs4" style="width: 100%;" required>
-				@foreach ($unidades as $unidad)
-				    @if ($unidad->IdUnidad === $documento->IdUnidad)
-					<option value="{{ $unidad->IdUnidad }}" selected>{{ $unidad->Nombre }}</option>
-				    @else
-					<option value="{{ $unidad->IdUnidad }}">{{ $unidad->Nombre }}</option>
-				    @endif
-				@endforeach
-			    </select>
-			</div>
-		    </div>
-
-		    <div class="col-md-4">
-			<div class="form-group">
-			    <label>Estandares</label>
-			    <select name="estandares[]" class="select2bs4" multiple data-placeholder="Seleccione los estandares"
-				    style="width: 100%;" required>
-				@php
-				$encontro = false;
-				foreach ($estandares as $estandar) {
-				foreach ($docEstandares as $docEstandar) {
-				if ($estandar->IdEstandar === $docEstandar->IdEstandar) {
-				$encontro = true;
-				@endphp
-				<option value="{{ $estandar->IdEstandar }}" selected>{{ $estandar->Numero . '. ' . $estandar->Nombre }}</option>
-				@php
-				break;
-				}
-				}
-				if ($encontro === false) {
-				@endphp
-				<option value="{{ $estandar->IdEstandar }}">{{ $estandar->Numero . '. ' . $estandar->Nombre }}</option>
-				@php
-				}
-				else {
-				$encontro = false;
-				}
-				}
-				@endphp
-			    </select>
-			</div>
-		    </div>
-
-		</div>
-
-		<div class="row">
-		    <div class="col-md-4">
-			<div class="form-group">
-			    <label for="ubicacion-fisica">Ubicación física del documento</label>
-			    <input type="text" value="{{ $documento->UbicacionFisica }}" class="form-control" id="ubicacion-fisica" placeholder="Ingrese el ubicación del documento" maxlength="255" minlength="3" name="ubicacion-fisica">
-			</div>
-		    </div>
-
-		    <div class="col-md-4">
-			<div class="form-group">
-			    <label>Fecha de aprovación:</label>
+			    <label>Fecha de aprovación de la versión:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input type="date" value="{{ $documento->FechaAprovacion}}" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" max="{{ date('Y-m-d') }}" required/>
+				<input type="date" name="fecha-aprovacion" class="form-control datetimepicker-input" value="{{ date('Y-m-d') }}" data-target="#reservationdate" max="{{ date('Y-m-d') }}" required/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
@@ -124,10 +50,33 @@ $item_subproceso_activo = $subProceso->Nombre;
 			</div>
 		    </div>
 
-		    <div class="col-md-4">
+		</div>
+
+		<div class="row">
+
+		    <div class="col-md-12">
 			<div class="form-group">
-			    <label for="version">Versión del documento</label>
-			    <input type="number" value="{{ $documento->Version }}" class="form-control" id="version" min="0" placeholder="Ingrese la versión del documento" name="version" readonly>
+			    <label>Motivo del cambio (opcional)</label>
+			    <textarea class="form-control" rows="3" name="motivo" placeholder="Ingrese el motivo de crear la nueva versión..." maxlength="510"></textarea>
+			</div>
+		    </div>
+
+		</div>
+
+		<div class="row">
+
+		    <div class="col-md-12">
+			<div class="form-group">
+			    <label for="exampleInputFile">Subir archivo</label>
+			    <div class="input-group">
+				<div class="custom-file">
+				    <input name="archivo" type="file" class="custom-file-input" id="exampleInputFile" accept="application/pdf, application/msword, .doc, .docx .pdf" required>
+				    <label class="custom-file-label" for="exampleInputFile">Elija el archivo</label>
+				</div>
+				<div class="input-group-append">
+				    <span class="input-group-text">Subir</span>
+				</div>
+			    </div>
 			</div>
 		    </div>
 
@@ -136,13 +85,13 @@ $item_subproceso_activo = $subProceso->Nombre;
 	    </div>
 
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Editar</button>
-                <a href="{{ route('documentos-todos', $grupo->IdGrupoDocumento) }}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Aceptar</button>
+                <a href="{{ route('archivos-todos', $documento->IdDocumento) }}" class="btn btn-secondary">Cancelar</a>
             </div>
 	</form>
     </div>
 
-    <!-- Errores -->
+    <!-- Errores de la funcion validate de la clase Request -->
     @if ($errors->any())
 	@foreach ($errors->all() as $error)
 	    <div class="toasts-top-right fixed col-md-6" id="alerta">
@@ -153,6 +102,24 @@ $item_subproceso_activo = $subProceso->Nombre;
 	@endforeach
     @endif
     <!-- Errores/ -->
+
+    @if (($info = session('Informacion')))
+	@if ($info['Estado'] === 'Correcto')
+	    <div class="toasts-top-right fixed col-md-6" id="alerta">
+		<x-alerta tipo="success" titulo='Éxito'>
+		    {{ $info['Mensaje'] }}
+		</x-alerta>
+	    </div>
+	@elseif ($info['Estado'] === 'Error')
+	    <div class="toasts-top-right fixed col-md-6" id="alerta">
+		<x-alerta tipo="danger" titulo='Error'>
+		    {{ $info['Mensaje'] }}
+		</x-alerta>
+	    </div>
+	@endif
+    @endif
+
+
 
 @endsection()
 
@@ -313,6 +280,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 
      // Para las alertas
      $("#alerta").hide(5000);
+
     </script>
 
 @endsection()

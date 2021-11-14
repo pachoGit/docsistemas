@@ -3,12 +3,35 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+use App\Models\ArchivosModelo;
+use App\Models\GrupoDocumentosModelo;
+use App\Models\DocumentosModelo;
+use App\Models\ProcesosModelo;
+use App\Models\SubProcesosModelo;
+
+use App\Http\Controllers\Util;
 
 class Archivos extends Controller
 {
-    public function index()
+    private $moArchivos = null;
+
+    private $moGrupoDocumentos = null;
+
+    private $moDocumentos = null;
+
+    private $moProcesos = null;
+
+    private $moSubProcesos = null;
+
+    public function __construct()
     {
-        return view('archivo');
+        $this->moArchivos = new ArchivosModelo();
+        $this->moGrupoDocumentos = new GrupoDocumentosModelo();
+        $this->moDocumentos = new DocumentosModelo();
+        $this->moProcesos = new ProcesosModelo();
+        $this->moSubProcesos = new SubProcesosModelo();
     }
 
     /**
@@ -21,19 +44,142 @@ class Archivos extends Controller
      */
     public function todos($idDocumento)
     {
-        return 'Esto es para ver los archivos de ' . $idDocumento;
+        $archivos = $this->moArchivos->todoDe($idDocumento);
+        $documento = $this->moDocumentos->find($idDocumento);
+        $grupo = $this->moGrupoDocumentos->find($documento->IdGrupoDocumento);
+        $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
+        $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
+
+        $data = ['archivos'     => $archivos,
+                 'documento'    => $documento,
+                 'grupo'        => $grupo,
+                 'subProceso'   => $subProceso,
+                 'procesoPadre' => $procesoPadre];
+
+        return view('archivos/todos', $data);
     }
 
-    public function guardar(Request $solicitud)
+    /**
+     * Crear un nuevo 'Archivo' (Una nueva version de un 'Documento')
+     *
+     * @var $solicitud        - Solicitud entrante
+     * @var $idDocumento      - Id del documento
+     *
+     * @return view
+     */
+    public function crear(Request $solicitud, $idDocumento)
     {
+        $this->validar($solicitud);
+        $version = $solicitud->input('version');
+        if ($this->existeVersion(intval($version), $idDocumento))
+            return redirect()->route('archivos-vcrear', $idDocumento)
+                             ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'Ya existe esta versión (' . $version . '), por favor ingrese otro número']);
+        $documento = $this->moDocumentos->find($idDocumento);
         $archivo = $solicitud->file('archivo');
-        $nombre = $archivo->getClientOriginalName();
-        $extension = $archivo->extension();
+        $nombreArchivo = Util::generarNombreArchivo($archivo, $version);
+        
+        $data = [
+            'IdDocumento'       => $idDocumento,
+            'Nombre'            => $nombreArchivo,
+            'UbicacionVirtual'  => $documento->UbicacionVirtual . '/' . $nombreArchivo,
+            'Version'           => $version,
+            //'MotivoCambio'      => $solicitud->input('motivo'),
+            'FechaCreacion'     => Util::retFechaCreacion(),
+            'FechaAprovacion'   => $solicitud->input('fecha-aprovacion'),
+            'FechaModificacion' => Util::retFechaCreacion()
+        ];
+        $this->moArchivos->create($data);
+        // Modificamos la informacion del documento
+        $documento->Version = $version;
+        $documento->FechaAprovacion = $data['FechaAprovacion'];
+        $documento->save();
 
-        $nombre .= date('_d-m-Y_H-i-s');
+        $archivo->storeAs(str_replace('public/raiz/', '', $documento->UbicacionVirtual), $nombreArchivo, 'public');
+        return redirect()->route('archivos-todos', $idDocumento)
+                         ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha creado una nueva version del documento correctamente']);
+    }
 
-        $archivo->storeAs('nuevos', $nombre, 'public');
+    public function eliminar($idArchivo)
+    {
+        $archivo = $this->moArchivos->find($idArchivo);
+        $ubicacion = str_replace('public/raiz', '', $archivo->UbicacionVirtual);
+        // No validamos ya que si no existe el archivo, no pasa nada
+        // aun asi cambiamos de estado al registro
+        Storage::disk('public')->delete($ubicacion);
+        $archivo->Estado = 0;
+        $archivo->save();
+        // Si se esta eliminando la version actual tenemos que modificar al documento
+        $documento = $this->moDocumentos->find($archivo->IdDocumento);
+        if ($documento->Version == $archivo->Version)
+        {
+            // Obtenemos la version mas alta hasta el momento
+            $archivos = $this->moArchivos->where('Estado', 1)
+                                         ->where('IdDocumento', $documento->IdDocumento)
+                                         ->orderBy('Version', 'desc')
+                                         ->get();
+            if ($archivos->count() <= 0)
+            {
+                // El documento no tiene ninguna version
+                $documento->Version = 0;
+                $documento->FechaAprovacion = null;
+            }
+            else
+            {
+                $actual = $archivos->first();
+                $documento->Version = $actual->Version;
+                $documento->FechaAprovacion = $actual->FechaAprovacion;
+            }
+        }
+        $documento->save();
+        return redirect()->route('archivos-todos', $archivo->IdDocumento)
+                         ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha eliiminado la versión correctamente']);
+    }
 
-        return view('archivo', ['mensaje' => $nombre . $extension]);
+    private function validar(Request $solicitud)
+    {
+        return $solicitud->validate([
+            'version'          => ['required', 'numeric'],
+            'motivo'           => ['max:510'],
+            'fecha-aprovacion' => ['date'],
+            'archivo'          => ['required']
+        ]);
+    }
+
+    public function vistaCrear($idDocumento)
+    {
+        $documento = $this->moDocumentos->find($idDocumento);
+        $grupo = $this->moGrupoDocumentos->find($documento->IdGrupoDocumento);
+        $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
+        $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
+        
+        $data = ['grupo'        => $grupo,
+                 'subProceso'   => $subProceso,
+                 'procesoPadre' => $procesoPadre,
+                 'documento'    => $documento];
+
+        return view('archivos/crear', $data);
+    }
+
+    public function descargar($idArchivo)
+    {
+        $archivo = $this->moArchivos->find($idArchivo);
+        $ubicacion = $archivo->UbicacionVirtual;
+        return response()->download(public_path(str_replace('public', '', $ubicacion)));
+    }
+
+    /**
+     * Informa si existe la version de este documento
+     *
+     * @var int $version - La version a verificar
+     *
+     * @return bool 
+     */
+    private function existeVersion($version, $idDocumento)
+    {
+        $archivos = $this->moArchivos->todoDe($idDocumento);
+        foreach ($archivos as $archivo)
+            if ($archivo->Version === $version)
+                return true;
+        return false;
     }
 }

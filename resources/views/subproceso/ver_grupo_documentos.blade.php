@@ -19,7 +19,7 @@ $item_subproceso_activo = $subProceso->Nombre;
             <div class="card">
 		<div class="card-header d-flex p-0">
                     <h3 class="card-title p-3">
-			<button type="button" class="btn btn-block btn-outline-primary" data-toggle="modal" data-target="#nuevo-grupo">
+			<button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#nuevo-grupo">
 			    <i class="fa fa-plus"></i> Nuevo Grupo
 			</button>
 		    </h3>
@@ -104,7 +104,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 				<input type="text" class="form-control" name="nombre" id="nombre" minlength="3" maxlength="255" value="{{ $grupo->Nombre }}">
 			    </div>
 			    <div class="form-group">
-				<label>Descripción del grupo</label>
+				<label>Descripción del grupo (opcional)</label>
 				<textarea class="form-control" rows="3" name="descripcion" minlength="3" maxlength="255">{{ $grupo->Descripcion }}</textarea>
 			    </div>
 			</div>
@@ -127,8 +127,28 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    {{ $info['Mensaje'] }}
 		</x-alerta>
 	    </div>
+	@elseif ($info['Estado'] === 'Error')
+	    <div class="toasts-top-right fixed col-md-6" id="alerta">
+		<x-alerta tipo="danger" titulo='Error'>
+		    {{ $info['Mensaje'] }}
+		</x-alerta>
+	    </div>
 	@endif
     @endif
+
+    <!-- Errores de la funcion validate de la clase Request -->
+    @if ($errors->any())
+	@foreach ($errors->all() as $error)
+	    <div class="toasts-top-right fixed col-md-6" id="alerta">
+		<x-alerta tipo="danger" titulo='Error'>
+		    {{ $error }}
+		</x-alerta>
+	    </div>
+	@endforeach
+    @endif
+    <!-- Errores/ -->
+
+
 
 @endsection()
 
