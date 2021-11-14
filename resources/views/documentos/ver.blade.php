@@ -13,7 +13,11 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 @section('contenido')
 
-    <div class="card card-primary">
+    @if ($documento->Estado === 1)
+	<div class="card card-primary">
+    @else
+	<div class="card card-danger">
+    @endif
 	<div class="card-header">
             <h3 class="card-title">Agrupado en: {{ $grupo->Nombre }}</h3>
 	    @if ($documento->Estado === 1)

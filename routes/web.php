@@ -30,18 +30,27 @@ Route::get('grupo/eliminar/{IdGrupoDocumento}', [GrupoDocumentos::class, 'elimin
 
 /* Documentos */
 
-Route::get('documentos/todos/{IdGrupoDocumento}', [Documentos::class, 'todos'])->name('documentos-todos');
+Route::get('documentos/todos/{IdGrupoDocumento}',  [Documentos::class, 'todos'])->name('documentos-todos');
 Route::post('documentos/crear/{IdGrupoDocumento}', [Documentos::class, 'crear'])->name('documentos-crear');
-Route::get('documentos/ver/{IdDocumento}', [Documentos::class, 'ver'])->name('documentos-ver');
-Route::post('documentos/editar/{IdDocumento}', [Documentos::class, 'editar'])->name('documentos-editar');
-Route::post('documentos/eliminar/{IdDocumento}', [Documentos::class, 'eliminar'])->name('documentos-eliminar');
+Route::get('documentos/ver/{IdDocumento}',         [Documentos::class, 'ver'])->name('documentos-ver');
+Route::post('documentos/editar/{IdDocumento}',     [Documentos::class, 'editar'])->name('documentos-editar');
+Route::post('documentos/eliminar/{IdDocumento}',   [Documentos::class, 'eliminar'])->name('documentos-eliminar');
+Route::get('documentos/descargar/{IdDocumento}',   [Documentos::class, 'descargar'])->name('documentos-descargar');
 
 Route::get('documentos/vistacrear/{IdGrupoDocumento}', [Documentos::class, 'vistaCrear'])->name('documentos-vcrear');
-Route::get('documentos/vistaditar/{IdDocumento}', [Documentos::class, 'vistaEditar'])->name('documentos-veditar');
+Route::get('documentos/vistaditar/{IdDocumento}',      [Documentos::class, 'vistaEditar'])->name('documentos-veditar');
 
 /* Fin Documentos */
 
 /* Archivos */
-Route::get('archivos/todos/{IdDocumento}', [Archivos::class, 'todos'])->name('archivos-todos');
+Route::get('archivos/todos/{IdDocumento}',   [Archivos::class, 'todos'])->name('archivos-todos');
+Route::post('archivos/crear/{IdDocumento}',  [Archivos::class, 'crear'])->name('archivos-crear');
+Route::get('archivos/ver/{IdArchivo}',       [Archivos::class, 'ver'])->name('archivos-ver');
+Route::post('archivos/editar/{IdArchivo}',   [Archivos::class, 'editar'])->name('archivos-editar');
+Route::get('archivos/eliminar/{IdArchivo}', [Archivos::class, 'eliminar'])->name('archivos-eliminar');
+Route::get('archivos/descargar/{IdArchivo}', [Archivos::class, 'descargar'])->name('archivos-descargar');
+
+Route::get('archivos/vistacrear/{IdDocumento}', [Archivos::class, 'vistaCrear'])->name('archivos-vcrear');
+Route::get('archivos/vistaditar/{IdArchivo}',   [Archivos::class, 'vistaEditar'])->name('archivos-veditar');
 
 /* Fin Archivos */

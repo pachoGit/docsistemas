@@ -59,10 +59,13 @@ class Documentos extends Controller
      */
     public function todos($idGrupoDocumento)
     {
-        $documentos = $this->moDocumentos->presentarTodos($idGrupoDocumento);
         $grupo = $this->moGrupoDocumentos->find($idGrupoDocumento);
+        $documentos = $this->moDocumentos->presentarTodos($idGrupoDocumento);
         $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
         $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
+
+        // if ($grupo->Nombre === 'Todos')
+        //     return $this->generarTodosDocumentos($subProceso);
 
         $data = ['documentos'   => $documentos,
                  'grupo'        => $grupo,
@@ -116,14 +119,10 @@ class Documentos extends Controller
             'FechaCreacion'    => Util::retFechaCreacion()
         ];
         $documento = $this->moDocumentos->create($data);
-        foreach ($solicitud->input('estandares') as $estandar)
-        {
-            $data = [
-                'IdDocumento' => $documento->IdDocumento,
-                'IdEstandar'  => $estandar
-            ];
-            $this->moDocPorEstand->create($data);
-        }
+
+        /* Estandares */
+        $this->crearEstandares($solicitud->input('estandares'), $documento);
+
         Util::crearCarpeta($ubicacion);
 
         /* Creacion del 'Archivo' */
@@ -151,9 +150,41 @@ class Documentos extends Controller
         
     }
 
-    public function editar($idDocumento)
+    public function editar(Request $solicitud,  $idDocumento)
     {
-        
+        // No uso la funcion validar, por que ahi valido tambien el archivo :(
+        $solicitud->validate([
+            'codigo'           => ['required', 'max:255', 'min:1'],
+            'nombre'           => ['required', 'max:255', 'min:3'],
+            'tipo'             => ['required'],
+            'unidad'           => ['required'],
+            'ubicacion-fisica' => ['max:255', 'min:3'],
+            'fecha-aprovacion' => ['date']
+        ]);
+        $documento = $this->moDocumentos->find($idDocumento);
+
+        // Modificacion del documento
+        $documento->Codigo = $solicitud->input('codigo');
+        $documento->Nombre = $solicitud->input('nombre');
+        $documento->IdTipoDocumento = $solicitud->input('tipo');
+        $documento->IdUnidad = $solicitud->input('unidad');
+        $documento->UbicacionFisica = $solicitud->input('ubicacion-fisica');
+        $documento->FechaAprovacion = $solicitud->input('fecha-aprovacion');
+        $documento->save();
+
+        // Modificacion de los estandares
+        // Para ello voy a eliminar los estandares anteriores y crear nuevos, es mas facil asi
+        $estandaresActuales = $this->moDocPorEstand->todoDe($idDocumento);
+        foreach ($estandaresActuales as $estandarActual)
+        {
+            $estandarActual->Estado = 0;
+            $estandarActual->save();
+        }
+
+        $this->crearEstandares($solicitud->input('estandares'), $documento);
+
+        return redirect()->route('documentos-todos', $documento->IdGrupoDocumento)
+                         ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha modificado el documento correctamente']);
     }
 
     public function eliminar(Request $solicitud, $idDocumento)
@@ -168,6 +199,18 @@ class Documentos extends Controller
         return redirect()->route('documentos-todos', $documento->IdGrupoDocumento)
                          ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha eliminado el documento correctamente']);
     }
+
+    public function descargar($idDocumento)
+    {
+        $archivos = $this->moArchivos->todoDe($idDocumento);
+        $documento = $this->moDocumentos->find($idDocumento);
+        foreach ($archivos as $archivo)
+            if ($archivo->Version === $documento->Version)
+                return response()->download(public_path(str_replace('public', '', $archivo->UbicacionVirtual)));
+        return redirect()->route('documentos-todos', $documento->IdGrupoDocumento)
+                         ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'No se ha localizado la versión del documento, contacte con el administrador']);
+    }
+
 
     public function vistaCrear($idGrupoDocumento)
     {
@@ -198,8 +241,6 @@ class Documentos extends Controller
         $unidades = $this->moUnidades->todo();
         $estandares = $this->moEstandares->todo();
         $docEstandares = $this->moDocPorEstand->presentarDe($idDocumento);
-
-        //return var_dump($docEstandares->toArray());
 
         $data = ['grupo'         => $grupo,
                  'subProceso'    => $subProceso,
@@ -237,5 +278,24 @@ class Documentos extends Controller
         // creacion al nombre de la carpeta
         $ubicacion .= '-' . Util::retFechaHora();
         return $ubicacion;
+    }
+
+    /**
+     * Crea los estandares del documento
+     *
+     * @var array $estandares - Lista de estandares
+     * @var $documento        - El documento para el cual se creara los estandares
+     *
+     */
+    private function crearEstandares($estandares, $documento)
+    {
+        foreach ($estandares as $estandar)
+        {
+            $data = [
+                'IdDocumento' => $documento->IdDocumento,
+                'IdEstandar'  => $estandar
+            ];
+            $this->moDocPorEstand->create($data);
+        }
     }
 }

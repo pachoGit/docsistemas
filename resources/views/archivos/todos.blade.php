@@ -8,25 +8,53 @@ $item_subproceso_activo = $subProceso->Nombre;
 @extends('esqueleto/esqueleto')
 
 @section('titulo-pagina')
-    Documentos ({{ $grupo->Nombre }}) de {{ $subProceso->Nombre }}
+    Historial de {{ $documento->Nombre }}
 @endsection()
 
 @section('contenido')
 
     <div class="row">
         <div class="col-12">
+	    @if ($documento->Estado === 1)
+		<div class="callout callout-info">
+		    <h5>
+			<i class="fas fa-info"></i> Versión actual: {{ $documento->Version }}
+			<button href="#" class="btn btn-success btn-sm ml-3" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i> Descargar </button>
+		    </h5>
+		    @foreach ($archivos as $archivo)
+			@if ($archivo->Version === $documento->Version)
+			    Nombre del archivo: {{ $archivo->Nombre }}
+			@endif
+		    @endforeach
+		</div>
+	    @else
+		<div class="callout callout-danger">
+		    <h5>
+			<i class="fas fa-danger"></i> El documento ha sido eliminado
+		    </h5>
+		</div>
+	    @endif
+
             <div class="card">
 		<div class="card-header">
-                    <h3 class="card-title">
-			<a href="{{ route('documentos-vcrear', $grupo->IdGrupoDocumento) }}" type="button" class="btn btn-block btn-primary">
-			    <i class="fa fa-plus"></i> Nuevo Documento
-			</a>
-		    </h3>
-		    <h3 class="card-tools">
-			<a href="{{ route('subproceso-versubprocesos', $subProceso->IdSubProceso) }}" type="button" class="btn btn-block btn-secondary">
-			    <i class="fa fa-angle-left"></i> Volver
-			</a>
-		    </h3>
+		    @if ($documento->Estado === 1)
+			<h3 class="card-title">
+			    <a href="{{ route('archivos-vcrear', $documento->IdDocumento) }}" type="button" class="btn btn-block btn-primary" title="Crear una nueva versión del documento">
+				<i class="fa fa-plus"></i> Nueva Versión
+			    </a>
+			</h3>
+			<h3 class="card-tools">
+			    <a href="{{ route('documentos-todos', $documento->IdGrupoDocumento) }}" type="button" class="btn btn-block btn-secondary">
+				<i class="fa fa-angle-left"></i> Volver
+			    </a>
+			</h3>
+		    @else
+			<h3 class="card-title">
+			    <a href="{{ route('documentos-todos', $documento->IdGrupoDocumento) }}" type="button" class="btn btn-block btn-secondary">
+				<i class="fa fa-angle-left"></i> Volver
+			    </a>
+			</h3>
+		    @endif
 		</div>
 
 		<!-- /.card-header -->
@@ -34,48 +62,49 @@ $item_subproceso_activo = $subProceso->Nombre;
                     <table id="example1" class="table table-bordered table-striped">
 			<thead>
 			    <tr>
-				<th>Ver</th>
-				<th>Historial</th>
-				<th>Código</th>
+				<th>#</th>
 				<th>Nombre</th>
-				<th>Tipo</th>
-				<th>Unidad</th>
 				<th>Fecha de Aprovación</th>
-				<th>Fecha de Creación</th>
-				<th>Versión Actual</th>
+				<th>Fecha de Modificación</th>
+				<th>Motivo del cambio</th>
+				<th>Versión</th>
 				<th>Estado</th>
 				<th>Acciones</th>
 			    </tr>
 			</thead>
 
 			<tbody>
-			    @foreach ($documentos as $documento)
+			    @foreach ($archivos as $archivo)
 				<tr>
-				    @if ($documento->Estado === 1)
-					<td><a href="{{ route('documentos-ver', $documento->IdDocumento) }}" type="button" class="btn btn-primary btn-block" title="Ver documento"><i class="fa fa-eye"></i></a></td>
-					<td><a href="{{ route('archivos-todos', $documento->IdDocumento) }}" type="button" class="btn btn-primary btn-block" title="Ver historial"><i class="fa fa-book"></i></a></td>
+				    @if ($archivo->Estado === 1)
+					<td><a href="{{ route('archivos-ver', $archivo->IdArchivo) }}" type="button" class="btn btn-primary btn-block" title="Ver archivo"><i class="fa fa-eye"></i></a></td>
 				    @else
-					<td><a href="{{ route('documentos-ver', $documento->IdDocumento) }}" type="button" class="btn btn-danger btn-block" title="Ver documento"><i class="fa fa-eye"></i></a></td>
-					<td><a href="{{ route('archivos-todos', $documento->IdDocumento) }}" type="button" class="btn btn-danger btn-block" title="Ver historial"><i class="fa fa-book"></i></a></td>
+					<td><a href="{{ route('archivos-ver', $archivo->IdArchivo) }}" type="button" class="btn btn-danger btn-block" title="Ver archivo"><i class="fa fa-eye"></i></a></td>
 				    @endif
-				    <td>{{ $documento->Codigo }}</td>
-				    <td>{{ $documento->Nombre }}</td>
-				    <td>{{ $documento->Tipo }}</td>
-				    <td>{{ $documento->Unidad }}</td>
-				    <td>{{ $documento->FechaAprovacion }}</td>
-				    <td>{{ $documento->FechaCreacion }}</td>
-				    <td>{{ $documento->Version }}</td>
-				    @if ($documento->Estado === 1)
-					<td class="text-center"><button type="button" class="btn btn-success" title="Activo"><i class="fa fa-check"></i></button></td>
+				    <td>{{ $archivo->Nombre }}</td>
+				    <td>{{ $archivo->FechaAprovacion }}</td>
+				    <td>{{ $archivo->FechaModificacion }}</td>
+				    <td>Motivo aquí</td>
+				    <td>{{ $archivo->Version }}</td>
+				    @if ($archivo->Estado === 1)
 					<td class="text-center">
+					    @if ($documento->Estado === 1)
+						<button type="button" class="btn btn-success" title="Activo"><i class="fa fa-check"></i></button>
+					    @else
+						<button type="button" class="btn btn-danger" title="Eliminado"><i class="fa fa-ban"></i></button>
+					    @endif
+					</td>
+					<td class="text-center">
+					    @if ($documento->Estado === 1)
 					    <div class="btn-group">
-						<a href="{{ route('documentos-descargar', $documento->IdDocumento) }}" type="button" class="btn btn-secondary" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i></a>
-						<a href="{{ route('documentos-veditar',  $documento->IdDocumento) }}" type="button" class="btn btn-warning" title="Editar documento"><i class="fas fa-pencil-alt"></i></a>
-						<a type="button" class="btn btn-danger" id="eliminar" title="Eliminar documento" data-toggle="modal" data-target="#modal-eliminar" data-action="{{ route('documentos-eliminar', $documento->IdDocumento) }}" data-nombre="{{ $documento->Nombre }}"><i class="fas fa-trash"></i></a>
+						<a href="{{ route('archivos-descargar', $archivo->IdArchivo) }}" type="button" class="btn btn-secondary" title="Descargar esta versión"><i class="fa fa-arrow-down"></i></a>
+						<a href="{{ route('archivos-veditar',  $archivo->IdArchivo) }}" type="button" class="btn btn-warning" title="Editar archivo"><i class="fas fa-pencil-alt"></i></a>
+						<a href="{{ route('archivos-eliminar',  $archivo->IdArchivo) }}" type="button" class="btn btn-danger" id="eliminar" title="Eliminar archivo" onclick="return confirm('¿Desea eliminar esta versión?')"><i class="fas fa-trash"></i></a>
 					    </div>
+					    @endif
 					</td>
 				    @else
-					<td class="text-center"><button type="button" class="btn btn-danger" title="Eliminado"><i class="fa fa-ban"></i></button></td>
+					<td class="text-center"><button type="button" class="btn btn-danger" title="Eliminado"><i class="fa fa-trash"></i></button></td>
 					<td class="text-center"></td>
 				    @endif
 				</tr>
@@ -84,15 +113,12 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 			<tfoot>
 			    <tr>
-				<th>Ver</th>
-				<th>Historial</th>
-				<th>Código</th>
+				<th>#</th>
 				<th>Nombre</th>
-				<th>Tipo</th>
-				<th>Unidad</th>
 				<th>Fecha de Aprovación</th>
-				<th>Fecha de Creación</th>
-				<th>Versión Actual</th>
+				<th>Fecha de Modificación</th>
+				<th>Motivo del cambio</th>
+				<th>Versión</th>
 				<th>Estado</th>
 				<th>Acciones</th>
 			    </tr>
@@ -122,33 +148,6 @@ $item_subproceso_activo = $subProceso->Nombre;
 	    </div>
 	@endif
     @endif
-
-    <div class="modal fade" id="modal-eliminar">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-		<div class="card card-danger">
-		    <div class="card-header">
-			<h3 class="card-title">Eliminar documento</h3>
-		    </div>
-		    <form method="post" action="">
-			@csrf
-			@method('post')
-			<div class="card-body">
-			    <div class="form-group">
-				<label>Motivo (opcional)</label>
-				<textarea class="form-control" rows="3" name="motivo" placeholder="Ingrese el motivo de eliminar el documento..." maxlength="510"></textarea>
-			    </div>
-			</div>
-			<div class="card-footer">
-			    <button type="submit" class="btn btn-danger">Eliminar</button>
-			    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-			</div>
-		    </form>
-		</div>
-	    </div>
-	</div>
-    </div>
-
 
 @endsection()
 
@@ -195,14 +194,14 @@ $item_subproceso_activo = $subProceso->Nombre;
      // Ocultar la alerta
      $("#alerta").hide(5000);
 
-     // Eliminar el documento
+     // Eliminar el archivo
      $("#modal-eliminar").on("show.bs.modal", (evento) => {
 	 let boton = evento.relatedTarget; // El boton de eliminar que se presiono
 	 let form_action = boton.getAttribute("data-action");
 	 let nombre = boton.getAttribute("data-nombre");
 	 let titulo = $("#modal-eliminar").find(".card-title");
 	 let formulario = $("#modal-eliminar").find("form");
-	 titulo.text("Eliminar documento - " + nombre);
+	 titulo.text("Eliminar archivo - " + nombre);
 	 formulario.attr("action", form_action);
      });
      
