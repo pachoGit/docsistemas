@@ -41,7 +41,7 @@ class DocumentosModelo extends Model
      * @return Collection
      *
      */
-    public function presentarTodos($idGrupoDocumento)
+    public function presentarDocumentosDeGrupo($idGrupoDocumento)
     {
         return $this->where('GrupoDocumentos.IdGrupoDocumento', $idGrupoDocumento)
                     ->join('TipoDocumento',   'Documentos.IdTipoDocumento',  '=', 'TipoDocumento.IdTipoDocumento')
@@ -72,7 +72,7 @@ class DocumentosModelo extends Model
      * @return Collection
      *
      */
-    public function presentarDe($idDocumento)
+    public function presentarDocumento($idDocumento)
     {
         return $this->select('Unidades.Nombre as Unidad',
                              'TipoDocumento.Nombre as Tipo',
@@ -96,5 +96,40 @@ class DocumentosModelo extends Model
                     ->join('Procesos',        'SubProcesos.IdProceso',        '=', 'Procesos.IdProceso')
                     ->where('Documentos.IdDocumento', $idDocumento)
                     ->get();
+    }
+
+    /**
+     * Obtiene todos los documentos de un subproceso, para ser presentados
+     * al usuario final. Se envian todos, con todo los de Estado = 0
+     *
+     * @var $idSubProceso - Id del grupo de documento
+     *
+     * @return Collection
+     *
+     */
+    public function presentarTodoDeSubProceso($idSubProceso)
+    {
+        return $this->where('SubProcesos.IdSubProceso', $idSubProceso)
+                    ->join('TipoDocumento',   'Documentos.IdTipoDocumento',   '=', 'TipoDocumento.IdTipoDocumento')
+                    ->join('Unidades',        'Documentos.IdUnidad',          '=', 'Unidades.IdUnidad')
+                    ->join('GrupoDocumentos', 'Documentos.IdGrupoDocumento',  '=', 'GrupoDocumentos.IdGrupoDocumento')
+                    ->join('SubProcesos',     'GrupoDocumentos.IdSubProceso', '=', 'SubProcesos.IdSubProceso')
+                    ->join('Procesos',        'SubProcesos.IdProceso',        '=', 'Procesos.IdProceso')
+                    ->select('Documentos.Nombre',
+                             'Unidades.Nombre as Unidad',
+                             'TipoDocumento.Nombre as Tipo',
+                             'GrupoDocumentos.Nombre as Grupo',
+                             'Documentos.IdDocumento',
+                             'Documentos.IdGrupoDocumento',
+                             'Documentos.Codigo',
+                             'Documentos.UbicacionVirtual',
+                             'Documentos.UbicacionFisica',
+                             'Documentos.Version',
+                             'Documentos.FechaAprovacion',
+                             'Documentos.FechaCreacion',
+                             'Documentos.Estado')
+                    ->orderBy('Documentos.FechaCreacion', 'desc')
+                    ->get();
+        
     }
 }

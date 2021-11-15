@@ -37,15 +37,10 @@ _Si con el anterior comando la base de datos no se ha llenado con los valores pr
     
 _Si con el comando anterior aun no se llena, tendra que ejecutarlo manualmente, para ello ejecute en orden lo siguiente_
 
-`php artisan db:seed --class=ProcesosSeeder`  
-`php artisan db:seed --class=SubProcesosSeeder`  
-`php artisan db:seed --class=UnidadesSeeder`  
-`php artisan db:seed --class=EstandaresSeeder`  
-`php artisan db:seed --class=TipoDocumentoSeeder`  
-`php artisan db:seed --class=GrupoDocumentosSeeder`  
+`./seeder.sh`
 
 #### Permisos de las nuevas carpetas creadas
 
-`sudo chown -R www-data:$USER public/raiz/` _Para usuarios de ubuntu_
+`sudo chown -R www-data:$USER public/raiz/*` _Para usuarios de ubuntu_
 
 

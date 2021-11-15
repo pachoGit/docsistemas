@@ -60,12 +60,12 @@ class Documentos extends Controller
     public function todos($idGrupoDocumento)
     {
         $grupo = $this->moGrupoDocumentos->find($idGrupoDocumento);
-        $documentos = $this->moDocumentos->presentarTodos($idGrupoDocumento);
+        if ($grupo->Nombre === 'Todos')
+            return $this->generarTodosDocumentos($grupo);
+        $documentos = $this->moDocumentos->presentarDocumentosDeGrupo($idGrupoDocumento);
         $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
         $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
 
-        // if ($grupo->Nombre === 'Todos')
-        //     return $this->generarTodosDocumentos($subProceso);
 
         $data = ['documentos'   => $documentos,
                  'grupo'        => $grupo,
@@ -77,7 +77,7 @@ class Documentos extends Controller
 
     public function ver($idDocumento)
     {
-        $documento = $this->moDocumentos->presentarDe($idDocumento)->first();
+        $documento = $this->moDocumentos->presentarDocumento($idDocumento)->first();
         $estandares = $this->moDocPorEstand->presentarDe($idDocumento);
         $grupo = $this->moGrupoDocumentos->find($documento->IdGrupoDocumento);
         $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
@@ -190,10 +190,9 @@ class Documentos extends Controller
     public function eliminar(Request $solicitud, $idDocumento)
     {
         $motivo = $solicitud->input('motivo');
-        // TODO: Guardar el motivo
         $documento = $this->moDocumentos->find($idDocumento);
         $documento->Estado = 0;
-        //$documento->MotivoEliminado = $motivo;
+        $documento->MotivoEliminado = $motivo;
         $documento->save();
 
         return redirect()->route('documentos-todos', $documento->IdGrupoDocumento)
@@ -254,7 +253,6 @@ class Documentos extends Controller
         return view('documentos/editar', $data);
     }
 
-
     private function validar(Request $solicitud)
     {
         return $solicitud->validate([
@@ -297,5 +295,26 @@ class Documentos extends Controller
             ];
             $this->moDocPorEstand->create($data);
         }
+    }
+
+    /**
+     * Genera la vista donde se presentan todos los documentos de un determinado subproceso
+     *
+     * @var $grupo - El grupo de documentos (obviamente 'Todos')
+     *
+     * @return view
+     */
+    private function generarTodosDocumentos($grupo)
+    {
+        $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
+        $documentos = $this->moDocumentos->presentarTodoDeSubProceso($subProceso->IdSubProceso);
+        $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
+        
+        $data = ['documentos'   => $documentos,
+                 'grupo'        => $grupo,
+                 'subProceso'   => $subProceso,
+                 'procesoPadre' => $procesoPadre];
+
+        return view('documentos/todos', $data);
     }
 }
