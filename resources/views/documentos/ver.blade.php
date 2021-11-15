@@ -140,8 +140,9 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		    <div class="col-md-6">
 			<div class="form-group">
-			    <label for="estandares">Motivo de la eliminación</label>
-			    <textarea id="estandares" class="form-control" cols="30" id="" name="" rows="5" disabled>Razon aqui
+			    <label for="motivo">Motivo de la eliminación</label>
+			    <textarea id="motivo" class="form-control" cols="30" id="" name="" rows="5" disabled>
+{{ $documento->MotivoEliminado }}Motivo aquí
 			    </textarea>
 			</div>
 

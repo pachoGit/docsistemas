@@ -43,12 +43,19 @@ $item_subproceso_activo = $subProceso->Nombre;
 	    @endphp
 	@endif
         <div class="col-lg-3 col-6">
-	    <x-tarjeta
-		titulo="{{ $grupo->Nombre }}"
-		descripcion="{{ $grupo->Descripcion }}"
-		:tipo="$tiposTarjeta[$itipo++]"
-		id-modal="{{ $grupo->IdGrupoDocumento }}"
-	    />
+	    @if ($grupo->Nombre !== 'Todos' && $grupo->Nombre !== 'Otros')
+		<x-tarjeta titulo="{{ $grupo->Nombre }}" descripcion="{{ $grupo->Descripcion }}" :tipo="$tiposTarjeta[$itipo++]" id-modal="{{ $grupo->IdGrupoDocumento }}">
+		    <x-slot name="opciones">
+			<a href="{{ route('grupo-eliminar', $grupo->IdGrupoDocumento) }}" type="button" class="close" id="boton-eliminar-grupo-{{ $grupo->IdGrupoDocumento }}" onclick="return confirm('Seguro que desea eliminar?');" title="Eliminar">&times;</a>
+			<button type="button" class="close" title="Editar" data-toggle="modal" data-target="#editar-grupo-{{ $grupo->IdGrupoDocumento }}" style="padding-right: 10px;">&#43;</button>
+		    </x-slot>
+		</x-tarjeta>
+	    @else
+		<x-tarjeta titulo="{{ $grupo->Nombre }}" descripcion="{{ $grupo->Descripcion }}" :tipo="$tiposTarjeta[$itipo++]" id-modal="{{ $grupo->IdGrupoDocumento }}">
+		    <x-slot name="opciones">
+		    </x-slot>
+		</x-tarjeta>
+	    @endif
 	</div>
     @endforeach
     </div>

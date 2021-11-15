@@ -18,9 +18,11 @@ $item_subproceso_activo = $subProceso->Nombre;
             <div class="card">
 		<div class="card-header">
                     <h3 class="card-title">
+			@if (!isset($documentos->first()->Grupo))
 			<a href="{{ route('documentos-vcrear', $grupo->IdGrupoDocumento) }}" type="button" class="btn btn-block btn-primary">
 			    <i class="fa fa-plus"></i> Nuevo Documento
 			</a>
+			@endif
 		    </h3>
 		    <h3 class="card-tools">
 			<a href="{{ route('subproceso-versubprocesos', $subProceso->IdSubProceso) }}" type="button" class="btn btn-block btn-secondary">
@@ -38,6 +40,9 @@ $item_subproceso_activo = $subProceso->Nombre;
 				<th>Historial</th>
 				<th>Código</th>
 				<th>Nombre</th>
+				@isset($documentos->first()->Grupo)
+				<th>Grupo</th>
+				@endisset
 				<th>Tipo</th>
 				<th>Unidad</th>
 				<th>Fecha de Aprovación</th>
@@ -60,6 +65,9 @@ $item_subproceso_activo = $subProceso->Nombre;
 				    @endif
 				    <td>{{ $documento->Codigo }}</td>
 				    <td>{{ $documento->Nombre }}</td>
+				    @isset($documento->Grupo)
+				    <td>{{ $documento->Grupo }}</td>
+				    @endisset
 				    <td>{{ $documento->Tipo }}</td>
 				    <td>{{ $documento->Unidad }}</td>
 				    <td>{{ $documento->FechaAprovacion }}</td>
@@ -88,6 +96,9 @@ $item_subproceso_activo = $subProceso->Nombre;
 				<th>Historial</th>
 				<th>Código</th>
 				<th>Nombre</th>
+				@isset($documentos->first()->Grupo)
+				<th>Grupo</th>
+				@endisset
 				<th>Tipo</th>
 				<th>Unidad</th>
 				<th>Fecha de Aprovación</th>
