@@ -158,8 +158,7 @@ class Documentos extends Controller
             'nombre'           => ['required', 'max:255', 'min:3'],
             'tipo'             => ['required'],
             'unidad'           => ['required'],
-            'ubicacion-fisica' => ['max:255', 'min:3'],
-            'fecha-aprovacion' => ['date']
+            'ubicacion-fisica' => ['max:255', 'min:3']
         ]);
         $documento = $this->moDocumentos->find($idDocumento);
 
@@ -169,7 +168,6 @@ class Documentos extends Controller
         $documento->IdTipoDocumento = $solicitud->input('tipo');
         $documento->IdUnidad = $solicitud->input('unidad');
         $documento->UbicacionFisica = $solicitud->input('ubicacion-fisica');
-        $documento->FechaAprovacion = $solicitud->input('fecha-aprovacion');
         $documento->save();
 
         // Modificacion de los estandares
@@ -269,7 +267,7 @@ class Documentos extends Controller
     private function generarUbicacion($idGrupoDocumento, $nombre)
     {
         $ubicacion = Util::retUbicacionDeGrupoDocumento($idGrupoDocumento);
-        $ubicacion .= '/' . Util::eliminarEspacios($nombre);
+        $ubicacion .= '/' . Util::formatearCadena($nombre);
         if (!is_dir($ubicacion))
             return $ubicacion;
         // Si la ubicacion (la carpeta) ya existe, agregamos la fecha y hora de

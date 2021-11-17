@@ -83,7 +83,7 @@ class Archivos extends Controller
             'Nombre'            => $nombreArchivo,
             'UbicacionVirtual'  => $documento->UbicacionVirtual . '/' . $nombreArchivo,
             'Version'           => $version,
-            //'MotivoCambio'      => $solicitud->input('motivo'),
+            'MotivoCambio'      => $solicitud->input('motivo'),
             'FechaCreacion'     => Util::retFechaCreacion(),
             'FechaAprovacion'   => $solicitud->input('fecha-aprovacion'),
             'FechaModificacion' => Util::retFechaCreacion()
@@ -132,17 +132,39 @@ class Archivos extends Controller
         }
         $documento->save();
         return redirect()->route('archivos-todos', $archivo->IdDocumento)
-                         ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha eliiminado la versión correctamente']);
+                         ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha eliminado la versión correctamente']);
     }
 
-    private function validar(Request $solicitud)
+    /**
+     * Descargar un archivo
+     *
+     * @var $idArchivo - Id del archivo a descargar
+     *
+     * @return Response
+     */
+    public function descargar($idArchivo)
     {
-        return $solicitud->validate([
-            'version'          => ['required', 'numeric'],
-            'motivo'           => ['max:510'],
-            'fecha-aprovacion' => ['date'],
-            'archivo'          => ['required']
-        ]);
+        $archivo = $this->moArchivos->find($idArchivo);
+        $ubicacion = $archivo->UbicacionVirtual;
+        return response()->download(public_path(str_replace('public', '', $ubicacion)));
+    }
+
+    /**
+     * Convertir a un archivo a la version actual del documento
+     *
+     * @var $idArchivo - Id del archivo a descargar
+     *
+     * @return Response
+     */
+    public function hacerActual($idArchivo)
+    {
+        $archivo = $this->moArchivos->find($idArchivo);
+        $documento = $this->moDocumentos->find($archivo->IdDocumento);
+        $documento->Version = $archivo->Version;
+        $documento->FechaAprovacion = $archivo->FechaAprovacion;
+        $documento->save();
+        return redirect()->route('archivos-todos', $archivo->IdDocumento)
+                         ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha cambiado la versión correctamente']);
     }
 
     public function vistaCrear($idDocumento)
@@ -160,11 +182,16 @@ class Archivos extends Controller
         return view('archivos/crear', $data);
     }
 
-    public function descargar($idArchivo)
+
+
+    private function validar(Request $solicitud)
     {
-        $archivo = $this->moArchivos->find($idArchivo);
-        $ubicacion = $archivo->UbicacionVirtual;
-        return response()->download(public_path(str_replace('public', '', $ubicacion)));
+        return $solicitud->validate([
+            'version'          => ['required', 'numeric'],
+            'motivo'           => ['max:510'],
+            'fecha-aprovacion' => ['date'],
+            'archivo'          => ['required']
+        ]);
     }
 
     /**

@@ -31,7 +31,9 @@ class SubProceso extends Controller
      */
     public function verGrupoDocumentos($idSubProceso)
     {
-        $grupos = $this->moSubProcesos->find($idSubProceso)->grupoDocumentos;
+        $grupos = $this->moSubProcesos->find($idSubProceso)
+                                      ->grupoDocumentos()
+                                      ->where('Estado', 1)->get();
         $subProceso = $this->moSubProcesos->find($idSubProceso);
         $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
 

@@ -33,6 +33,19 @@ class DocumentosModelo extends Model
     }
 
     /**
+     * Obtener los documentos (datos en bruto) de un determinado grupo de documentos
+     *
+     * @var $idGrupoDocumento - Id del grupo de documento
+     *
+     */
+    public function todoDeGrupo($idGrupoDocumento)
+    {
+        return $this->where('Estado', 1)
+                    ->where('IdGrupoDocumento', $idGrupoDocumento)
+                    ->get();
+    }
+
+    /**
      * Obtiene todos los documentos de un grupo de documentos, para ser presentados
      * al usuario final. Se envian todos, con todo los de Estado = 0
      *
@@ -110,6 +123,9 @@ class DocumentosModelo extends Model
     public function presentarTodoDeSubProceso($idSubProceso)
     {
         return $this->where('SubProcesos.IdSubProceso', $idSubProceso)
+            // Descomente esto si desea que los documentos de un determinado grupo que haya
+            // sido eliminado, no se vean al generar todos los documentos
+            //->where('GrupoDocumentos.Estado', 1)
                     ->join('TipoDocumento',   'Documentos.IdTipoDocumento',   '=', 'TipoDocumento.IdTipoDocumento')
                     ->join('Unidades',        'Documentos.IdUnidad',          '=', 'Unidades.IdUnidad')
                     ->join('GrupoDocumentos', 'Documentos.IdGrupoDocumento',  '=', 'GrupoDocumentos.IdGrupoDocumento')

@@ -6,20 +6,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\ProcesosModelo;
+use App\Models\DocumentosModelo;
 
 class Inicio extends Controller
 {
     private $moProcesos = null;
 
+    private $moDocumentos = null;
+    
     public function __construct()
     {
         $this->moProcesos = new ProcesosModelo();
+        $this->moDocumentos = new DocumentosModelo();
     }
                
     public function index()
     {
         $this->generarDataDefecto();
-        return view('inicio');
+        $ndocumentos = $this->moDocumentos->todo()->count();
+        $data = ['ndocumentos' => $ndocumentos];
+        return view('inicio', $data);
     }
 
     /**

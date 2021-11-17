@@ -35,7 +35,7 @@ _Si con el anterior comando la base de datos no se ha llenado con los valores pr
 
 `php artisan db:seed`
     
-_Si con el comando anterior aun no se llena, tendra que ejecutarlo manualmente, para ello ejecute en orden lo siguiente_
+_Si con el comando anterior aun no se llena, tendra que ejecutarlo manualmente, para ello ejecute lo siguiente_
 
 `./seeder.sh`
 

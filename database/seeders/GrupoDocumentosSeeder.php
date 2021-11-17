@@ -27,14 +27,14 @@ class GrupoDocumentosSeeder extends Seeder
                 [
                     'IdSubProceso' => $subProceso->IdSubProceso,
                     'Nombre'       => 'Otros',
-                    'Descripcion'  => 'Miscelanea de archivos',
+                    'Descripcion'  => 'Miscelanea de documentos',
                     'Ubicacion'    => $subProceso->Ubicacion . '/Otros',
                     'FechaCreacion' => $fecha
                 ],
                 [
                     'IdSubProceso' => $subProceso->IdSubProceso,
                     'Nombre'       => 'Todos',
-                    'Descripcion'  => 'Todos los archivos del proceso de ' . $subProceso->Nombre,
+                    'Descripcion'  => 'Todos los documentos del proceso de ' . $subProceso->Nombre,
                     'Ubicacion'    => $subProceso->Ubicacion . '/Todos',
                     'FechaCreacion' => $fecha
                 ]
