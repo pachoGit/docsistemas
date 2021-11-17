@@ -49,6 +49,7 @@ Route::get('archivos/ver/{IdArchivo}',       [Archivos::class, 'ver'])->name('ar
 Route::post('archivos/editar/{IdArchivo}',   [Archivos::class, 'editar'])->name('archivos-editar');
 Route::get('archivos/eliminar/{IdArchivo}', [Archivos::class, 'eliminar'])->name('archivos-eliminar');
 Route::get('archivos/descargar/{IdArchivo}', [Archivos::class, 'descargar'])->name('archivos-descargar');
+Route::get('archivos/haceractual/{IdArchivo}', [Archivos::class, 'hacerActual'])->name('archivos-haceractual');
 
 Route::get('archivos/vistacrear/{IdDocumento}', [Archivos::class, 'vistaCrear'])->name('archivos-vcrear');
 Route::get('archivos/vistaditar/{IdArchivo}',   [Archivos::class, 'vistaEditar'])->name('archivos-veditar');

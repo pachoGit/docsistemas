@@ -8,12 +8,29 @@ $item_subproceso_activo = '';
 
 @extends('esqueleto/esqueleto')
 
-@section('titulo-pagina', 'Inicio')
+@section('titulo-pagina', 'Inicio - Listado maestro de documentos')
 
 @section('contenido')
 
-    <h1> Página de inicio :) </h1>
+    <div class="row">
+	<div class="col-lg-3 col-6">                                             
+            <!-- small box -->
+	    <div class="small-box bg-info">
+		<div class="inner">
+		    <h3>{{ $ndocumentos }}</h3>
+		    <p> Cantidad de documentos activos </p>
+		</div>
+		<div class="icon">
+                    <i class="ion ion-bag"></i>
+		</div>
+		<a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div> 
+	
+    </div>
+    
 
-    <p> Bienvenidos al listado maestro de documentos</p>
+    
+
 
 @endsection()

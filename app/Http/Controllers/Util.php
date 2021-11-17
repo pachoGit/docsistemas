@@ -43,16 +43,20 @@ class Util extends Controller
     }
 
     /**
-     * Elimina los espacios en blanco y reemplazar por '-' de cualquier cadena
+     * Elimina caracteres raros que podrian generar errores en nombres
+     * de carpetas y archivos
      *
      * @var string $cadena - Una cadena de caracteres
      *
-     * @return string - La cadena sin espacios en blanco
+     * @return string - La cadena sin caracteres raros
      *
      */
-    public static function eliminarEspacios($cadena)
+    public static function formatearCadena($cadena)
     {
-        return str_replace(' ', '-', $cadena);
+        $eliminar = [':', '{', '}', ';', '+', '*', '/', '\\', '?', '¡', '!', '&', '%', '$',
+                     '#', '=', '^', '`', '"', '~', '<',  '>', '[', ']', '(', ')', '|', ' '];
+        
+        return str_replace($eliminar, '', $cadena);
     }
 
     /**
@@ -104,7 +108,7 @@ class Util extends Controller
     public static function generarNombreArchivo(UploadedFile $archivo, $version)
     {
         $nombre = $archivo->getClientOriginalName();
-        $nombre = Util::eliminarEspacios($nombre);
+        $nombre = Util::formatearCadena($nombre);
         // Eliminamos la extension del archivo para renombrar el archivo
         $nombre = substr($nombre, 0, strrpos($nombre, $archivo->extension()) - 1);
         $nombre .= '_' . Util::retFechaHora() . '-v' . $version . '.' . $archivo->extension();

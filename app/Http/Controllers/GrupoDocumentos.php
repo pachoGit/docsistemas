@@ -5,15 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\GrupoDocumentosModelo;
+use App\Models\DocumentosModelo;
 use App\Http\Controllers\Util;
 
 class GrupoDocumentos extends Controller
 {
     private $moGrupoDocumentos = null;
 
+    private $moDocumentos = null;
+
     public function __construct()
     {
         $this->moGrupoDocumentos = new GrupoDocumentosModelo();
+        $this->moDocumentos = new DocumentosModelo();
     }
 
     public function crear(Request $solicitud, $idSubProceso)
@@ -60,7 +64,17 @@ class GrupoDocumentos extends Controller
 
     public function eliminar($idGrupoDocumento)
     {
-        return 'Estas en la funcion eliminar';
+        $grupo = $this->moGrupoDocumentos->find($idGrupoDocumento);
+        $documentos = $this->moDocumentos->todoDeGrupo($idGrupoDocumento);
+        foreach ($documentos as $documento)
+        {
+            $documento->Estado = 0;
+            $documento->save();
+        }
+        $grupo->Estado = 0;
+        $grupo->save();
+        return redirect()->route('subproceso-versubprocesos', $grupo->IdSubProceso)
+                         ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha eliminado el grupo de documentos correctamente']);
     }
 
     private function validar(Request $solicitud)
@@ -82,7 +96,7 @@ class GrupoDocumentos extends Controller
     private function generarUbicacion($idSubProceso, $nombre)
     {
         $ubicacion = Util::retUbicacionDeSubProceso($idSubProceso);
-        $ubicacion .= '/' . Util::eliminarEspacios($nombre);
+        $ubicacion .= '/' . Util::formatearCadena($nombre);
         if (!is_dir($ubicacion))
             return $ubicacion;
         // Si la ubicacion (la carpeta) ya existe, agregamos la fecha y hora de

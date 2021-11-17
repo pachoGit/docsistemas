@@ -28,7 +28,7 @@ class Documentos extends Migration
             $tabla->string('UbicacionVirtual', 510)->nullable(); // Considerar a cambiar a tipo "text"
             $tabla->string('UbicacionFisica')->nullable();
             $tabla->unsignedInteger('Version')->nullable();
-            $tabla->text('MotivoEliminado')->nullable();
+            $tabla->string('MotivoEliminado', 510)->nullable();
             $tabla->date('FechaAprovacion')->nullable();
             $tabla->date('FechaCreacion')->nullable();
             $tabla->integer('Estado')->default(1);

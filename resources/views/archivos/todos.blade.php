@@ -19,11 +19,11 @@ $item_subproceso_activo = $subProceso->Nombre;
 		<div class="callout callout-info">
 		    <h5>
 			<i class="fas fa-info"></i> Versión actual: {{ $documento->Version }}
-			<button href="#" class="btn btn-success btn-sm ml-3" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i> Descargar </button>
 		    </h5>
 		    @foreach ($archivos as $archivo)
 			@if ($archivo->Version === $documento->Version)
 			    Nombre del archivo: {{ $archivo->Nombre }}
+			    <a href="{{ route('archivos-descargar', $archivo->IdArchivo) }}" type="button" class="btn btn-success btn-sm ml-3" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i> Descargar </a>
 			@endif
 		    @endforeach
 		</div>
@@ -76,15 +76,23 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<tbody>
 			    @foreach ($archivos as $archivo)
 				<tr>
-				    @if ($archivo->Estado === 1)
-					<td><a href="{{ route('archivos-ver', $archivo->IdArchivo) }}" type="button" class="btn btn-primary btn-block" title="Ver archivo"><i class="fa fa-eye"></i></a></td>
+				    @if ($documento->Estado == 1)
+					@if ($archivo->Estado === 1)
+					    @if ($archivo->Version !== $documento->Version)
+						<td><a href="{{ route('archivos-haceractual', $archivo->IdArchivo) }}" type="button" class="btn btn-primary btn-block" title="Convertir en la versión actual"><i class="fa fa-arrow-up"></i></a></td>
+					    @else
+						<td></td>
+					    @endif
+					@else
+					    <td></td>
+					@endif
 				    @else
-					<td><a href="{{ route('archivos-ver', $archivo->IdArchivo) }}" type="button" class="btn btn-danger btn-block" title="Ver archivo"><i class="fa fa-eye"></i></a></td>
+					<td></td>
 				    @endif
 				    <td>{{ $archivo->Nombre }}</td>
 				    <td>{{ $archivo->FechaAprovacion }}</td>
 				    <td>{{ $archivo->FechaModificacion }}</td>
-				    <td>Motivo aquí</td>
+				    <td>{{ $archivo->MotivoCambio }}</td>
 				    <td>{{ $archivo->Version }}</td>
 				    @if ($archivo->Estado === 1)
 					<td class="text-center">

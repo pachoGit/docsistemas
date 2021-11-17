@@ -116,7 +116,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label>Fecha de aprovación:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input type="date" value="{{ $documento->FechaAprovacion}}" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" max="{{ date('Y-m-d') }}" required/>
+				<input type="date" value="{{ $documento->FechaAprovacion}}" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" max="{{ date('Y-m-d') }}" disabled/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
