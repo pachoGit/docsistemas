@@ -16,8 +16,8 @@ class DocumentosModelo extends Model
     protected $primaryKey = 'IdDocumento';
 
     protected $fillable = ['IdGrupoDocumento', 'IdTipoDocumento', 'IdUnidad', 'Codigo',
-                           'Nombre', 'UbicacionVirtual', 'UbicacionFisica', 'Version',
-                           'FechaAprovacion', 'FechaCreacion', 'Estado'];
+                           'Nombre', 'UbicacionVirtual', 'UbicacionFisica', 'Version', 'MotivoEliminado',
+                           'FechaAprovacion', 'FechaCreacion', 'FechaDocumento', 'Estado'];
 
     public $timestamps = false;
     
@@ -69,7 +69,9 @@ class DocumentosModelo extends Model
                              'Documentos.UbicacionVirtual',
                              'Documentos.UbicacionFisica',
                              'Documentos.Version',
+                             'Documentos.MotivoEliminado',
                              'Documentos.FechaAprovacion',
+                             'Documentos.FechaDocumento',
                              'Documentos.FechaCreacion',
                              'Documentos.Estado')
                     ->orderBy('Documentos.FechaCreacion', 'desc')
@@ -99,7 +101,9 @@ class DocumentosModelo extends Model
                              'Documentos.UbicacionVirtual',
                              'Documentos.UbicacionFisica',
                              'Documentos.Version',
+                             'Documentos.MotivoEliminado',
                              'Documentos.FechaAprovacion',
+                             'Documentos.FechaDocumento',
                              'Documentos.FechaCreacion',
                              'Documentos.Estado')
                     ->join('TipoDocumento',   'Documentos.IdTipoDocumento',   '=', 'TipoDocumento.IdTipoDocumento')
@@ -142,6 +146,7 @@ class DocumentosModelo extends Model
                              'Documentos.UbicacionFisica',
                              'Documentos.Version',
                              'Documentos.FechaAprovacion',
+                             'Documentos.FechaDocumento',
                              'Documentos.FechaCreacion',
                              'Documentos.Estado')
                     ->orderBy('Documentos.FechaCreacion', 'desc')

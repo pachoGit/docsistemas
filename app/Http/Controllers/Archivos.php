@@ -86,12 +86,14 @@ class Archivos extends Controller
             'MotivoCambio'      => $solicitud->input('motivo'),
             'FechaCreacion'     => Util::retFechaCreacion(),
             'FechaAprovacion'   => $solicitud->input('fecha-aprovacion'),
+            'FechaDocumento'    => $solicitud->input('fecha-documento'),
             'FechaModificacion' => Util::retFechaCreacion()
         ];
         $this->moArchivos->create($data);
         // Modificamos la informacion del documento
         $documento->Version = $version;
         $documento->FechaAprovacion = $data['FechaAprovacion'];
+        $documento->FechaDocumento = $data['FechaDocumento'];
         $documento->save();
 
         $archivo->storeAs(str_replace('public/raiz/', '', $documento->UbicacionVirtual), $nombreArchivo, 'public');
@@ -122,12 +124,14 @@ class Archivos extends Controller
                 // El documento no tiene ninguna version
                 $documento->Version = 0;
                 $documento->FechaAprovacion = null;
+                $documento->FechaDocumento = null;
             }
             else
             {
                 $actual = $archivos->first();
                 $documento->Version = $actual->Version;
                 $documento->FechaAprovacion = $actual->FechaAprovacion;
+                $documento->FechaDocumento = $actual->FechaDocumento;
             }
         }
         $documento->save();
@@ -162,6 +166,7 @@ class Archivos extends Controller
         $documento = $this->moDocumentos->find($archivo->IdDocumento);
         $documento->Version = $archivo->Version;
         $documento->FechaAprovacion = $archivo->FechaAprovacion;
+        $documento->FechaDocumento = $archivo->FechaDocumento;
         $documento->save();
         return redirect()->route('archivos-todos', $archivo->IdDocumento)
                          ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha cambiado la versión correctamente']);
@@ -190,6 +195,7 @@ class Archivos extends Controller
             'version'          => ['required', 'numeric'],
             'motivo'           => ['max:510'],
             'fecha-aprovacion' => ['date'],
+            'fecha-documento'  => ['date'],
             'archivo'          => ['required']
         ]);
     }

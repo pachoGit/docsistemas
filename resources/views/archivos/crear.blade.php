@@ -30,7 +30,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 	    @method('post')
             <div class="card-body">
 		<div class="row">
-		    <div class="col-md-6">
+		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="codigo">Número de versión</label>
 			    <input value="{{ $documento->Version + 1 }}" type="number" class="form-control" id="version" name="version" placeholder="Ingrese el número de versión" min="0" required>
@@ -38,7 +38,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    </div>
 
 
-		    <div class="col-md-6">
+		    <div class="col-md-4">
 			<div class="form-group">
 			    <label>Fecha de aprovación de la versión:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
@@ -49,6 +49,19 @@ $item_subproceso_activo = $subProceso->Nombre;
 			    </div>
 			</div>
 		    </div>
+
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <label>Fecha de emisión de la versión:</label>
+			    <div class="input-group date" id="reservationdate2" data-target-input="nearest">
+				<input type="date" name="fecha-documento" class="form-control datetimepicker-input" value="{{ date('Y-m-d') }}" data-target="#reservationdate" max="{{ date('Y-m-d') }}" required/>
+				<div class="input-group-append" data-target="#reservationdate2" data-toggle="datetimepicker">
+				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				</div>
+			    </div>
+			</div>
+		    </div>
+
 
 		</div>
 
@@ -164,6 +177,10 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 	 //Date picker
 	 $('#reservationdate').datetimepicker({
+             format: 'YYYY-MM-DD'
+	 });
+
+	 $('#reservationdate2').datetimepicker({
              format: 'YYYY-MM-DD'
 	 });
 
