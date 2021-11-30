@@ -116,6 +116,7 @@ class Documentos extends Controller
             'UbicacionFisica'  => $solicitud->input('ubicacion-fisica'),
             'Version'          => $solicitud->input('version'),
             'FechaAprovacion'  => $solicitud->input('fecha-aprovacion'),
+            'FechaDocumento'  => $solicitud->input('fecha-documento'),
             'FechaCreacion'    => Util::retFechaCreacion()
         ];
         $documento = $this->moDocumentos->create($data);
@@ -136,6 +137,7 @@ class Documentos extends Controller
             'Version'           => $documento->Version,
             'FechaCreacion'     => Util::retFechaCreacion(),
             'FechaAprovacion'   => $documento->FechaAprovacion,
+            'FechaDocumento'   => $documento->FechaDocumento,
             'FechaModificacion' => Util::retFechaCreacion()
         ];
 
@@ -157,6 +159,7 @@ class Documentos extends Controller
             'codigo'           => ['required', 'max:255', 'min:1'],
             'nombre'           => ['required', 'max:255', 'min:3'],
             'tipo'             => ['required'],
+            'fecha-documento'  => ['date'],
             'unidad'           => ['required'],
             'ubicacion-fisica' => ['max:255', 'min:3']
         ]);
@@ -256,6 +259,7 @@ class Documentos extends Controller
         return $solicitud->validate([
             'codigo'           => ['required', 'max:255', 'min:1'],
             'nombre'           => ['required', 'max:255', 'min:3'],
+            'fecha-documento'  => ['date'],
             'tipo'             => ['required'],
             'unidad'           => ['required'],
             'ubicacion-fisica' => ['max:255', 'min:3'],

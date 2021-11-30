@@ -13,6 +13,17 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 @section('contenido')
 
+    <div class="row">
+	<div class="col-12">
+	    <div class="callout callout-info">
+		<h5>
+		    <i class="fas fa-info"></i> Nota
+		</h5>
+		Para editar los campos bloqueados tendrá que realizarlo a la versión actual del documento
+	    </div>
+	</div>
+    </div>
+
     <div class="card card-primary">
 	<div class="card-header">
             <h3 class="card-title">Editar documento ({{ $grupo->Nombre }})</h3>
@@ -23,20 +34,32 @@ $item_subproceso_activo = $subProceso->Nombre;
 	    @method('post')
             <div class="card-body">
 		<div class="row">
-		    <div class="col-md-6">
+		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="codigo">Código del documento</label>
 			    <input type="text" value="{{ $documento->Codigo }}" class="form-control" id="codigo" name="codigo" placeholder="Ingrese el código del documento" maxlength="255" minlength="1" required>
 			</div>
 		    </div>
 
-		    <div class="col-md-6">
+		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="nombre">Nombre del documento</label>
 			    <input type="text" value="{{ $documento->Nombre }}" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del documento" maxlength="255" minlength="3" required>
 			</div>
 		    </div>
 		    
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <label>Fecha de emisión de la versión actual:</label>
+			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
+				<input type="date" value="{{ $documento->FechaDocumento}}" name="fecha-documento" class="form-control datetimepicker-input" data-target="#reservationdate" max="{{ date('Y-m-d') }}" disabled/>
+				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				</div>
+			    </div>
+			</div>
+		    </div>
+
 		</div>
 
 		<div class="row">
@@ -114,7 +137,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		    <div class="col-md-4">
 			<div class="form-group">
-			    <label>Fecha de aprovación:</label>
+			    <label>Fecha de aprovación de la versión actual:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
 				<input type="date" value="{{ $documento->FechaAprovacion}}" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" max="{{ date('Y-m-d') }}" disabled/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
@@ -126,7 +149,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		    <div class="col-md-4">
 			<div class="form-group">
-			    <label for="version">Versión del documento</label>
+			    <label for="version">Versión actual del documento</label>
 			    <input type="number" value="{{ $documento->Version }}" class="form-control" id="version" min="0" placeholder="Ingrese la versión del documento" name="version" readonly>
 			</div>
 		    </div>

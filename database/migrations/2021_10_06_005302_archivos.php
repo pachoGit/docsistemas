@@ -22,12 +22,13 @@ class Archivos extends Migration
             $tabla->id('IdArchivo');
             $tabla->unsignedBigInteger('IdDocumento')->nullable();
             $tabla->string('Nombre')->nullable();
-            $tabla->string('UbicacionVirtual', 510)->nullable(); // Considerar a cambiar a tipo "text"
+            $tabla->string('UbicacionVirtual', 510)->nullable();
             $tabla->unsignedInteger('Version')->nullable();
             $tabla->string('MotivoCambio', 510)->nullable();
             $tabla->date('FechaCreacion')->nullable();
             $tabla->date('FechaAprovacion')->nullable();
             $tabla->date('FechaModificacion')->nullable();
+            $tabla->date('FechaDocumento')->nullable(); // Fecha que se encuentra en el documento
             $tabla->integer('Estado')->default(1);
 
             $tabla->foreign('IdDocumento')->references('IdDocumento')->on('Documentos');

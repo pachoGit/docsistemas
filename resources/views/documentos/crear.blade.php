@@ -23,20 +23,32 @@ $item_subproceso_activo = $subProceso->Nombre;
 	    @method('post')
             <div class="card-body">
 		<div class="row">
-		    <div class="col-md-6">
+		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="codigo">Código del documento</label>
 			    <input type="text" class="form-control" id="codigo" name="codigo" placeholder="Ingrese el código del documento" maxlength="255" minlength="1" required>
 			</div>
 		    </div>
 
-		    <div class="col-md-6">
+		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="nombre">Nombre del documento</label>
 			    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del documento" maxlength="255" minlength="3" required>
 			</div>
 		    </div>
 		    
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <label>Fecha de emisión del documento:</label>
+			    <div class="input-group date" id="reservationdate2" data-target-input="nearest">
+				<input type="date" name="fecha-documento" class="form-control datetimepicker-input" data-target="#reservationdate2" max="{{ date('Y-m-d') }}" required/>
+				<div class="input-group-append" data-target="#reservationdate2" data-toggle="datetimepicker">
+				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				</div>
+			    </div>
+			</div>
+		    </div>
+
 		</div>
 
 		<div class="row">
@@ -183,6 +195,10 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 	 //Date picker
 	 $('#reservationdate').datetimepicker({
+             format: 'YYYY-MM-DD'
+	 });
+
+	 $('#reservationdate2').datetimepicker({
              format: 'YYYY-MM-DD'
 	 });
 

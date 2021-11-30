@@ -16,7 +16,8 @@ class ArchivosModelo extends Model
     protected $primaryKey = 'IdArchivo';
 
     protected $fillable = ['IdDocumento', 'Nombre', 'UbicacionVirtual', 'Version',
-                           'FechaCreacion', 'FechaAprovacion', 'FechaModificacion', 'Estado'];
+                           'FechaCreacion', 'FechaAprovacion', 'FechaModificacion',
+                           'MotivoCambio', 'FechaDocumento', 'Estado'];
 
     public $timestamps = false;
 

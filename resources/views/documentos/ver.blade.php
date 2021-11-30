@@ -85,9 +85,22 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		<div class="row">
 
-		    <div class="col-md-6">
+		    <div class="col-md-4">
 			<div class="form-group">
-			    <label>Fecha de aprovación:</label>
+			    <label>Fecha de emisión de la versión actual:</label>
+			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
+				<input value="{{ $documento->FechaDocumento }}" type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
+				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				</div>
+			    </div>
+			</div>
+		    </div>
+
+
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <label>Fecha de aprovación de la versión actual:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
 				<input value="{{ $documento->FechaAprovacion }}" type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
@@ -97,9 +110,9 @@ $item_subproceso_activo = $subProceso->Nombre;
 			</div>
 		    </div>
 
-		    <div class="col-md-6">
+		    <div class="col-md-4">
 			<div class="form-group">
-			    <label>Subido al sistema el:</label>
+			    <label>La versión actual ha sido subido al sistema el:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
 				<input value="{{ $documento->FechaCreacion }}" type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
@@ -142,7 +155,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label for="motivo">Motivo de la eliminación</label>
 			    <textarea id="motivo" class="form-control" cols="30" id="" name="" rows="5" disabled>
-{{ $documento->MotivoEliminado }}Motivo aquí
+{{ $documento->MotivoEliminado }}
 			    </textarea>
 			</div>
 

@@ -45,8 +45,8 @@ $item_subproceso_activo = $subProceso->Nombre;
 				@endisset
 				<th>Tipo</th>
 				<th>Unidad</th>
+				<th>Fecha de Emisión</th>
 				<th>Fecha de Aprovación</th>
-				<th>Fecha de Creación</th>
 				<th>Versión Actual</th>
 				<th>Estado</th>
 				<th>Acciones</th>
@@ -70,8 +70,8 @@ $item_subproceso_activo = $subProceso->Nombre;
 				    @endisset
 				    <td>{{ $documento->Tipo }}</td>
 				    <td>{{ $documento->Unidad }}</td>
+				    <td>{{ $documento->FechaDocumento }}</td>
 				    <td>{{ $documento->FechaAprovacion }}</td>
-				    <td>{{ $documento->FechaCreacion }}</td>
 				    <td>{{ $documento->Version }}</td>
 				    @if ($documento->Estado === 1)
 					<td class="text-center"><button type="button" class="btn btn-success" title="Activo"><i class="fa fa-check"></i></button></td>
@@ -101,8 +101,8 @@ $item_subproceso_activo = $subProceso->Nombre;
 				@endisset
 				<th>Tipo</th>
 				<th>Unidad</th>
+				<th>Fecha de Emisión</th>
 				<th>Fecha de Aprovación</th>
-				<th>Fecha de Creación</th>
 				<th>Versión Actual</th>
 				<th>Estado</th>
 				<th>Acciones</th>
@@ -189,8 +189,7 @@ $item_subproceso_activo = $subProceso->Nombre;
     <script>
      $(function () {
 	 $("#example1").DataTable({
-	     "responsive": true, "lengthChange": false, "autoWidth": false,
-	     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+	     "responsive": true, "lengthChange": false, "autoWidth": false
 	 }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 	 $('#example2').DataTable({
 	     "paging": true,
