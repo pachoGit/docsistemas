@@ -28,9 +28,5 @@ $item_subproceso_activo = '';
         </div> 
 	
     </div>
-    
-
-    
-
 
 @endsection()

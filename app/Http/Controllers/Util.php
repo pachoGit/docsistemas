@@ -91,13 +91,14 @@ class Util extends Controller
      */
     public static function crearCarpeta($ruta)
     {
+        $ruta = public_path('raiz/' . $ruta);
         return (!is_dir($ruta) ? mkdir($ruta, 0777, true) : false);
     }
 
     /**
      * Genera el nombre del archivo
      * Ejemplo: Entra - "Documento de informe de egresados.pdf"
-     *          Sale  - "Documento-de-informe-de-egresados:2021-11-04_22-28-30-v1.pdf"
+     *          Sale  - "Documento-de-informe-de-egresados_2021-11-04-22-28-30-v1.pdf"
      *
      * @var object UploadedFile $archivo  - El archivo que subio el usuario
      * @var string              $version  - Version del archivo

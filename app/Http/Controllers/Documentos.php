@@ -53,22 +53,25 @@ class Documentos extends Controller
      * Ver los Documentos de un determinado Grupo de Documentos
      *
      * @param $idGrupoDocumento - El ID del grupo de documento
-     *
      * @return view
-     *
      */
     public function todos($idGrupoDocumento)
     {
-        $grupo = $this->moGrupoDocumentos->find($idGrupoDocumento);
+        $grupo = $this->moGrupoDocumentos->retGrupoDocumento($idGrupoDocumento);
         if ($grupo->Nombre === 'Todos')
             return $this->generarTodosDocumentos($grupo);
-        $documentos = $this->moDocumentos->presentarDocumentosDeGrupo($idGrupoDocumento);
-        $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
-        $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
+        $documentos = $this->moDocumentos->retDocumentosDeGrupo($idGrupoDocumento);
 
+        $documentosUsuario = collect([]);
+        foreach ($documentos as $documento)
+            $documentosUsuario->push($this->moDocumentos->retDocumentoUsuario($documento->IdDocumento));
+        $subProceso = $this->moSubProcesos->retSubProceso($grupo->IdSubProceso);
+        $procesoPadre = $this->moProcesos->retProceso($subProceso->IdProceso);
+        $bandera = collect(['VerTodos' => false]);
 
-        $data = ['documentos'   => $documentos,
+        $data = ['documentos'   => $documentosUsuario,
                  'grupo'        => $grupo,
+                 'bandera'      => $bandera,
                  'subProceso'   => $subProceso,
                  'procesoPadre' => $procesoPadre];
 
@@ -77,15 +80,12 @@ class Documentos extends Controller
 
     public function ver($idDocumento)
     {
-        $documento = $this->moDocumentos->presentarDocumento($idDocumento)->first();
-        $estandares = $this->moDocPorEstand->presentarDe($idDocumento);
-        $grupo = $this->moGrupoDocumentos->find($documento->IdGrupoDocumento);
-        $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
-        $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
+        $documento = $this->moDocumentos->retDocumentoUsuario($idDocumento);
+
+        $subProceso = $this->moSubProcesos->retSubProceso($documento->get('IdSubProceso'));
+        $procesoPadre = $this->moProcesos->retProceso($subProceso->IdProceso);
 
         $data = ['documento'    => $documento,
-                 'estandares'   => $estandares,
-                 'grupo'        => $grupo,
                  'subProceso'   => $subProceso,
                  'procesoPadre' => $procesoPadre];
 
@@ -142,9 +142,7 @@ class Documentos extends Controller
         ];
 
         // Guardamos el archivo fisico en el sistema de archivos
-        // Ubicacion esta asi: public/raiz/Estrategicos/ProgramaEgresados/Matrices
-        // Lo cambiamos asi:   Estrategicos/ProgramaEgresados/Matrices
-        $archivo->storeAs(str_replace('public/raiz/', '', $documento->UbicacionVirtual), $nombreArchivo, 'public');
+        $archivo->storeAs($documento->UbicacionVirtual, $nombreArchivo, 'public');
         $this->moArchivos->create($data);
         
         return redirect()->route('documentos-todos', $idGrupoDocumento)
@@ -163,7 +161,7 @@ class Documentos extends Controller
             'unidad'           => ['required'],
             'ubicacion-fisica' => ['max:255', 'min:3']
         ]);
-        $documento = $this->moDocumentos->find($idDocumento);
+        $documento = $this->moDocumentos->retDocumento($idDocumento);
 
         // Modificacion del documento
         $documento->Codigo = $solicitud->input('codigo');
@@ -175,7 +173,7 @@ class Documentos extends Controller
 
         // Modificacion de los estandares
         // Para ello voy a eliminar los estandares anteriores y crear nuevos, es mas facil asi
-        $estandaresActuales = $this->moDocPorEstand->todoDe($idDocumento);
+        $estandaresActuales = $this->moDocPorEstand->retEstandaresDeDocumento($idDocumento);
         foreach ($estandaresActuales as $estandarActual)
         {
             $estandarActual->Estado = 0;
@@ -191,7 +189,7 @@ class Documentos extends Controller
     public function eliminar(Request $solicitud, $idDocumento)
     {
         $motivo = $solicitud->input('motivo');
-        $documento = $this->moDocumentos->find($idDocumento);
+        $documento = $this->moDocumentos->retDocumento($idDocumento);
         $documento->Estado = 0;
         $documento->MotivoEliminado = $motivo;
         $documento->save();
@@ -202,15 +200,14 @@ class Documentos extends Controller
 
     public function descargar($idDocumento)
     {
-        $archivos = $this->moArchivos->todoDe($idDocumento);
-        $documento = $this->moDocumentos->find($idDocumento);
+        $archivos = $this->moArchivos->retArchivosDeDocumento($idDocumento);
+        $documento = $this->moDocumentos->retDocumento($idDocumento);
         foreach ($archivos as $archivo)
             if ($archivo->Version === $documento->Version)
-                return response()->download(public_path(str_replace('public', '', $archivo->UbicacionVirtual)));
+                return response()->download(public_path('raiz/' . $archivo->UbicacionVirtual));
         return redirect()->route('documentos-todos', $documento->IdGrupoDocumento)
                          ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'No se ha localizado la versión del documento, contacte con el administrador']);
     }
-
 
     public function vistaCrear($idGrupoDocumento)
     {
@@ -233,23 +230,19 @@ class Documentos extends Controller
 
     public function vistaEditar($idDocumento)
     {
-        $documento = $this->moDocumentos->find($idDocumento);
-        $grupo = $this->moGrupoDocumentos->find($documento->IdGrupoDocumento);
-        $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
-        $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
+        $documento = $this->moDocumentos->retDocumentoUsuario($idDocumento);
+        $subProceso = $this->moSubProcesos->retSubProceso($documento->get('IdSubProceso'));
+        $procesoPadre = $this->moProcesos->retProceso($subProceso->IdProceso);
         $tipoDocumento = $this->moTipoDocumento->todo();
         $unidades = $this->moUnidades->todo();
         $estandares = $this->moEstandares->todo();
-        $docEstandares = $this->moDocPorEstand->presentarDe($idDocumento);
 
-        $data = ['grupo'         => $grupo,
-                 'subProceso'    => $subProceso,
+        $data = ['subProceso'    => $subProceso,
                  'procesoPadre'  => $procesoPadre,
                  'tipos'         => $tipoDocumento,
                  'unidades'      => $unidades,
                  'estandares'    => $estandares,
-                 'documento'     => $documento,
-                 'docEstandares' => $docEstandares];
+                 'documento'     => $documento];
 
         return view('documentos/editar', $data);
     }
@@ -268,14 +261,17 @@ class Documentos extends Controller
         ]);
     }
     
+    /**
+     * Genera la ubicacion de la carpeta donde se guardara la informacion del documento
+     * y de sus respectivas versiones
+     *
+     * @var $idGrupoDocumento - Grupo de documentos al que pertenece el documento
+     * @var $nombre           - Nombre del documento
+     */
     private function generarUbicacion($idGrupoDocumento, $nombre)
     {
         $ubicacion = Util::retUbicacionDeGrupoDocumento($idGrupoDocumento);
         $ubicacion .= '/' . Util::formatearCadena($nombre);
-        if (!is_dir($ubicacion))
-            return $ubicacion;
-        // Si la ubicacion (la carpeta) ya existe, agregamos la fecha y hora de
-        // creacion al nombre de la carpeta
         $ubicacion .= '-' . Util::retFechaHora();
         return $ubicacion;
     }
@@ -302,18 +298,22 @@ class Documentos extends Controller
     /**
      * Genera la vista donde se presentan todos los documentos de un determinado subproceso
      *
-     * @var $grupo - El grupo de documentos (obviamente 'Todos')
-     *
+     * @var $grupo - Objeto de GrupoDocumentos
      * @return view
      */
     private function generarTodosDocumentos($grupo)
     {
-        $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
-        $documentos = $this->moDocumentos->presentarTodoDeSubProceso($subProceso->IdSubProceso);
-        $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
-        
-        $data = ['documentos'   => $documentos,
+        $subProceso = $this->moSubProcesos->retSubProceso($grupo->IdSubProceso);
+        $documentos = $this->moDocumentos->retDocumentosDeSubProceso($grupo->IdSubProceso);
+        $documentosUsuario = collect([]);
+        foreach ($documentos as $documento)
+            $documentosUsuario->push($this->moDocumentos->retDocumentoUsuario($documento->IdDocumento));
+        $procesoPadre = $this->moProcesos->retProceso($subProceso->IdProceso);
+        $bandera = collect(['VerTodos' => true]);
+
+        $data = ['documentos'   => $documentosUsuario,
                  'grupo'        => $grupo,
+                 'bandera'      => $bandera,
                  'subProceso'   => $subProceso,
                  'procesoPadre' => $procesoPadre];
 

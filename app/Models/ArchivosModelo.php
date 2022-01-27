@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\DocumentosModelo;
+
 /**
  * Modelo para controlar la tabla 'Archivos'
  *
@@ -17,38 +19,69 @@ class ArchivosModelo extends Model
 
     protected $fillable = ['IdDocumento', 'Nombre', 'UbicacionVirtual', 'Version',
                            'FechaCreacion', 'FechaAprovacion', 'FechaModificacion',
-                           'MotivoCambio', 'FechaDocumento', 'Estado'];
+                           'MotivoCambio', 'FechaEmision', 'Estado'];
 
     public $timestamps = false;
 
     /**
-     * Obtiene todos los datos en bruto con 'Estado = 1'
+     * Obtiene todos los archivos
      *
      * @return Collection
-     *
      */
     public function todo()
     {
-        return $this->where('Estado', 1)
+        return $this->orderBy('FechaCreacion', 'desc')
+                    ->get();
+    }
+
+    /**
+     * Obtiene un archivo determinado
+     *
+     * @var $idArchivo - Id del archivo
+     * @return Collection
+     */
+    public function retArchivo($idArchivo)
+    {
+        return $this->where('IdArchivo', $idArchivo)
+                    ->first();
+    }
+
+    /**
+     * Obtiene todos los archivos de un determinado documento
+     *
+     * @var $idDocumento - Id del documento
+     * @return Collection
+     */
+    public function retArchivosDeDocumento($idDocumento)
+    {
+        return $this->where('IdDocumento', $idDocumento)
                     ->orderBy('FechaCreacion', 'desc')
                     ->get();
     }
 
     /**
-     * Obtiene todos los datos en bruto con 'Estado = 1'
-     * de un determinado documento
+     * Obtiene un archivo determinado para ser presentado al usuario final
      *
-     * @var $idDocumento - Id del documento
-     *
+     * @var $idArchivo - Id del archivo
      * @return Collection
-     *
      */
-    public function todoDe($idDocumento)
+    public function retArchivoUsuario($idArchivo)
     {
-        return $this->where('Estado', 1)
-                    ->where('IdDocumento', $idDocumento)
-                    ->orderBy('FechaCreacion', 'desc')
-                    ->get();
+        $archivo = $this->retArchivo($idArchivo);
+        $moDocumentos = new DocumentosModelo();
+        $documento = $moDocumentos->retDocumentoUsuario($archivo->IdDocumento);
+        return collect([
+            'IdArchivo'                 => $archivo->IdArchivo,
+            'NombreArchivo'             => $archivo->Nombre,
+            'UbicacionVirtualArchivo'   => $archivo->UbicacionVirtual,
+            'VersionArchivo'            => $archivo->Version,
+            'MotivoCambioArchivo'       => $archivo->MotivoCambio,
+            'FechaCreacionArchivo'      => $archivo->FechaCreacion,
+            'FechaAprovacionArchivo'    => $archivo->FechaAprovacion,
+            'FechaModificacionArchivo'  => $archivo->FechaModificacion,
+            'FechaEmision'              => $archivo->FechaEmision,
+            'EstadoArchivo'             => $archivo->Estado,
+        ])->merge($documento);
     }
 }
 

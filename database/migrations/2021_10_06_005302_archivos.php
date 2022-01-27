@@ -28,7 +28,7 @@ class Archivos extends Migration
             $tabla->date('FechaCreacion')->nullable();
             $tabla->date('FechaAprovacion')->nullable();
             $tabla->date('FechaModificacion')->nullable();
-            $tabla->date('FechaDocumento')->nullable(); // Fecha que se encuentra en el documento
+            $tabla->date('FechaEmision')->nullable(); // Fecha que se encuentra en el documento
             $tabla->integer('Estado')->default(1);
 
             $tabla->foreign('IdDocumento')->references('IdDocumento')->on('Documentos');

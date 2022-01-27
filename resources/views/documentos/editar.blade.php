@@ -26,10 +26,10 @@ $item_subproceso_activo = $subProceso->Nombre;
 
     <div class="card card-primary">
 	<div class="card-header">
-            <h3 class="card-title">Editar documento ({{ $grupo->Nombre }})</h3>
+            <h3 class="card-title">Editar documento ({{ $documento->get('NombreGrupoDocumento') }})</h3>
 	</div>
 
-	<form method="post" action="{{ route('documentos-editar', $documento->IdDocumento) }}">
+	<form method="post" action="{{ route('documentos-editar', $documento->get('IdDocumento')) }}">
 	    @csrf
 	    @method('post')
             <div class="card-body">
@@ -37,14 +37,14 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="codigo">Código del documento</label>
-			    <input type="text" value="{{ $documento->Codigo }}" class="form-control" id="codigo" name="codigo" placeholder="Ingrese el código del documento" maxlength="255" minlength="1" required>
+			    <input type="text" value="{{ $documento->get('CodigoDocumento') }}" class="form-control" id="codigo" name="codigo" placeholder="Ingrese el código del documento" maxlength="255" minlength="1" required>
 			</div>
 		    </div>
 
 		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="nombre">Nombre del documento</label>
-			    <input type="text" value="{{ $documento->Nombre }}" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del documento" maxlength="255" minlength="3" required>
+			    <input type="text" value="{{ $documento->get('NombreDocumento') }}" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del documento" maxlength="255" minlength="3" required>
 			</div>
 		    </div>
 		    
@@ -52,7 +52,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label>Fecha de emisión de la versión actual:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input type="date" value="{{ $documento->FechaDocumento}}" name="fecha-documento" class="form-control datetimepicker-input" data-target="#reservationdate" max="{{ date('Y-m-d') }}" disabled/>
+				<input type="date" value="{{ $documento->get('FechaEmisionDocumento')}}" name="fecha-documento" class="form-control datetimepicker-input" data-target="#reservationdate" max="{{ date('Y-m-d') }}" disabled/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
@@ -69,7 +69,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			    <label>Tipo de documento</label>
 			    <select name="tipo" class="form-control select2bs4" style="width: 100%;" required>
 				@foreach ($tipos as $tipo)
-				    @if ($tipo->IdTipoDocumento === $documento->IdTipoDocumento)
+				    @if ($tipo->IdTipoDocumento === $documento->get('IdTipoDocumento'))
 					<option value="{{ $tipo->IdTipoDocumento }}" selected>{{ $tipo->Nombre }}</option>
 				    @else
 					<option value="{{ $tipo->IdTipoDocumento }}">{{ $tipo->Nombre }}</option>
@@ -84,7 +84,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			    <label>Unidad</label>
 			    <select name="unidad" class="form-control select2bs4" style="width: 100%;" required>
 				@foreach ($unidades as $unidad)
-				    @if ($unidad->IdUnidad === $documento->IdUnidad)
+				    @if ($unidad->IdUnidad === $documento->get('IdUnidad'))
 					<option value="{{ $unidad->IdUnidad }}" selected>{{ $unidad->Nombre }}</option>
 				    @else
 					<option value="{{ $unidad->IdUnidad }}">{{ $unidad->Nombre }}</option>
@@ -102,8 +102,8 @@ $item_subproceso_activo = $subProceso->Nombre;
 				@php
 				$encontro = false;
 				foreach ($estandares as $estandar) {
-				foreach ($docEstandares as $docEstandar) {
-				if ($estandar->IdEstandar === $docEstandar->IdEstandar) {
+				foreach ($documento->get('EstandaresDocumento') as $docEstandar) {
+				if ($estandar->IdEstandar === $docEstandar->get('IdEstandar')) {
 				$encontro = true;
 				@endphp
 				<option value="{{ $estandar->IdEstandar }}" selected>{{ $estandar->Numero . '. ' . $estandar->Nombre }}</option>
@@ -131,7 +131,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="ubicacion-fisica">Ubicación física del documento</label>
-			    <input type="text" value="{{ $documento->UbicacionFisica }}" class="form-control" id="ubicacion-fisica" placeholder="Ingrese el ubicación del documento" maxlength="255" minlength="3" name="ubicacion-fisica">
+			    <input type="text" value="{{ $documento->get('UbicacionFisicaDocumento') }}" class="form-control" id="ubicacion-fisica" placeholder="Ingrese el ubicación del documento" maxlength="255" minlength="3" name="ubicacion-fisica">
 			</div>
 		    </div>
 
@@ -139,7 +139,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label>Fecha de aprovación de la versión actual:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input type="date" value="{{ $documento->FechaAprovacion}}" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" max="{{ date('Y-m-d') }}" disabled/>
+				<input type="date" value="{{ $documento->get('FechaAprovacionDocumento')}}" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" max="{{ date('Y-m-d') }}" disabled/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
@@ -150,7 +150,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="version">Versión actual del documento</label>
-			    <input type="number" value="{{ $documento->Version }}" class="form-control" id="version" min="0" placeholder="Ingrese la versión del documento" name="version" readonly>
+			    <input type="number" value="{{ $documento->get('VersionDocumento') }}" class="form-control" id="version" min="0" placeholder="Ingrese la versión del documento" name="version" readonly>
 			</div>
 		    </div>
 
@@ -160,7 +160,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Editar</button>
-                <a href="{{ route('documentos-todos', $grupo->IdGrupoDocumento) }}" class="btn btn-secondary">Cancelar</a>
+                <a href="{{ route('documentos-todos', $documento->get('IdGrupoDocumento')) }}" class="btn btn-secondary">Cancelar</a>
             </div>
 	</form>
     </div>

@@ -21,7 +21,11 @@ use App\Http\Controllers\Archivos;
 
 Route::get('/', [Inicio::class, 'index'])->name('inicio');
 
-//Route::get('subproceso', [SubProceso::class, 'index']);
+Route::get('nombre', function() {
+    return 'Esta funcionando...';
+});
+
+Route::get('subproceso', [SubProceso::class, 'index']);
 Route::get('subproceso/{IdSubProceso}', [SubProceso::class, 'verGrupoDocumentos'])->name('subproceso-versubprocesos');
 
 Route::post('grupo/crear/{IdSubProceso}', [GrupoDocumentos::class, 'crear'])->name('grupo-crear');

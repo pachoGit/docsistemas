@@ -4,6 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+
+use App\Models\GrupoDocumentosModelo;
+use App\Models\TipoDocumentoModelo;
+use App\Models\UnidadesModelo;
+use App\Models\DocPorEstandModelo;
+use App\Models\SubProcesosModelo;
+use App\Models\EstandaresModelo;
 
 /**
  * Modelo para controlar la tabla 'Documentos'
@@ -17,140 +25,125 @@ class DocumentosModelo extends Model
 
     protected $fillable = ['IdGrupoDocumento', 'IdTipoDocumento', 'IdUnidad', 'Codigo',
                            'Nombre', 'UbicacionVirtual', 'UbicacionFisica', 'Version', 'MotivoEliminado',
-                           'FechaAprovacion', 'FechaCreacion', 'FechaDocumento', 'Estado'];
+                           'FechaAprovacion', 'FechaCreacion', 'FechaEmision', 'Estado'];
 
     public $timestamps = false;
     
     /**
-     * Obtiene todos los datos en bruto con 'Estado = 1'
+     * Obtiene todos los documentos
      *
      * @return Collection
-     *
      */
     public function todo()
     {
-        return $this->where('Estado', 1)->get();
+        return $this->orderBy('FechaCreacion', 'desc')
+                    ->get();
     }
 
     /**
-     * Obtener los documentos (datos en bruto) de un determinado grupo de documentos
+     * Obtiene un documento determinado
+     *
+     * @var $idDocumento - Id del registro
+     * @return Collection
+     */
+    public function retDocumento($idDocumento)
+    {
+        return $this->where('IdDocumento', $idDocumento)
+                    ->first();
+    }
+
+    /**
+     * Obtiene los documentos de un determinado grupo de documentos
      *
      * @var $idGrupoDocumento - Id del grupo de documento
-     *
+     * @return Collection
      */
-    public function todoDeGrupo($idGrupoDocumento)
+    public function retDocumentosDeGrupo($idGrupoDocumento)
     {
-        return $this->where('Estado', 1)
-                    ->where('IdGrupoDocumento', $idGrupoDocumento)
+        return $this->where('IdGrupoDocumento', $idGrupoDocumento)
+                    ->orderBy('FechaCreacion', 'desc')
                     ->get();
     }
 
     /**
-     * Obtiene todos los documentos de un grupo de documentos, para ser presentados
-     * al usuario final. Se envian todos, con todo los de Estado = 0
+     * Obtiene los documentos de un determinado tipo de documentos
      *
-     * @var $idGrupoDocumento - Id del grupo de documento
-     *
+     * @var $idTipoDocumento - Id del tipo de documento
      * @return Collection
-     *
      */
-    public function presentarDocumentosDeGrupo($idGrupoDocumento)
+    public function retDocumentosDeTipo($idTipoDocumento)
     {
-        return $this->where('GrupoDocumentos.IdGrupoDocumento', $idGrupoDocumento)
-                    ->join('TipoDocumento',   'Documentos.IdTipoDocumento',  '=', 'TipoDocumento.IdTipoDocumento')
-                    ->join('Unidades',        'Documentos.IdUnidad',         '=', 'Unidades.IdUnidad')
-                    ->join('GrupoDocumentos', 'Documentos.IdGrupoDocumento', '=', 'GrupoDocumentos.IdGrupoDocumento')
-                    ->select('Documentos.Nombre',
-                             'Unidades.Nombre as Unidad',
-                             'TipoDocumento.Nombre as Tipo',
-                             'Documentos.IdDocumento',
-                             'Documentos.IdGrupoDocumento',
-                             'Documentos.Codigo',
-                             'Documentos.UbicacionVirtual',
-                             'Documentos.UbicacionFisica',
-                             'Documentos.Version',
-                             'Documentos.MotivoEliminado',
-                             'Documentos.FechaAprovacion',
-                             'Documentos.FechaDocumento',
-                             'Documentos.FechaCreacion',
-                             'Documentos.Estado')
-                    ->orderBy('Documentos.FechaCreacion', 'desc')
+        return $this->where('IdTipoDocumento', $idTipoDocumento)
+                    ->orderBy('FechaCreacion', 'desc')
                     ->get();
     }
 
     /**
-     * Obtiene la información de un documento, para ser mostrados
-     * al usuario final.
+     * Obtiene los documentos de una determinada unidad de documentos
      *
-     * @var $idDocumento - Id del documento que se desea mostrar
-     *
+     * @var $idUnidad - Id de la unidad de documento
      * @return Collection
-     *
      */
-    public function presentarDocumento($idDocumento)
+    public function retDocumentosDeUnidad($idUnidad)
     {
-        return $this->select('Unidades.Nombre as Unidad',
-                             'TipoDocumento.Nombre as Tipo',
-                             'GrupoDocumentos.Nombre as Grupo',
-                             'SubProcesos.Nombre as SubProceso',
-                             'Procesos.Nombre as Proceso',
-                             'Documentos.IdDocumento',
-                             'Documentos.IdGrupoDocumento',
-                             'Documentos.Codigo',
-                             'Documentos.Nombre',
-                             'Documentos.UbicacionVirtual',
-                             'Documentos.UbicacionFisica',
-                             'Documentos.Version',
-                             'Documentos.MotivoEliminado',
-                             'Documentos.FechaAprovacion',
-                             'Documentos.FechaDocumento',
-                             'Documentos.FechaCreacion',
-                             'Documentos.Estado')
-                    ->join('TipoDocumento',   'Documentos.IdTipoDocumento',   '=', 'TipoDocumento.IdTipoDocumento')
-                    ->join('Unidades',        'Documentos.IdUnidad',          '=', 'Unidades.IdUnidad')
-                    ->join('GrupoDocumentos', 'Documentos.IdGrupoDocumento',  '=', 'GrupoDocumentos.IdGrupoDocumento')
-                    ->join('SubProcesos',     'GrupoDocumentos.IdSubProceso', '=', 'SubProcesos.IdSubProceso')
-                    ->join('Procesos',        'SubProcesos.IdProceso',        '=', 'Procesos.IdProceso')
-                    ->where('Documentos.IdDocumento', $idDocumento)
+        return $this->where('IdUnidad', $idUnidad)
+                    ->orderBy('FechaCreacion', 'desc')
                     ->get();
     }
 
     /**
-     * Obtiene todos los documentos de un subproceso, para ser presentados
-     * al usuario final. Se envian todos, con todo los de Estado = 0
+     * Obtiene los documentos de una determinada subproceso
      *
-     * @var $idSubProceso - Id del grupo de documento
+     * @var $idSubProceso - Id del subproceso
+     * @return Collection
+     */
+    public function retDocumentosDeSubProceso($idSubProceso)
+    {
+        // Obtenemos todos los grupos que pertenecen al subproceso
+        $moGrupoDocumentos = new GrupoDocumentosModelo();
+        $grupos = $moGrupoDocumentos->retGrupoDocumentosDeSubProceso($idSubProceso);
+        $documentos = collect([]);
+        // De cada grupo, obtenemos los documentos que tienen alojados
+        foreach ($grupos as $grupo)
+            $documentos->push($this->retDocumentosDeGrupo($grupo->IdGrupoDocumento));
+        return $documentos->collapse();
+    }
+
+    /**
+     * Obtiene un documento para ser presentado al usuario final
      *
      * @return Collection
-     *
      */
-    public function presentarTodoDeSubProceso($idSubProceso)
+    public function retDocumentoUsuario($idDocumento)
     {
-        return $this->where('SubProcesos.IdSubProceso', $idSubProceso)
-            // Descomente esto si desea que los documentos de un determinado grupo que haya
-            // sido eliminado, no se vean al generar todos los documentos
-            //->where('GrupoDocumentos.Estado', 1)
-                    ->join('TipoDocumento',   'Documentos.IdTipoDocumento',   '=', 'TipoDocumento.IdTipoDocumento')
-                    ->join('Unidades',        'Documentos.IdUnidad',          '=', 'Unidades.IdUnidad')
-                    ->join('GrupoDocumentos', 'Documentos.IdGrupoDocumento',  '=', 'GrupoDocumentos.IdGrupoDocumento')
-                    ->join('SubProcesos',     'GrupoDocumentos.IdSubProceso', '=', 'SubProcesos.IdSubProceso')
-                    ->join('Procesos',        'SubProcesos.IdProceso',        '=', 'Procesos.IdProceso')
-                    ->select('Documentos.Nombre',
-                             'Unidades.Nombre as Unidad',
-                             'TipoDocumento.Nombre as Tipo',
-                             'GrupoDocumentos.Nombre as Grupo',
-                             'Documentos.IdDocumento',
-                             'Documentos.IdGrupoDocumento',
-                             'Documentos.Codigo',
-                             'Documentos.UbicacionVirtual',
-                             'Documentos.UbicacionFisica',
-                             'Documentos.Version',
-                             'Documentos.FechaAprovacion',
-                             'Documentos.FechaDocumento',
-                             'Documentos.FechaCreacion',
-                             'Documentos.Estado')
-                    ->orderBy('Documentos.FechaCreacion', 'desc')
-                    ->get();
+        $documento = $this->retDocumento($idDocumento);
+        $moGrupoDocumentos = new GrupoDocumentosModelo();
+        $moTipoDocumento = new TipoDocumentoModelo();
+        $moUnidades = new UnidadesModelo();
+        $moDocPorEstand = new DocPorEstandModelo();
+        $grupo = $moGrupoDocumentos->retGrupoDocumentoUsuario($documento->IdGrupoDocumento);
+        $tipo = $moTipoDocumento->retTipoDocumentoUsuario($documento->IdTipoDocumento);
+        $unidad = $moUnidades->retUnidadUsuario($documento->IdUnidad);
         
+        $estandares = $moDocPorEstand->retEstandaresDeDocumento($idDocumento);
+        $moEstandares = new EstandaresModelo();
+        $estandaresUsuario = collect([]);
+        foreach ($estandares as $estandar)
+            $estandaresUsuario->push($moEstandares->retEstandarUsuario($estandar->IdEstandar));
+
+        return collect([
+            'IdDocumento'                 => $documento->IdDocumento,
+            'CodigoDocumento'             => $documento->Codigo,
+            'NombreDocumento'             => $documento->Nombre,
+            'UbicacionVirtualDocumento'   => $documento->UbicacionVirtual,
+            'UbicacionFisicaDocumento'    => $documento->UbicacionFisica,
+            'VersionDocumento'            => $documento->Version,
+            'MotivoEliminadoDocumento'    => $documento->MotivoEliminado,
+            'FechaAprovacionDocumento'    => $documento->FechaAprovacion,
+            'FechaCreacionDocumento'      => $documento->FechaCreacion,
+            'FechaEmisionDocumento'       => $documento->FechaEmision,
+            'EstadoDocumento'             => $documento->Estado,
+            'EstandaresDocumento'         => $estandaresUsuario,
+        ])->merge($grupo)->merge($tipo)->merge($unidad);
     }
 }

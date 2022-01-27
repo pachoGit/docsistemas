@@ -31,30 +31,28 @@ class DocPorEstandModelo extends Model
     }
 
     /**
-     * Obtiene todos los datos en bruto con 'Estado = 1'
-     * de un determinado documento
+     * Obtiene los estandares de un determinado documento
      *
      * @var $idDocumento - Id del documento
-     *
      * @return Collection
-     *
      */
-    public function todoDe($idDocumento)
+    public function retEstandaresDeDocumento($idDocumento)
     {
         return $this->where('Estado', 1)
                     ->where('IdDocumento', $idDocumento)
                     ->get();
     }
 
-    public function presentarDe($idDocumento)
+    /**
+     * Obtiene los documentos de un determinado estandar
+     *
+     * @var $idDocumento - Id del estandar
+     * @return Collection
+     */
+    public function retDocumentosDeEstandar($idEstandar)
     {
-        return $this->join('Documentos', 'Documentos.IdDocumento', '=', 'DocPorEstand.IdDocumento')
-                    ->join('Estandares', 'Estandares.IdEstandar',  '=', 'DocPorEstand.IdEstandar')
-                    ->where('DocPorEstand.Estado', 1)
-                    ->where('DocPorEstand.IdDocumento', $idDocumento)
-                    ->select('Estandares.Nombre as Estandar',
-                             'Estandares.Numero as Numero',
-                             'Estandares.IdEstandar')
+        return $this->where('Estado', 1)
+                    ->where('IdEstandar', $idEstandar)
                     ->get();
     }
 }

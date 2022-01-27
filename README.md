@@ -11,6 +11,9 @@
 
 `sudo chmod -R 777 storage/`  
 `sudo chmod -R 777 public/`  
+Si estas en una distribución basada en Ubuntu:  
+`sudo chown -R www-data:$USER storage/`  
+`sudo chown -R www-data:$USER public/`  
 
 ## PASOS PARA DAR INICIO AL USO DEL SISTEMA
 
@@ -33,13 +36,9 @@ Ejecute el siguiente comando para generar la base de datos
 
 _Si con el anterior comando la base de datos no se ha llenado con los valores predeterminados, ejecute lo siguiente_
 
-`php artisan db:seed`
-    
-_Si con el comando anterior aun no se llena, tendra que ejecutarlo manualmente, para ello ejecute lo siguiente_
-
 `./seeder.sh`
 
-#### Permisos de las nuevas carpetas creadas
+#### Para finalizar debemos cambiar los propietarios de las nuevas carpetas creadas
 
 `sudo chown -R www-data:$USER public/raiz/*` _Para usuarios de ubuntu_
 

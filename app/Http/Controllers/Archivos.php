@@ -44,15 +44,16 @@ class Archivos extends Controller
      */
     public function todos($idDocumento)
     {
-        $archivos = $this->moArchivos->todoDe($idDocumento);
-        $documento = $this->moDocumentos->find($idDocumento);
-        $grupo = $this->moGrupoDocumentos->find($documento->IdGrupoDocumento);
-        $subProceso = $this->moSubProcesos->find($grupo->IdSubProceso);
-        $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
+        $documento = $this->moDocumentos->retDocumento($idDocumento);
+        $archivos = $this->moArchivos->retArchivosDeDocumento($idDocumento);
+        $archivosUsuario = collect([]);
+        foreach ($archivos as $archivo)
+            $archivosUsuario->push($this->moArchivos->retArchivoUsuario($archivo->IdArchivo));
+        $subProceso = $this->moSubProcesos->retSubProceso($archivosUsuario->first()->get('IdSubProceso'));
+        $procesoPadre = $this->moProcesos->retProceso($subProceso->IdProceso);
 
-        $data = ['archivos'     => $archivos,
+        $data = ['archivos'     => $archivosUsuario,
                  'documento'    => $documento,
-                 'grupo'        => $grupo,
                  'subProceso'   => $subProceso,
                  'procesoPadre' => $procesoPadre];
 
@@ -103,15 +104,15 @@ class Archivos extends Controller
 
     public function eliminar($idArchivo)
     {
-        $archivo = $this->moArchivos->find($idArchivo);
-        $ubicacion = str_replace('public/raiz', '', $archivo->UbicacionVirtual);
+        $archivo = $this->moArchivos->retArchivo($idArchivo);
+        $ubicacion = $archivo->UbicacionVirtual;
         // No validamos ya que si no existe el archivo, no pasa nada
         // aun asi cambiamos de estado al registro
         Storage::disk('public')->delete($ubicacion);
         $archivo->Estado = 0;
         $archivo->save();
         // Si se esta eliminando la version actual tenemos que modificar al documento
-        $documento = $this->moDocumentos->find($archivo->IdDocumento);
+        $documento = $this->moDocumentos->retDocumento($archivo->IdDocumento);
         if ($documento->Version == $archivo->Version)
         {
             // Obtenemos la version mas alta hasta el momento
@@ -148,9 +149,9 @@ class Archivos extends Controller
      */
     public function descargar($idArchivo)
     {
-        $archivo = $this->moArchivos->find($idArchivo);
+        $archivo = $this->moArchivos->retArchivo($idArchivo);
         $ubicacion = $archivo->UbicacionVirtual;
-        return response()->download(public_path(str_replace('public', '', $ubicacion)));
+        return response()->download(public_path('raiz/' . $ubicacion));
     }
 
     /**
@@ -209,7 +210,7 @@ class Archivos extends Controller
      */
     private function existeVersion($version, $idDocumento)
     {
-        $archivos = $this->moArchivos->todoDe($idDocumento);
+        $archivos = $this->moArchivos->retArchivosDeDocumento($idDocumento);
         foreach ($archivos as $archivo)
             if ($archivo->Version === $version)
                 return true;

@@ -18,7 +18,7 @@ $item_subproceso_activo = $subProceso->Nombre;
             <div class="card">
 		<div class="card-header">
                     <h3 class="card-title">
-			@if (!isset($documentos->first()->Grupo))
+			@if ($bandera->get('VerTodos') === false)
 			<a href="{{ route('documentos-vcrear', $grupo->IdGrupoDocumento) }}" type="button" class="btn btn-block btn-primary">
 			    <i class="fa fa-plus"></i> Nuevo Documento
 			</a>
@@ -40,9 +40,9 @@ $item_subproceso_activo = $subProceso->Nombre;
 				<th>Historial</th>
 				<th>Código</th>
 				<th>Nombre</th>
-				@isset($documentos->first()->Grupo)
+				@if($bandera->get('VerTodos') === true)
 				<th>Grupo</th>
-				@endisset
+				@endif
 				<th>Tipo</th>
 				<th>Unidad</th>
 				<th>Fecha de Emisión</th>
@@ -56,30 +56,30 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<tbody>
 			    @foreach ($documentos as $documento)
 				<tr>
-				    @if ($documento->Estado === 1)
-					<td><a href="{{ route('documentos-ver', $documento->IdDocumento) }}" type="button" class="btn btn-primary btn-block" title="Ver documento"><i class="fa fa-eye"></i></a></td>
-					<td><a href="{{ route('archivos-todos', $documento->IdDocumento) }}" type="button" class="btn btn-primary btn-block" title="Ver historial"><i class="fa fa-book"></i></a></td>
+				    @if ($documento->get('EstadoDocumento') === 1)
+					<td><a href="{{ route('documentos-ver', $documento->get('IdDocumento')) }}" type="button" class="btn btn-primary btn-block" title="Ver documento"><i class="fa fa-eye"></i></a></td>
+					<td><a href="{{ route('archivos-todos', $documento->get('IdDocumento')) }}" type="button" class="btn btn-primary btn-block" title="Ver historial"><i class="fa fa-book"></i></a></td>
 				    @else
-					<td><a href="{{ route('documentos-ver', $documento->IdDocumento) }}" type="button" class="btn btn-danger btn-block" title="Ver documento"><i class="fa fa-eye"></i></a></td>
-					<td><a href="{{ route('archivos-todos', $documento->IdDocumento) }}" type="button" class="btn btn-danger btn-block" title="Ver historial"><i class="fa fa-book"></i></a></td>
+					<td><a href="{{ route('documentos-ver', $documento->get('IdDocumento')) }}" type="button" class="btn btn-danger btn-block" title="Ver documento"><i class="fa fa-eye"></i></a></td>
+					<td><a href="{{ route('archivos-todos', $documento->get('IdDocumento')) }}" type="button" class="btn btn-danger btn-block" title="Ver historial"><i class="fa fa-book"></i></a></td>
 				    @endif
-				    <td>{{ $documento->Codigo }}</td>
-				    <td>{{ $documento->Nombre }}</td>
-				    @isset($documento->Grupo)
-				    <td>{{ $documento->Grupo }}</td>
-				    @endisset
-				    <td>{{ $documento->Tipo }}</td>
-				    <td>{{ $documento->Unidad }}</td>
-				    <td>{{ $documento->FechaDocumento }}</td>
-				    <td>{{ $documento->FechaAprovacion }}</td>
-				    <td>{{ $documento->Version }}</td>
-				    @if ($documento->Estado === 1)
+				    <td>{{ $documento->get('CodigoDocumento') }}</td>
+				    <td>{{ $documento->get('NombreDocumento') }}</td>
+				    @if($bandera->get('VerTodos') === true)
+				    <td>{{ $documento->get('NombreGrupoDocumento') }}</td>
+				    @endif
+				    <td>{{ $documento->get('NombreTipoDocumento') }}</td>
+				    <td>{{ $documento->get('NombreUnidad') }}</td>
+				    <td>{{ $documento->get('FechaEmisionDocumento') }}</td>
+				    <td>{{ $documento->get('FechaAprovacionDocumento') }}</td>
+				    <td>{{ $documento->get('VersionDocumento') }}</td>
+				    @if ($documento->get('EstadoDocumento') === 1)
 					<td class="text-center"><button type="button" class="btn btn-success" title="Activo"><i class="fa fa-check"></i></button></td>
 					<td class="text-center">
 					    <div class="btn-group">
-						<a href="{{ route('documentos-descargar', $documento->IdDocumento) }}" type="button" class="btn btn-secondary" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i></a>
-						<a href="{{ route('documentos-veditar',  $documento->IdDocumento) }}" type="button" class="btn btn-warning" title="Editar documento"><i class="fas fa-pencil-alt"></i></a>
-						<a type="button" class="btn btn-danger" id="eliminar" title="Eliminar documento" data-toggle="modal" data-target="#modal-eliminar" data-action="{{ route('documentos-eliminar', $documento->IdDocumento) }}" data-nombre="{{ $documento->Nombre }}"><i class="fas fa-trash"></i></a>
+						<a href="{{ route('documentos-descargar', $documento->get('IdDocumento')) }}" type="button" class="btn btn-secondary" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i></a>
+						<a href="{{ route('documentos-veditar',   $documento->get('IdDocumento')) }}" type="button" class="btn btn-warning" title="Editar documento"><i class="fas fa-pencil-alt"></i></a>
+						<a type="button" class="btn btn-danger" id="eliminar" title="Eliminar documento" data-toggle="modal" data-target="#modal-eliminar" data-action="{{ route('documentos-eliminar', $documento->get('IdDocumento')) }}" data-nombre="{{ $documento->get('NombreDocumento') }}"><i class="fas fa-trash"></i></a>
 					    </div>
 					</td>
 				    @else
@@ -96,9 +96,9 @@ $item_subproceso_activo = $subProceso->Nombre;
 				<th>Historial</th>
 				<th>Código</th>
 				<th>Nombre</th>
-				@isset($documentos->first()->Grupo)
+				@if($bandera->get('VerTodos') === true)
 				<th>Grupo</th>
-				@endisset
+				@endif
 				<th>Tipo</th>
 				<th>Unidad</th>
 				<th>Fecha de Emisión</th>

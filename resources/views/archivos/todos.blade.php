@@ -21,9 +21,9 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<i class="fas fa-info"></i> Versión actual: {{ $documento->Version }}
 		    </h5>
 		    @foreach ($archivos as $archivo)
-			@if ($archivo->Version === $documento->Version)
-			    Nombre del archivo: {{ $archivo->Nombre }}
-			    <a href="{{ route('archivos-descargar', $archivo->IdArchivo) }}" type="button" class="btn btn-success btn-sm ml-3" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i> Descargar </a>
+			@if ($archivo->get('VersionArchivo') === $documento->Version)
+			    Nombre del archivo: {{ $archivo->get('NombreArchivo') }}
+			    <a href="{{ route('archivos-descargar', $archivo->get('IdArchivo')) }}" type="button" class="btn btn-success btn-sm ml-3" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i> Descargar </a>
 			@endif
 		    @endforeach
 		</div>
@@ -77,9 +77,9 @@ $item_subproceso_activo = $subProceso->Nombre;
 			    @foreach ($archivos as $archivo)
 				<tr>
 				    @if ($documento->Estado == 1)
-					@if ($archivo->Estado === 1)
-					    @if ($archivo->Version !== $documento->Version)
-						<td><a href="{{ route('archivos-haceractual', $archivo->IdArchivo) }}" type="button" class="btn btn-primary btn-block" title="Convertir en la versión actual"><i class="fa fa-arrow-up"></i></a></td>
+					@if ($archivo->get('EstadoArchivo') === 1)
+					    @if ($archivo->get('VersionArchivo') !== $documento->Version)
+						<td><a href="{{ route('archivos-haceractual', $archivo->get('IdArchivo')) }}" type="button" class="btn btn-primary btn-block" title="Convertir en la versión actual"><i class="fa fa-arrow-up"></i></a></td>
 					    @else
 						<td></td>
 					    @endif
@@ -89,12 +89,12 @@ $item_subproceso_activo = $subProceso->Nombre;
 				    @else
 					<td></td>
 				    @endif
-				    <td>{{ $archivo->Nombre }}</td>
-				    <td>{{ $archivo->FechaAprovacion }}</td>
-				    <td>{{ $archivo->FechaModificacion }}</td>
-				    <td>{{ $archivo->MotivoCambio }}</td>
-				    <td>{{ $archivo->Version }}</td>
-				    @if ($archivo->Estado === 1)
+				    <td>{{ $archivo->get('NombreArchivo') }}</td>
+				    <td>{{ $archivo->get('FechaAprovacionArchivo') }}</td>
+				    <td>{{ $archivo->get('FechaModificacionArchivo') }}</td>
+				    <td>{{ $archivo->get('MotivoCambioArchivo') }}</td>
+				    <td>{{ $archivo->get('VersionArchivo') }}</td>
+				    @if ($archivo->get('EstadoArchivo') === 1)
 					<td class="text-center">
 					    @if ($documento->Estado === 1)
 						<button type="button" class="btn btn-success" title="Activo"><i class="fa fa-check"></i></button>
@@ -105,9 +105,9 @@ $item_subproceso_activo = $subProceso->Nombre;
 					<td class="text-center">
 					    @if ($documento->Estado === 1)
 					    <div class="btn-group">
-						<a href="{{ route('archivos-descargar', $archivo->IdArchivo) }}" type="button" class="btn btn-secondary" title="Descargar esta versión"><i class="fa fa-arrow-down"></i></a>
-						<a href="{{ route('archivos-veditar',  $archivo->IdArchivo) }}" type="button" class="btn btn-warning" title="Editar archivo"><i class="fas fa-pencil-alt"></i></a>
-						<a href="{{ route('archivos-eliminar',  $archivo->IdArchivo) }}" type="button" class="btn btn-danger" id="eliminar" title="Eliminar archivo" onclick="return confirm('¿Desea eliminar esta versión?')"><i class="fas fa-trash"></i></a>
+						<a href="{{ route('archivos-descargar', $archivo->get('IdArchivo')) }}" type="button" class="btn btn-secondary" title="Descargar esta versión"><i class="fa fa-arrow-down"></i></a>
+						<a href="{{ route('archivos-veditar',  $archivo->get('IdArchivo')) }}" type="button" class="btn btn-warning" title="Editar archivo"><i class="fas fa-pencil-alt"></i></a>
+						<a href="{{ route('archivos-eliminar',  $archivo->get('IdArchivo')) }}" type="button" class="btn btn-danger" id="eliminar" title="Eliminar archivo" onclick="return confirm('¿Desea eliminar esta versión?')"><i class="fas fa-trash"></i></a>
 					    </div>
 					    @endif
 					</td>

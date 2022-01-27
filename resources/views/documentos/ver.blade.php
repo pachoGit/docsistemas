@@ -13,14 +13,14 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 @section('contenido')
 
-    @if ($documento->Estado === 1)
+    @if ($documento->get('EstadoDocumento') === 1)
 	<div class="card card-primary">
     @else
 	<div class="card card-danger">
     @endif
 	<div class="card-header">
-            <h3 class="card-title">Agrupado en: {{ $grupo->Nombre }}</h3>
-	    @if ($documento->Estado === 1)
+            <h3 class="card-title">Agrupado en: {{ $documento->get('NombreGrupoDocumento') }}</h3>
+	    @if ($documento->get('EstadoDocumento') === 1)
 		<div class="card-tools">
 		    <span class="badge badge-success" title="Este documento esta activo">Activo</span>
 		</div>
@@ -37,21 +37,21 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="codigo">Código del documento</label>
-			    <input  value="{{ $documento->Codigo }}" type="text" class="form-control" id="codigo" name="codigo" maxlength="255" minlength="1" disabled>
+			    <input  value="{{ $documento->get('CodigoDocumento') }}" type="text" class="form-control" id="codigo" name="codigo" maxlength="255" minlength="1" disabled>
 			</div>
 		    </div>
 
 		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="nombre">Nombre del documento</label>
-			    <input value="{{ $documento->Nombre }}" type="text" class="form-control" id="nombre" name="nombre" maxlength="255" minlength="3" disabled>
+			    <input value="{{ $documento->get('NombreDocumento') }}" type="text" class="form-control" id="nombre" name="nombre" maxlength="255" minlength="3" disabled>
 			</div>
 		    </div>
 
 		    <div class="col-md-4">
 			<div class="form-group">
 			    <label>Tipo de documento</label>
-			    <input value="{{ $documento->Tipo }}" type="text" class="form-control" id="tipo" name="tipo" maxlength="255" minlength="3" disabled>
+			    <input value="{{ $documento->get('NombreTipoDocumento') }}" type="text" class="form-control" id="tipo" name="tipo" maxlength="255" minlength="3" disabled>
 			</div>
 		    </div>
 		</div>
@@ -61,14 +61,14 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    <div class="col-md-4">
 			<div class="form-group">
 			    <label>Unidad</label>
-			    <input value="{{ $documento->Unidad }}" type="text" class="form-control" id="unidad" name="unidad" maxlength="255" minlength="3" disabled>
+			    <input value="{{ $documento->get('NombreUnidad') }}" type="text" class="form-control" id="unidad" name="unidad" maxlength="255" minlength="3" disabled>
 			</div>
 		    </div>
 
 		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="version">Versión actual del documento</label>
-			    <input value="{{ $documento->Version }}" type="number" class="form-control" id="version" min="0" name="version" disabled>
+			    <input value="{{ $documento->get('VersionDocumento') }}" type="number" class="form-control" id="version" min="0" name="version" disabled>
 			</div>
 		    </div>
 
@@ -76,7 +76,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    <div class="col-md-4">
 			<div class="form-group">
 			    <label for="ubicacion-fisica">Ubicación física del documento</label>
-			    <input value="{{ $documento->UbicacionFisica }}" type="text" class="form-control" id="ubicacion-fisica" disabled>
+			    <input value="{{ $documento->get('UbicacionFisicaDocumento') }}" type="text" class="form-control" id="ubicacion-fisica" disabled>
 			</div>
 		    </div>
 
@@ -89,7 +89,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label>Fecha de emisión de la versión actual:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input value="{{ $documento->FechaDocumento }}" type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
+				<input value="{{ $documento->get('FechaEmisionDocumento') }}" type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
@@ -102,7 +102,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label>Fecha de aprovación de la versión actual:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input value="{{ $documento->FechaAprovacion }}" type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
+				<input value="{{ $documento->get('FechaAprovacionDocumento') }}" type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
@@ -114,7 +114,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label>La versión actual ha sido subido al sistema el:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input value="{{ $documento->FechaCreacion }}" type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
+				<input value="{{ $documento->get('FechaCreacionDocumento') }}" type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
@@ -126,13 +126,13 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		<div class="row">
 
-		    @if ($documento->Estado === 1)
+		    @if ($documento->get('EstadoDocumento') === 1)
 		    <div class="col-md-12">
 			<div class="form-group">
 			    <label for="estandares">Estandares</label>
 			    <textarea id="estandares" class="form-control" cols="30" id="" name="" rows="5" disabled>
-@foreach ($estandares as $estandar)
-{{ $estandar->Numero . '. ' . $estandar->Estandar }}
+@foreach ($documento->get('EstandaresDocumento') as $estandar)
+{{ $estandar->get('NumeroEstandar') . '. ' . $estandar->get('NombreEstandar') }}
 @endforeach
 			    </textarea>
 			</div>
@@ -143,8 +143,8 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label for="estandares">Estandares</label>
 			    <textarea id="estandares" class="form-control" cols="30" id="" name="" rows="5" disabled>
-@foreach ($estandares as $estandar)
-{{ $estandar->Numero . '. ' . $estandar->Estandar }}
+@foreach ($documento->get('EstandaresDocumento') as $estandar)
+{{ $estandar->get('NumeroEstandar') . '. ' . $estandar->get('NombreEstandar') }}
 @endforeach
 			    </textarea>
 			</div>
@@ -155,7 +155,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label for="motivo">Motivo de la eliminación</label>
 			    <textarea id="motivo" class="form-control" cols="30" id="" name="" rows="5" disabled>
-{{ $documento->MotivoEliminado }}
+{{ $documento->get('MotivoEliminadoDocumento') }}
 			    </textarea>
 			</div>
 
@@ -168,7 +168,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 	    </div>
 
             <div class="card-footer">
-                <a href="{{ route('documentos-todos', $documento->IdGrupoDocumento) }}" class="btn btn-secondary">Volver</a>
+                <a href="{{ route('documentos-todos', $documento->get('IdGrupoDocumento')) }}" class="btn btn-secondary">Volver</a>
             </div>
 	</form>
     </div>
