@@ -23,7 +23,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    @foreach ($archivos as $archivo)
 			@if ($archivo->get('VersionArchivo') === $documento->Version)
 			    Nombre del archivo: {{ $archivo->get('NombreArchivo') }}
-			    <a href="{{ route('archivos-descargar', $archivo->get('IdArchivo')) }}" type="button" class="btn btn-success btn-sm ml-3" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i> Descargar </a>
+			    <a href="{{ route('archivos-descargar', $archivo->get('IdArchivo')) }}" type="button" class="btn btn-sm btn-success ml-3" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i> Descargar </a>
 			@endif
 		    @endforeach
 		</div>
@@ -64,7 +64,8 @@ $item_subproceso_activo = $subProceso->Nombre;
 			    <tr>
 				<th>#</th>
 				<th>Nombre</th>
-				<th>Fecha de Aprovación</th>
+				<th>Fecha de Emisión</th>
+				<th>Fecha de Aprobación</th>
 				<th>Fecha de Modificación</th>
 				<th>Motivo del cambio</th>
 				<th>Versión</th>
@@ -90,7 +91,8 @@ $item_subproceso_activo = $subProceso->Nombre;
 					<td></td>
 				    @endif
 				    <td>{{ $archivo->get('NombreArchivo') }}</td>
-				    <td>{{ $archivo->get('FechaAprovacionArchivo') }}</td>
+				    <td>{{ $archivo->get('FechaEmisionArchivo') }}</td>
+				    <td>{{ $archivo->get('FechaAprobacionArchivo') }}</td>
 				    <td>{{ $archivo->get('FechaModificacionArchivo') }}</td>
 				    <td>{{ $archivo->get('MotivoCambioArchivo') }}</td>
 				    <td>{{ $archivo->get('VersionArchivo') }}</td>
@@ -123,7 +125,8 @@ $item_subproceso_activo = $subProceso->Nombre;
 			    <tr>
 				<th>#</th>
 				<th>Nombre</th>
-				<th>Fecha de Aprovación</th>
+				<th>Fecha de Emisión</th>
+				<th>Fecha de Aprobación</th>
 				<th>Fecha de Modificación</th>
 				<th>Motivo del cambio</th>
 				<th>Versión</th>
@@ -140,6 +143,18 @@ $item_subproceso_activo = $subProceso->Nombre;
         </div>
         <!-- /.col -->
     </div>
+
+    <!-- Errores de la funcion validate de la clase Request -->
+    @if ($errors->any())
+	@foreach ($errors->all() as $error)
+	    <div class="toasts-top-right fixed col-md-6" id="alerta">
+		<x-alerta tipo="danger" titulo='Error'>
+		    {{ $error }}
+		</x-alerta>
+	    </div>
+	@endforeach
+    @endif
+    <!-- Errores/ -->
 
     @if (($info = session('Informacion')))
 	@if ($info['Estado'] === 'Correcto')
@@ -199,7 +214,7 @@ $item_subproceso_activo = $subProceso->Nombre;
      });
 
      // Ocultar la alerta
-     $("#alerta").hide(5000);
+     $("#alerta").hide(10000);
 
      // Eliminar el archivo
      $("#modal-eliminar").on("show.bs.modal", (evento) => {

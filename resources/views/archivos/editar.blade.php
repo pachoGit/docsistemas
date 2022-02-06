@@ -8,52 +8,56 @@ $item_subproceso_activo = $subProceso->Nombre;
 @extends('esqueleto/esqueleto')
 
 @section('titulo-pagina')
-    Editar documento de {{ $subProceso->Nombre }}
+    Editar versión de {{ $archivo->get('NombreDocumento') }}
 @endsection()
 
 @section('contenido')
 
-    <div class="row">
-	<div class="col-12">
-	    <div class="callout callout-info">
-		<h5>
-		    <i class="fas fa-info"></i> Nota
-		</h5>
-		Para editar los campos bloqueados tendrá que realizarlo a la versión actual del documento
-	    </div>
-	</div>
+    <!-- 
+    <div class="callout callout-info">
+	<h5>
+	    <i class="fas fa-info"></i> Nota: 
+	    Al crear un nuevo archivo, este será la versión más reciente, es decir, reemplazará a la versión actual
+	</h5>
     </div>
+    -->
 
     <div class="card card-primary">
 	<div class="card-header">
-            <h3 class="card-title">Editar documento ({{ $documento->get('NombreGrupoDocumento') }})</h3>
+            <h3 class="card-title">Editar versión</h3>
 	</div>
 
-	<form method="post" action="{{ route('documentos-editar', $documento->get('IdDocumento')) }}">
+	<form method="post" action="{{ route('archivos-editar', $archivo->get('IdArchivo')) }}" enctype="multipart/form-data">
 	    @csrf
 	    @method('post')
             <div class="card-body">
 		<div class="row">
 		    <div class="col-md-4">
 			<div class="form-group">
-			    <label for="codigo">Código del documento</label>
-			    <input type="text" value="{{ $documento->get('CodigoDocumento') }}" class="form-control" id="codigo" name="codigo" placeholder="Ingrese el código del documento" maxlength="255" minlength="1" required>
+			    <label for="codigo">Número de versión *</label>
+			    <input value="{{ $archivo->get('VersionArchivo') }}" type="number" class="form-control" id="version" name="version" placeholder="Ingrese el número de versión" min="0" required>
+			</div>
+		    </div>
+
+
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <label>Fecha de aprobación de la versión</label>
+			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
+				<input type="date" name="fecha-aprobacion" class="form-control datetimepicker-input" value="{{ $archivo->get('FechaAprobacionArchivo') }}" data-target="#reservationdate" max="{{ date('Y-m-d') }}"/>
+				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				</div>
+			    </div>
 			</div>
 		    </div>
 
 		    <div class="col-md-4">
 			<div class="form-group">
-			    <label for="nombre">Nombre del documento</label>
-			    <input type="text" value="{{ $documento->get('NombreDocumento') }}" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del documento" maxlength="255" minlength="3" required>
-			</div>
-		    </div>
-		    
-		    <div class="col-md-4">
-			<div class="form-group">
-			    <label>Fecha de emisión de la versión actual:</label>
-			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input type="date" value="{{ $documento->get('FechaEmisionDocumento')}}" name="fecha-documento" class="form-control datetimepicker-input" data-target="#reservationdate" max="{{ date('Y-m-d') }}" disabled/>
-				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+			    <label>Fecha de emisión de la versión *</label>
+			    <div class="input-group date" id="reservationdate2" data-target-input="nearest">
+				<input type="date" name="fecha-emision" class="form-control datetimepicker-input" value="{{ $archivo->get('FechaEmisionArchivo') }}" data-target="#reservationdate" max="{{ date('Y-m-d') }}" required/>
+				<div class="input-group-append" data-target="#reservationdate2" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
 			    </div>
@@ -64,93 +68,31 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		<div class="row">
 
-		    <div class="col-md-4">
+		    <div class="col-md-12">
 			<div class="form-group">
-			    <label>Tipo de documento</label>
-			    <select name="tipo" class="form-control select2bs4" style="width: 100%;" required>
-				@foreach ($tipos as $tipo)
-				    @if ($tipo->IdTipoDocumento === $documento->get('IdTipoDocumento'))
-					<option value="{{ $tipo->IdTipoDocumento }}" selected>{{ $tipo->Nombre }}</option>
-				    @else
-					<option value="{{ $tipo->IdTipoDocumento }}">{{ $tipo->Nombre }}</option>
-				    @endif
-				@endforeach
-			    </select>
-			</div>
-		    </div>
-
-		    <div class="col-md-4">
-			<div class="form-group">
-			    <label>Unidad</label>
-			    <select name="unidad" class="form-control select2bs4" style="width: 100%;" required>
-				@foreach ($unidades as $unidad)
-				    @if ($unidad->IdUnidad === $documento->get('IdUnidad'))
-					<option value="{{ $unidad->IdUnidad }}" selected>{{ $unidad->Nombre }}</option>
-				    @else
-					<option value="{{ $unidad->IdUnidad }}">{{ $unidad->Nombre }}</option>
-				    @endif
-				@endforeach
-			    </select>
-			</div>
-		    </div>
-
-		    <div class="col-md-4">
-			<div class="form-group">
-			    <label>Estándares</label>
-			    <select name="estandares[]" class="select2bs4" multiple data-placeholder="Seleccione los estandares"
-				    style="width: 100%;" required>
-				@php
-				$encontro = false;
-				foreach ($estandares as $estandar) {
-				foreach ($documento->get('EstandaresDocumento') as $docEstandar) {
-				if ($estandar->IdEstandar === $docEstandar->get('IdEstandar')) {
-				$encontro = true;
-				@endphp
-				<option value="{{ $estandar->IdEstandar }}" selected>{{ $estandar->Numero . '. ' . $estandar->Nombre }}</option>
-				@php
-				break;
-				}
-				}
-				if ($encontro === false) {
-				@endphp
-				<option value="{{ $estandar->IdEstandar }}">{{ $estandar->Numero . '. ' . $estandar->Nombre }}</option>
-				@php
-				}
-				else {
-				$encontro = false;
-				}
-				}
-				@endphp
-			    </select>
+			    <label>Motivo del cambio (opcional)</label>
+			    <textarea class="form-control" rows="3" name="motivo" placeholder="Ingrese el motivo de crear la nueva versión..." maxlength="510">
+{{ $archivo->get('MotivoCambioArchivo')}}
+			    </textarea>
 			</div>
 		    </div>
 
 		</div>
 
 		<div class="row">
-		    <div class="col-md-4">
-			<div class="form-group">
-			    <label for="ubicacion-fisica">Ubicación física del documento</label>
-			    <input type="text" value="{{ $documento->get('UbicacionFisicaDocumento') }}" class="form-control" id="ubicacion-fisica" placeholder="Ingrese el ubicación del documento" maxlength="255" minlength="3" name="ubicacion-fisica">
-			</div>
-		    </div>
 
-		    <div class="col-md-4">
+		    <div class="col-md-12">
 			<div class="form-group">
-			    <label>Fecha de aprobación de la versión actual:</label>
-			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input type="date" value="{{ $documento->get('FechaAprobacionDocumento')}}" name="fecha-aprobacion" class="form-control datetimepicker-input" data-target="#reservationdate" max="{{ date('Y-m-d') }}" disabled/>
-				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+			    <label for="exampleInputFile">Subir archivo *</label>
+			    <div class="input-group">
+				<div class="custom-file">
+				    <input name="archivo" type="file" class="custom-file-input" id="exampleInputFile" accept="application/pdf, application/msword, .doc, .docx .pdf">
+				    <label class="custom-file-label" for="exampleInputFile">{{ $archivo->get('NombreArchivo')}}</label>
+				</div>
+				<div class="input-group-append">
+				    <span class="input-group-text">Subir</span>
 				</div>
 			    </div>
-			</div>
-		    </div>
-
-		    <div class="col-md-4">
-			<div class="form-group">
-			    <label for="version">Versión actual del documento</label>
-			    <input type="number" value="{{ $documento->get('VersionDocumento') }}" class="form-control" id="version" min="0" placeholder="Ingrese la versión del documento" name="version" readonly>
 			</div>
 		    </div>
 
@@ -159,13 +101,13 @@ $item_subproceso_activo = $subProceso->Nombre;
 	    </div>
 
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Editar</button>
-                <a href="{{ route('documentos-todos', $documento->get('IdGrupoDocumento')) }}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Aceptar</button>
+                <a href="{{ route('archivos-todos', $archivo->get('IdDocumento')) }}" class="btn btn-secondary">Cancelar</a>
             </div>
 	</form>
     </div>
 
-    <!-- Errores -->
+    <!-- Errores de la funcion validate de la clase Request -->
     @if ($errors->any())
 	@foreach ($errors->all() as $error)
 	    <div class="toasts-top-right fixed col-md-6" id="alerta">
@@ -176,6 +118,24 @@ $item_subproceso_activo = $subProceso->Nombre;
 	@endforeach
     @endif
     <!-- Errores/ -->
+
+    @if (($info = session('Informacion')))
+	@if ($info['Estado'] === 'Correcto')
+	    <div class="toasts-top-right fixed col-md-6" id="alerta">
+		<x-alerta tipo="success" titulo='Éxito'>
+		    {{ $info['Mensaje'] }}
+		</x-alerta>
+	    </div>
+	@elseif ($info['Estado'] === 'Error')
+	    <div class="toasts-top-right fixed col-md-6" id="alerta">
+		<x-alerta tipo="danger" titulo='Error'>
+		    {{ $info['Mensaje'] }}
+		</x-alerta>
+	    </div>
+	@endif
+    @endif
+
+
 
 @endsection()
 
@@ -199,6 +159,10 @@ $item_subproceso_activo = $subProceso->Nombre;
     <script src="{{ asset('docsistemas/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
     <script src="{{ asset('docsistemas/plugins/dropzone/min/dropzone.min.js') }}"></script>
     <script>
+
+     // Para las alertas
+     $("#alerta").hide(10000);
+
      $(function () {
 
 	 bsCustomFileInput.init();
@@ -220,6 +184,10 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 	 //Date picker
 	 $('#reservationdate').datetimepicker({
+             format: 'YYYY-MM-DD'
+	 });
+
+	 $('#reservationdate2').datetimepicker({
              format: 'YYYY-MM-DD'
 	 });
 
@@ -334,8 +302,7 @@ $item_subproceso_activo = $subProceso->Nombre;
      }
      // DropzoneJS Demo Code End
 
-     // Para las alertas
-     $("#alerta").hide(10000);
+
     </script>
 
 @endsection()

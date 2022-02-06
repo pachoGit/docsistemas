@@ -26,7 +26,7 @@ class Archivos extends Migration
             $tabla->unsignedInteger('Version')->nullable();
             $tabla->string('MotivoCambio', 510)->nullable();
             $tabla->date('FechaCreacion')->nullable();
-            $tabla->date('FechaAprovacion')->nullable();
+            $tabla->date('FechaAprobacion')->nullable();
             $tabla->date('FechaModificacion')->nullable();
             $tabla->date('FechaEmision')->nullable(); // Fecha que se encuentra en el documento
             $tabla->integer('Estado')->default(1);

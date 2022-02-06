@@ -70,12 +70,12 @@ class Archivos extends Controller
      */
     public function crear(Request $solicitud, $idDocumento)
     {
-        $this->validar($solicitud);
+        $this->validar($solicitud, 1);
         $version = $solicitud->input('version');
         if ($this->existeVersion(intval($version), $idDocumento))
             return redirect()->route('archivos-vcrear', $idDocumento)
                              ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'Ya existe esta versión (' . $version . '), por favor ingrese otro número']);
-        $documento = $this->moDocumentos->find($idDocumento);
+        $documento = $this->moDocumentos->retDocumento($idDocumento);
         $archivo = $solicitud->file('archivo');
         $nombreArchivo = Util::generarNombreArchivo($archivo, $version);
         
@@ -86,20 +86,64 @@ class Archivos extends Controller
             'Version'           => $version,
             'MotivoCambio'      => $solicitud->input('motivo'),
             'FechaCreacion'     => Util::retFechaCreacion(),
-            'FechaAprovacion'   => $solicitud->input('fecha-aprovacion'),
-            'FechaDocumento'    => $solicitud->input('fecha-documento'),
+            'FechaAprobacion'   => $solicitud->input('fecha-aprobacion'),
+            'FechaEmision'      => $solicitud->input('fecha-emision'),
             'FechaModificacion' => Util::retFechaCreacion()
         ];
         $this->moArchivos->create($data);
         // Modificamos la informacion del documento
         $documento->Version = $version;
-        $documento->FechaAprovacion = $data['FechaAprovacion'];
-        $documento->FechaDocumento = $data['FechaDocumento'];
+        $documento->FechaAprobacion = $data['FechaAprobacion'];
+        $documento->FechaEmision = $data['FechaEmision'];
         $documento->save();
 
-        $archivo->storeAs(str_replace('public/raiz/', '', $documento->UbicacionVirtual), $nombreArchivo, 'public');
+        $archivo->storeAs($documento->UbicacionVirtual, $nombreArchivo, 'public');
         return redirect()->route('archivos-todos', $idDocumento)
-                         ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha creado una nueva version del documento correctamente']);
+                         ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha creado una nueva versión del documento correctamente']);
+    }
+
+    public function editar(Request $solicitud, $idArchivo)
+    {
+        $this->validar($solicitud, 2);
+        $archivo = $this->moArchivos->retArchivo($idArchivo);
+        $documento = $this->moDocumentos->retDocumento($archivo->IdDocumento);
+        $version = $solicitud->input('version');
+
+        if ($archivo->Version !== intval($version)) // Modifico el numero de version
+            if ($this->existeVersion(intval($version), $documento->IdDocumento))
+                return redirect()->route('archivos-veditar', $archivo->IdArchivo)
+                                 ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'Ya existe esta versión (' . $version . '), por favor ingrese otro número']);
+
+        $ubicacion = $archivo->UbicacionVirtual;
+
+        if ($solicitud->file('archivo') !== null)
+        {
+            $nombreArchivo = Util::generarNombreArchivo($archivo, $version);
+            $ubicacion = $documento->UbicacionVirtual . '/' . $nombreArchivo;
+            $archivo->storeAs($documento->UbicacionVirtual, $nombreArchivo, 'public');
+        }
+        
+        $fechaAprobacion = $solicitud->input('fecha-aprobacion');
+        $fechaEmision = $solicitud->input('fecha-emision');
+
+        // Si la version que se esta editando es la version actual, modificar la informacion
+        // del documento
+        if ($documento->Version === intval($version))
+        {
+            $documento->Version = $version;
+            $documento->FechaAprobacion = $fechaAprobacion;
+            $documento->FechaEmision = $fechaEmision;
+            $documento->save();
+        }
+
+        $archivo->Version = $version;
+        $archivo->FechaAprobacion = $fechaAprobacion;
+        $archivo->FechaEmision = $fechaEmision;
+        $archivo->MotivoCambio = $solicitud->input('motivo');
+        $archivo->save();
+
+        return redirect()->route('archivos-todos', $documento->IdDocumento)
+                         ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha editado la versión correctamente']);
     }
 
     public function eliminar($idArchivo)
@@ -107,7 +151,7 @@ class Archivos extends Controller
         $archivo = $this->moArchivos->retArchivo($idArchivo);
         $ubicacion = $archivo->UbicacionVirtual;
         // No validamos ya que si no existe el archivo, no pasa nada
-        // aun asi cambiamos de estado al registro
+        // aun asi cambiamos de estado al registro)
         Storage::disk('public')->delete($ubicacion);
         $archivo->Estado = 0;
         $archivo->save();
@@ -124,16 +168,16 @@ class Archivos extends Controller
             {
                 // El documento no tiene ninguna version
                 $documento->Version = 0;
-                $documento->FechaAprovacion = null;
-                $documento->FechaDocumento = null;
+                $documento->FechaAprobacion = null;
+                $documento->FechaEmision = null;
             }
             else
             {
                 $actual = $archivos->first();
                 $documento->Version = $actual->Version;
-                $documento->FechaAprovacion = $actual->FechaAprovacion;
-                $documento->FechaDocumento = $actual->FechaDocumento;
-            }
+                $documento->FechaAprobacion = $actual->FechaAprobacion;
+                $documento->FechaEmision = $actual->FechaEmision;
+            };
         }
         $documento->save();
         return redirect()->route('archivos-todos', $archivo->IdDocumento)
@@ -166,13 +210,19 @@ class Archivos extends Controller
         $archivo = $this->moArchivos->find($idArchivo);
         $documento = $this->moDocumentos->find($archivo->IdDocumento);
         $documento->Version = $archivo->Version;
-        $documento->FechaAprovacion = $archivo->FechaAprovacion;
-        $documento->FechaDocumento = $archivo->FechaDocumento;
+        $documento->FechaAprobacion = $archivo->FechaAprobacion;
+        $documento->FechaEmision = $archivo->FechaEmision;
         $documento->save();
         return redirect()->route('archivos-todos', $archivo->IdDocumento)
                          ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha cambiado la versión correctamente']);
     }
 
+    /**
+     * Redirige hacia la vista para crear un nueva version
+     *
+     * @var $idDocumento - Id del documento
+     * @return view
+     */
     public function vistaCrear($idDocumento)
     {
         $documento = $this->moDocumentos->find($idDocumento);
@@ -188,17 +238,44 @@ class Archivos extends Controller
         return view('archivos/crear', $data);
     }
 
-
-
-    private function validar(Request $solicitud)
+    /**
+     * Redirige hacia la vista para editar una version
+     *
+     * @var $idDocumento - Id del documento
+     * @return view
+     */
+    public function vistaEditar($idArchivo)
     {
-        return $solicitud->validate([
+        $archivo = $this->moArchivos->retArchivoUsuario($idArchivo);
+        $subProceso = $this->moSubProcesos->find($archivo->get('IdSubProceso'));
+        $procesoPadre = $this->moProcesos->find($subProceso->IdProceso);
+        
+        $data = ['archivo'      => $archivo,
+                 'subProceso'   => $subProceso,
+                 'procesoPadre' => $procesoPadre];
+
+        return view('archivos/editar', $data);
+    }
+
+    /**
+     * Valida la solicitud del usuario
+     *
+     * @var Request $solicitud - Solicitud Http entrante
+     * @var int tfuncion - 1 o 2 para la funcion crear o editar
+     */
+    private function validar(Request $solicitud, int $tfuncion)
+    {
+        // Campos que validan la funcion crear y editar por igual
+        $comun = [
             'version'          => ['required', 'numeric'],
             'motivo'           => ['max:510'],
-            'fecha-aprovacion' => ['date'],
-            'fecha-documento'  => ['date'],
-            'archivo'          => ['required']
-        ]);
+            'fecha-aprobacion' => ['date'],
+            'fecha-emision'    => ['required', 'date']
+        ];
+
+        if ($tfuncion === 1) // Se llamo desde la funcion crear
+            $comun['archivo'] = ['required'];
+        return $solicitud->validate($comun);
     }
 
     /**

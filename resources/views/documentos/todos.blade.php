@@ -46,7 +46,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 				<th>Tipo</th>
 				<th>Unidad</th>
 				<th>Fecha de Emisión</th>
-				<th>Fecha de Aprovación</th>
+				<th>Fecha de Aprobación</th>
 				<th>Versión Actual</th>
 				<th>Estado</th>
 				<th>Acciones</th>
@@ -71,7 +71,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 				    <td>{{ $documento->get('NombreTipoDocumento') }}</td>
 				    <td>{{ $documento->get('NombreUnidad') }}</td>
 				    <td>{{ $documento->get('FechaEmisionDocumento') }}</td>
-				    <td>{{ $documento->get('FechaAprovacionDocumento') }}</td>
+				    <td>{{ $documento->get('FechaAprobacionDocumento') }}</td>
 				    <td>{{ $documento->get('VersionDocumento') }}</td>
 				    @if ($documento->get('EstadoDocumento') === 1)
 					<td class="text-center"><button type="button" class="btn btn-success" title="Activo"><i class="fa fa-check"></i></button></td>
@@ -102,7 +102,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 				<th>Tipo</th>
 				<th>Unidad</th>
 				<th>Fecha de Emisión</th>
-				<th>Fecha de Aprovación</th>
+				<th>Fecha de Aprobación</th>
 				<th>Versión Actual</th>
 				<th>Estado</th>
 				<th>Acciones</th>
@@ -203,7 +203,7 @@ $item_subproceso_activo = $subProceso->Nombre;
      });
 
      // Ocultar la alerta
-     $("#alerta").hide(5000);
+     $("#alerta").hide(10000);
 
      // Eliminar el documento
      $("#modal-eliminar").on("show.bs.modal", (evento) => {

@@ -32,7 +32,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 		<div class="row">
 		    <div class="col-md-4">
 			<div class="form-group">
-			    <label for="codigo">Número de versión</label>
+			    <label for="codigo">Número de versión *</label>
 			    <input value="{{ $documento->Version + 1 }}" type="number" class="form-control" id="version" name="version" placeholder="Ingrese el número de versión" min="0" required>
 			</div>
 		    </div>
@@ -40,10 +40,10 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		    <div class="col-md-4">
 			<div class="form-group">
-			    <label>Fecha de aprovación de la versión:</label>
-			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input type="date" name="fecha-aprovacion" class="form-control datetimepicker-input" value="{{ date('Y-m-d') }}" data-target="#reservationdate" max="{{ date('Y-m-d') }}" required/>
-				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+			    <label>Fecha de emisión de la versión *</label>
+			    <div class="input-group date" id="reservationdate2" data-target-input="nearest">
+				<input type="date" name="fecha-emision" class="form-control datetimepicker-input" value="{{ date('Y-m-d') }}" data-target="#reservationdate" max="{{ date('Y-m-d') }}" required/>
+				<div class="input-group-append" data-target="#reservationdate2" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
 			    </div>
@@ -52,16 +52,15 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		    <div class="col-md-4">
 			<div class="form-group">
-			    <label>Fecha de emisión de la versión:</label>
-			    <div class="input-group date" id="reservationdate2" data-target-input="nearest">
-				<input type="date" name="fecha-documento" class="form-control datetimepicker-input" value="{{ date('Y-m-d') }}" data-target="#reservationdate" max="{{ date('Y-m-d') }}" required/>
-				<div class="input-group-append" data-target="#reservationdate2" data-toggle="datetimepicker">
+			    <label>Fecha de aprobación de la versión</label>
+			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
+				<input type="date" name="fecha-aprobacion" class="form-control datetimepicker-input" value="{{ date('Y-m-d') }}" data-target="#reservationdate" max="{{ date('Y-m-d') }}"/>
+				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
 			    </div>
 			</div>
 		    </div>
-
 
 		</div>
 
@@ -80,7 +79,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		    <div class="col-md-12">
 			<div class="form-group">
-			    <label for="exampleInputFile">Subir archivo</label>
+			    <label for="exampleInputFile">Subir archivo *</label>
 			    <div class="input-group">
 				<div class="custom-file">
 				    <input name="archivo" type="file" class="custom-file-input" id="exampleInputFile" accept="application/pdf, application/msword, .doc, .docx .pdf" required>
@@ -156,6 +155,10 @@ $item_subproceso_activo = $subProceso->Nombre;
     <script src="{{ asset('docsistemas/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
     <script src="{{ asset('docsistemas/plugins/dropzone/min/dropzone.min.js') }}"></script>
     <script>
+
+     // Para las alertas
+     $("#alerta").hide(10000);
+
      $(function () {
 
 	 bsCustomFileInput.init();
@@ -295,8 +298,6 @@ $item_subproceso_activo = $subProceso->Nombre;
      }
      // DropzoneJS Demo Code End
 
-     // Para las alertas
-     $("#alerta").hide(5000);
 
     </script>
 

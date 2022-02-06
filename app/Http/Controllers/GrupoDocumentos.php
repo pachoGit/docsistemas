@@ -27,6 +27,7 @@ class GrupoDocumentos extends Controller
         $descripcion = $solicitud->input('descripcion');
         $ubicacion = $this->generarUbicacion($idSubProceso, $nombre);
 
+        // TODO: Se debe evitar, tambien, ambos nombres sin importar mayusculas y minusculas
         if ($nombre === 'Todos' || $nombre === 'Otros') // Estos nombres son reservados
         return redirect()->route('subproceso-versubprocesos', $idSubProceso)
                          ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'No puede usar este nombre (' . $nombre . '), por favor ingrese otro']);
@@ -49,12 +50,13 @@ class GrupoDocumentos extends Controller
         $this->validar($solicitud);
         $nombre = $solicitud->input('nombre');
         $descripcion = $solicitud->input('descripcion');
+        $grupo = $this->moGrupoDocumentos->retGrupoDocumento($idGrupoDocumento);
 
+        // TODO: Se debe evitar, tambien, ambos nombres sin importar mayusculas y minusculas
         if ($nombre === 'Todos' || $nombre === 'Otros') // Estos nombres son reservados
-            return redirect()->route('subproceso-versubprocesos', $idSubProceso)
+            return redirect()->route('subproceso-versubprocesos', $grupo->IdSubProceso)
                              ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'No puede usar este nombre (' . $nombre . '), por favor ingrese otro']);
 
-        $grupo = $this->moGrupoDocumentos->find($idGrupoDocumento);
         $grupo->Nombre = $nombre;
         $grupo->Descripcion = $descripcion;
         $grupo->save();
@@ -64,8 +66,8 @@ class GrupoDocumentos extends Controller
 
     public function eliminar($idGrupoDocumento)
     {
-        $grupo = $this->moGrupoDocumentos->find($idGrupoDocumento);
-        $documentos = $this->moDocumentos->todoDeGrupo($idGrupoDocumento);
+        $grupo = $this->moGrupoDocumentos->retGrupoDocumento($idGrupoDocumento);
+        $documentos = $this->moDocumentos->retDocumentosDeGrupo($idGrupoDocumento);
         foreach ($documentos as $documento)
         {
             $documento->Estado = 0;
@@ -97,10 +99,6 @@ class GrupoDocumentos extends Controller
     {
         $ubicacion = Util::retUbicacionDeSubProceso($idSubProceso);
         $ubicacion .= '/' . Util::formatearCadena($nombre);
-        if (!is_dir($ubicacion))
-            return $ubicacion;
-        // Si la ubicacion (la carpeta) ya existe, agregamos la fecha y hora de
-        // creacion al nombre de la carpeta
         $ubicacion .= '-' . Util::retFechaHora();
         return $ubicacion;
     }

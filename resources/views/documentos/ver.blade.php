@@ -89,7 +89,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label>Fecha de emisión de la versión actual:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input value="{{ $documento->get('FechaEmisionDocumento') }}" type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
+				<input value="{{ $documento->get('FechaEmisionDocumento') }}" type="text" name="fecha-aprobacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
@@ -100,9 +100,9 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		    <div class="col-md-4">
 			<div class="form-group">
-			    <label>Fecha de aprovación de la versión actual:</label>
+			    <label>Fecha de aprobación de la versión actual:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input value="{{ $documento->get('FechaAprovacionDocumento') }}" type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
+				<input value="{{ $documento->get('FechaAprobacionDocumento') }}" type="text" name="fecha-aprobacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
@@ -114,7 +114,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label>La versión actual ha sido subido al sistema el:</label>
 			    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-				<input value="{{ $documento->get('FechaCreacionDocumento') }}" type="text" name="fecha-aprovacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
+				<input value="{{ $documento->get('FechaCreacionDocumento') }}" type="text" name="fecha-aprobacion" class="form-control datetimepicker-input" data-target="#reservationdate" disabled/>
 				<div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
 				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
@@ -129,7 +129,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    @if ($documento->get('EstadoDocumento') === 1)
 		    <div class="col-md-12">
 			<div class="form-group">
-			    <label for="estandares">Estandares</label>
+			    <label for="estandares">Estándares</label>
 			    <textarea id="estandares" class="form-control" cols="30" id="" name="" rows="5" disabled>
 @foreach ($documento->get('EstandaresDocumento') as $estandar)
 {{ $estandar->get('NumeroEstandar') . '. ' . $estandar->get('NombreEstandar') }}
@@ -141,7 +141,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    @else
 		    <div class="col-md-6">
 			<div class="form-group">
-			    <label for="estandares">Estandares</label>
+			    <label for="estandares">Estándares</label>
 			    <textarea id="estandares" class="form-control" cols="30" id="" name="" rows="5" disabled>
 @foreach ($documento->get('EstandaresDocumento') as $estandar)
 {{ $estandar->get('NumeroEstandar') . '. ' . $estandar->get('NombreEstandar') }}

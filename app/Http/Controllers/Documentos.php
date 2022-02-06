@@ -115,8 +115,8 @@ class Documentos extends Controller
             'UbicacionVirtual' => $ubicacion,
             'UbicacionFisica'  => $solicitud->input('ubicacion-fisica'),
             'Version'          => $solicitud->input('version'),
-            'FechaAprovacion'  => $solicitud->input('fecha-aprovacion'),
-            'FechaDocumento'  => $solicitud->input('fecha-documento'),
+            'FechaAprobacion'  => $solicitud->input('fecha-aprobacion'),
+            'FechaEmision'     => $solicitud->input('fecha-documento'),
             'FechaCreacion'    => Util::retFechaCreacion()
         ];
         $documento = $this->moDocumentos->create($data);
@@ -136,8 +136,8 @@ class Documentos extends Controller
             'UbicacionVirtual'  => $documento->UbicacionVirtual . '/' . $nombreArchivo,
             'Version'           => $documento->Version,
             'FechaCreacion'     => Util::retFechaCreacion(),
-            'FechaAprovacion'   => $documento->FechaAprovacion,
-            'FechaDocumento'   => $documento->FechaDocumento,
+            'FechaAprobacion'   => $documento->FechaAprobacion,
+            'FechaEmision'      => $documento->FechaEmision,
             'FechaModificacion' => Util::retFechaCreacion()
         ];
 
@@ -159,6 +159,7 @@ class Documentos extends Controller
             'tipo'             => ['required'],
             'fecha-documento'  => ['date'],
             'unidad'           => ['required'],
+            'version'          => ['required'],
             'ubicacion-fisica' => ['max:255', 'min:3']
         ]);
         $documento = $this->moDocumentos->retDocumento($idDocumento);
@@ -252,11 +253,12 @@ class Documentos extends Controller
         return $solicitud->validate([
             'codigo'           => ['required', 'max:255', 'min:1'],
             'nombre'           => ['required', 'max:255', 'min:3'],
-            'fecha-documento'  => ['date'],
+            'fecha-documento'  => ['required', 'date'],
             'tipo'             => ['required'],
             'unidad'           => ['required'],
             'ubicacion-fisica' => ['max:255', 'min:3'],
-            'fecha-aprovacion' => ['date'],
+            'fecha-aprobacion' => ['date'],
+            'version'          => ['required'],
             'archivo'          => ['required']
         ]);
     }

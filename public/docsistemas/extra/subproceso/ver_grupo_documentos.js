@@ -1,2 +1,2 @@
 // Ocultar la alerta
-$("#alerta").hide(4500);
+$("#alerta").hide(10000);

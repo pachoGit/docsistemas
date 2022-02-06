@@ -25,7 +25,7 @@ class DocumentosModelo extends Model
 
     protected $fillable = ['IdGrupoDocumento', 'IdTipoDocumento', 'IdUnidad', 'Codigo',
                            'Nombre', 'UbicacionVirtual', 'UbicacionFisica', 'Version', 'MotivoEliminado',
-                           'FechaAprovacion', 'FechaCreacion', 'FechaEmision', 'Estado'];
+                           'FechaAprobacion', 'FechaCreacion', 'FechaEmision', 'Estado'];
 
     public $timestamps = false;
     
@@ -139,7 +139,7 @@ class DocumentosModelo extends Model
             'UbicacionFisicaDocumento'    => $documento->UbicacionFisica,
             'VersionDocumento'            => $documento->Version,
             'MotivoEliminadoDocumento'    => $documento->MotivoEliminado,
-            'FechaAprovacionDocumento'    => $documento->FechaAprovacion,
+            'FechaAprobacionDocumento'    => $documento->FechaAprobacion,
             'FechaCreacionDocumento'      => $documento->FechaCreacion,
             'FechaEmisionDocumento'       => $documento->FechaEmision,
             'EstadoDocumento'             => $documento->Estado,
