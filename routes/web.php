@@ -7,6 +7,11 @@ use App\Http\Controllers\SubProceso;
 use App\Http\Controllers\GrupoDocumentos;
 use App\Http\Controllers\Documentos;
 use App\Http\Controllers\Archivos;
+use App\Http\Controllers\DocEstandar;
+use App\Http\Controllers\DocFecha;
+
+// Debug
+use App\Http\Controllers\Prueba;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,15 +26,11 @@ use App\Http\Controllers\Archivos;
 
 Route::get('/', [Inicio::class, 'index'])->name('inicio');
 
-Route::get('nombre', function() {
-    return 'Esta funcionando...';
-});
-
 Route::get('subproceso', [SubProceso::class, 'index']);
 Route::get('subproceso/{IdSubProceso}', [SubProceso::class, 'verGrupoDocumentos'])->name('subproceso-versubprocesos');
 
-Route::post('grupo/crear/{IdSubProceso}', [GrupoDocumentos::class, 'crear'])->name('grupo-crear');
-Route::post('grupo/editar/{IdGrupoDocumento}', [GrupoDocumentos::class, 'editar'])->name('grupo-editar');
+Route::post('grupo/crear/{IdSubProceso}',       [GrupoDocumentos::class, 'crear'])->name('grupo-crear');
+Route::post('grupo/editar/{IdGrupoDocumento}',  [GrupoDocumentos::class, 'editar'])->name('grupo-editar');
 Route::get('grupo/eliminar/{IdGrupoDocumento}', [GrupoDocumentos::class, 'eliminar'])->name('grupo-eliminar');
 
 /* Documentos */
@@ -47,15 +48,29 @@ Route::get('documentos/vistaditar/{IdDocumento}',      [Documentos::class, 'vist
 /* Fin Documentos */
 
 /* Archivos */
-Route::get('archivos/todos/{IdDocumento}',   [Archivos::class, 'todos'])->name('archivos-todos');
-Route::post('archivos/crear/{IdDocumento}',  [Archivos::class, 'crear'])->name('archivos-crear');
-Route::get('archivos/ver/{IdArchivo}',       [Archivos::class, 'ver'])->name('archivos-ver');
-Route::post('archivos/editar/{IdArchivo}',   [Archivos::class, 'editar'])->name('archivos-editar');
-Route::get('archivos/eliminar/{IdArchivo}', [Archivos::class, 'eliminar'])->name('archivos-eliminar');
-Route::get('archivos/descargar/{IdArchivo}', [Archivos::class, 'descargar'])->name('archivos-descargar');
-Route::get('archivos/haceractual/{IdArchivo}', [Archivos::class, 'hacerActual'])->name('archivos-haceractual');
+Route::get('archivos/todos/{IdDocumento}',      [Archivos::class, 'todos'])->name('archivos-todos');
+Route::post('archivos/crear/{IdDocumento}',     [Archivos::class, 'crear'])->name('archivos-crear');
+Route::get('archivos/ver/{IdArchivo}',          [Archivos::class, 'ver'])->name('archivos-ver');
+Route::post('archivos/editar/{IdArchivo}',      [Archivos::class, 'editar'])->name('archivos-editar');
+Route::get('archivos/eliminar/{IdArchivo}',     [Archivos::class, 'eliminar'])->name('archivos-eliminar');
+Route::get('archivos/descargar/{IdArchivo}',    [Archivos::class, 'descargar'])->name('archivos-descargar');
+Route::get('archivos/haceractual/{IdArchivo}',  [Archivos::class, 'hacerActual'])->name('archivos-haceractual');
 
 Route::get('archivos/vistacrear/{IdDocumento}', [Archivos::class, 'vistaCrear'])->name('archivos-vcrear');
 Route::get('archivos/vistaditar/{IdArchivo}',   [Archivos::class, 'vistaEditar'])->name('archivos-veditar');
 
 /* Fin Archivos */
+
+/* Documentos por estandar */
+Route::get('docestandar/todos',                          [DocEstandar::class, 'todos'])->name('docestandar-todos');
+Route::get('docestandar/documentos/{IdEstandar}',        [DocEstandar::class, 'documentos'])->name('docestandar-documentos');
+Route::get('docestandar/ver/{IdDocumento}/{IdEstandar}', [DocEstandar::class, 'ver'])->name('docestandar-ver');
+
+/* Documentos por fecha */
+Route::get('docfecha/inicio',            [DocFecha::class, 'inicio'])->name('docfecha-inicio');
+Route::post('docfecha/documentos',       [DocFecha::class, 'documentos'])->name('docfecha-documentos');
+Route::get('docfecha/ver/{IdDocumento}', [DocFecha::class, 'ver'])->name('docfecha-ver');
+
+// Una ruta para pruebas :D
+Route::get('pruebas', [Prueba::class, 'index'])->name('pruebas');
+

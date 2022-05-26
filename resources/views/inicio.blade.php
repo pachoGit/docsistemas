@@ -18,7 +18,7 @@ $item_subproceso_activo = '';
 	    <div class="small-box bg-info">
 		<div class="inner">
 		    <h3>{{ $ndocumentos }}</h3>
-		    <p> Cantidad de documentos activos </p>
+		    <p> Total de documentos activos </p>
 		</div>
 		<div class="icon">
                     <i class="ion ion-bag"></i>
@@ -26,7 +26,12 @@ $item_subproceso_activo = '';
 		<a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div> 
-	
+
+	@foreach ($todos as $llave => $valor)
+	    {{ $llave }};
+	    {{ $valor }};
+	@endforeach
+
     </div>
 
 @endsection()

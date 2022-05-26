@@ -24,7 +24,8 @@ class Inicio extends Controller
     {
         $this->generarDataDefecto();
         $ndocumentos = $this->moDocumentos->todo()->count();
-        $data = ['ndocumentos' => $ndocumentos];
+        $todos = $this->contarDocumentos(); // Cuenta los documentos por proceso y todo en general
+        $data = ['ndocumentos' => $ndocumentos, 'todos' => $todos];
         return view('inicio', $data);
     }
 
@@ -48,6 +49,15 @@ class Inicio extends Controller
             $menu[$proceso->Nombre] = $subs->toArray();
         }
         session(['menu' => $menu]);
+    }
+
+    private function contarDocumentos()
+    {
+        $ndocumentos = $this->moDocumentos->todo()->count();
+        $procesos = $this->moProcesos->todo();
+        foreach ($procesos as $proceso)
+            $documentos[$proceso->Nombre] =  $this->moDocumentos->retDocumentosDeProceso($proceso->IdProceso)->count();
+        return $documentos;
     }
 }
 

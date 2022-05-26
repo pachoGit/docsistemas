@@ -122,13 +122,9 @@
 			    <li class="nav-header">PROCESOS</li>
 
 			    <li class="nav-item">
-				@if (isset($item_inicio))
-				    <a href="{{ route('inicio') }}" class="nav-link active">
-				@else
-				    <a href="{{ route('inicio') }}" class="nav-link">
-				@endif
+				@php $iactivo = (isset($item_inicio) ? 'active' : ''); @endphp
+				<a href="{{ route('inicio') }}" class="nav-link {{ $iactivo }}">
 				    <i class="nav-icon far fa-calendar-alt"></i>
-
 				    <p>
 					Inicio
 				    </p>
@@ -143,35 +139,21 @@
 
 			    @foreach ($procesos as $proceso => $subprocesos)
 				<li class="nav-item">
-				    @if ($item_proceso_activo === $proceso)
-					<x-item-menu-desplegable
-					    contenido="{{ $proceso }}"
-					    :icono="$iconos[$iicono++]"
-					    estado="active"
-					/>
-				    @else
-					<x-item-menu-desplegable
-					    contenido="{{ $proceso }}"
-					    :icono="$iconos[$iicono++]"
-					    estado=""
-					/>
-				    @endif
-				    
+				    @php $e1 = ($item_proceso_activo === $proceso ? 'active' : ''); @endphp
+				    <x-item-menu-desplegable
+					contenido="{{ $proceso }}"
+					:icono="$iconos[$iicono++]"
+					:estado="$e1"
+				    />
+
 				    <ul class="nav nav-treeview">
 					@foreach ($subprocesos as $subproceso)
-					    @if ($item_subproceso_activo === $subproceso['Nombre'])
-						<x-item-menu-simple
-						    href="{{ route('subproceso-versubprocesos', $subproceso['IdSubProceso']) }}"
-						    contenido="{{ $subproceso['Nombre'] }}"
-						    estado="active"
-						/>
-					    @else
-						<x-item-menu-simple
-						    href="{{ route('subproceso-versubprocesos', $subproceso['IdSubProceso']) }}"
-						    contenido="{{ $subproceso['Nombre'] }}"
-						    estado=""
-						/>
-					    @endif
+					    @php $e2 = ($item_subproceso_activo === $subproceso['Nombre'] ? 'active' : ''); @endphp
+					    <x-item-menu-simple
+						href="{{ route('subproceso-versubprocesos', $subproceso['IdSubProceso']) }}"
+						contenido="{{ $subproceso['Nombre'] }}"
+						:estado="$e2"
+					    />
 					@endforeach
 				    </ul>
 
@@ -180,6 +162,32 @@
 
 			</ul>
 
+			<!-- Menu adicional
+			     data-widget necesita otro :D -->
+			<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview2" role="menu" data-accordion="false">
+			    <!-- Add icons to the links using the .nav-icon class
+				 with font-awesome or any other icon font library -->
+			    <li class="nav-header">REPORTES</li>
+
+			    @php
+			    $a1 = (isset($item_docfecha) ? 'active' : '');
+			    @endphp
+			    <li class="nav-item">
+				<a href="{{ route('docfecha-inicio') }}" class="nav-link {{ $a1 }}">
+				    <i class="nav-icon fa fa-search"></i><p> Documentos Por Fecha</p>
+				</a>
+			    </li>
+
+			    @php
+			    $a2 = (isset($item_docestandar) ? 'active' : '');
+			    @endphp
+			    <li class="nav-item">
+				<a href="{{ route('docestandar-todos') }}" class="nav-link {{ $a2 }}">
+				    <i class="nav-icon fa fa-address-card"></i><p> Documentos por Estandar</p>
+				</a>
+			    </li>
+			    
+			</ul>
 		    </nav>
 		    <!-- /.sidebar-menu -->
 		</div>

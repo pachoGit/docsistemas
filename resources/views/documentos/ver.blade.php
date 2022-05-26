@@ -168,7 +168,11 @@ $item_subproceso_activo = $subProceso->Nombre;
 	    </div>
 
             <div class="card-footer">
-                <a href="{{ route('documentos-todos', $documento->get('IdGrupoDocumento')) }}" class="btn btn-secondary">Volver</a>
+		@if (!isset($redireccion))
+                    <a href="{{ route('documentos-todos', $documento->get('IdGrupoDocumento')) }}" class="btn btn-secondary">Volver</a>
+		@else
+                    <a href="{{ route($redireccion['ruta'], $redireccion['id']) }}" class="btn btn-secondary">Volver</a>
+		@endif
             </div>
 	</form>
     </div>

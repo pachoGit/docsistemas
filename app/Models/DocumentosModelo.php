@@ -11,6 +11,7 @@ use App\Models\TipoDocumentoModelo;
 use App\Models\UnidadesModelo;
 use App\Models\DocPorEstandModelo;
 use App\Models\SubProcesosModelo;
+use App\Models\ProcesosModelo;
 use App\Models\EstandaresModelo;
 
 /**
@@ -106,6 +107,22 @@ class DocumentosModelo extends Model
         // De cada grupo, obtenemos los documentos que tienen alojados
         foreach ($grupos as $grupo)
             $documentos->push($this->retDocumentosDeGrupo($grupo->IdGrupoDocumento));
+        return $documentos->collapse();
+    }
+
+    /**
+     * Obtiene los documentos de una determinada proceso
+     *
+     * @var $idProceso - Id del proceso
+     * @return Collection
+     */
+    public function retDocumentosDeProceso($idProceso)
+    {
+        $moSubProceso = new SubProcesosModelo();
+        $subProcesos = $moSubProceso->retSubProcesosDeProceso($idProceso);
+        $documentos = collect([]);
+        foreach ($subProcesos as $subProceso)
+            $documentos->push($this->retDocumentosDeSubProceso($subProceso->IdSubProceso));
         return $documentos->collapse();
     }
 
