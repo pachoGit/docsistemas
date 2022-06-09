@@ -114,6 +114,14 @@ $item_docfecha = ''; // Simplemente se usa como bandera para iluminar el item de
 
 			<tbody>
 			    @isset($documentos)
+			    @php
+			    $data = [
+			    ['bg-danger',  '25%'],
+			    ['bg-warning', '50%'],
+			    ['bg-info',    '75%'],
+			    ['bg-success', '100%']
+			    ];
+			    @endphp
 			    @foreach ($documentos as $documento)
 				<tr>
 				    <td>
@@ -130,8 +138,11 @@ $item_docfecha = ''; // Simplemente se usa como bandera para iluminar el item de
 				    <td>{{ $documento->get('FechaEmisionDocumento') }}</td>
 				    <td>{{ $documento->get('FechaAprobacionDocumento') }}</td>
 				    <td>{{ $documento->get('VersionDocumento') }}</td>	
-				    @if ($documento->get('EstadoDocumento') === 1)
-					<td class="text-center"><button type="button" class="btn btn-success" title="Activo"><i class="fa fa-check"></i></button></td>
+				    @if ($documento->get('EstadoDocumento') !== 0)
+					@php
+					$infoEstado = $data[$documento->get('EstadoDocumento') - 1];
+					@endphp
+					<td class="text-center"><span class="badge {{ $infoEstado[0] }}">{{ $infoEstado[1] }}</span></td>
 					<td class="text-center">
 					    <div class="btn-group">
 						<a href="{{ route('documentos-descargar', $documento->get('IdDocumento')) }}" type="button" class="btn btn-secondary" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i></a>

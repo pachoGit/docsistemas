@@ -117,7 +117,8 @@ class Documentos extends Controller
             'Version'          => $solicitud->input('version'),
             'FechaAprobacion'  => $solicitud->input('fecha-aprobacion'),
             'FechaEmision'     => $solicitud->input('fecha-documento'),
-            'FechaCreacion'    => Util::retFechaCreacion()
+            'FechaCreacion'    => Util::retFechaCreacion(),
+            'Estado'           => $solicitud->input('estado')
         ];
         $documento = $this->moDocumentos->create($data);
 
@@ -165,11 +166,12 @@ class Documentos extends Controller
         $documento = $this->moDocumentos->retDocumento($idDocumento);
 
         // Modificacion del documento
-        $documento->Codigo = $solicitud->input('codigo');
-        $documento->Nombre = $solicitud->input('nombre');
+        $documento->Codigo =          $solicitud->input('codigo');
+        $documento->Nombre =          $solicitud->input('nombre');
         $documento->IdTipoDocumento = $solicitud->input('tipo');
-        $documento->IdUnidad = $solicitud->input('unidad');
+        $documento->IdUnidad =        $solicitud->input('unidad');
         $documento->UbicacionFisica = $solicitud->input('ubicacion-fisica');
+        $documento->Estado =          $solicitud->input('estado');
         $documento->save();
 
         // Modificacion de los estandares

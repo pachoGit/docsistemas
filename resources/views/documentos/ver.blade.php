@@ -13,14 +13,14 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 @section('contenido')
 
-    @if ($documento->get('EstadoDocumento') === 1)
+    @if ($documento->get('EstadoDocumento') !== 0)
 	<div class="card card-primary">
     @else
 	<div class="card card-danger">
     @endif
 	<div class="card-header">
             <h3 class="card-title">Agrupado en: {{ $documento->get('NombreGrupoDocumento') }}</h3>
-	    @if ($documento->get('EstadoDocumento') === 1)
+	    @if ($documento->get('EstadoDocumento') !== 0)
 		<div class="card-tools">
 		    <span class="badge badge-success" title="Este documento esta activo">Activo</span>
 		</div>
@@ -126,7 +126,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		<div class="row">
 
-		    @if ($documento->get('EstadoDocumento') === 1)
+		    @if ($documento->get('EstadoDocumento') !== 0)
 		    <div class="col-md-12">
 			<div class="form-group">
 			    <label for="estandares">Estándares</label>
@@ -155,7 +155,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<div class="form-group">
 			    <label for="motivo">Motivo de la eliminación</label>
 			    <textarea id="motivo" class="form-control" cols="30" id="" name="" rows="5" disabled>
-{{ $documento->get('MotivoEliminadoDocumento') }}
+				{{ $documento->get('MotivoEliminadoDocumento') }}
 			    </textarea>
 			</div>
 
@@ -164,6 +164,20 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    @endif
 
 		</div>
+
+		@if ($documento->get('EstadoDocumento') !== 0)
+		    <div class="row">
+			<div class="col-md-4">
+			    <div class="form-group">
+				<label>Estado</label>
+				@php
+				$valor = ['25%', '50%', '75%', '100%'];
+				@endphp
+				<input value="{{ $valor[$documento->get('EstadoDocumento') - 1] }}" type="text" class="form-control" id="tipo" name="tipo" maxlength="255" minlength="3" disabled>
+			    </div>
+			</div>
+		    </div>
+		@endif
 
 	    </div>
 

@@ -187,6 +187,15 @@
 				</a>
 			    </li>
 			    
+			    @php
+			    $a3 = (isset($item_docprocesos) ? 'active' : '');
+			    @endphp
+			    <li class="nav-item">
+				<a href="{{ route('docprocesos-inicio') }}" class="nav-link {{ $a3 }}">
+				    <i class="nav-icon fa fa-retweet"></i><p> Documentos por Procesos</p>
+				</a>
+			    </li>
+
 			</ul>
 		    </nav>
 		    <!-- /.sidebar-menu -->

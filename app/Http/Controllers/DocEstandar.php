@@ -95,10 +95,10 @@ class DocEstandar extends Controller
         $subProceso = $this->moSubProcesos->retSubProceso($documento->get('IdSubProceso'));
         $procesoPadre = $this->moProcesos->retProceso($subProceso->IdProceso);
 
-        $data = ['documento'   => $documento,
+        $data = ['documento'    => $documento,
                  'subProceso'   => $subProceso,
                  'procesoPadre' => $procesoPadre,
-                 'redireccion' => ['ruta' => 'docestandar-documentos', 'id' => $idEstandar]];
+                 'redireccion'  => ['ruta' => 'docestandar-documentos', 'id' => $idEstandar]];
         return view ('documentos/ver', $data);
     }
 }

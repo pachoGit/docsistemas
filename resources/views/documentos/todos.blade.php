@@ -54,9 +54,17 @@ $item_subproceso_activo = $subProceso->Nombre;
 			</thead>
 
 			<tbody>
+			    @php
+			    $data = [
+			    ['bg-danger',  '25%'],
+			    ['bg-warning', '50%'],
+			    ['bg-info',    '75%'],
+			    ['bg-success', '100%']
+			    ];
+			    @endphp
 			    @foreach ($documentos as $documento)
 				<tr>
-				    @if ($documento->get('EstadoDocumento') === 1)
+				    @if ($documento->get('EstadoDocumento') !== 0)
 					<td><a href="{{ route('documentos-ver', $documento->get('IdDocumento')) }}" type="button" class="btn btn-primary btn-block" title="Ver documento"><i class="fa fa-eye"></i></a></td>
 					<td><a href="{{ route('archivos-todos', $documento->get('IdDocumento')) }}" type="button" class="btn btn-primary btn-block" title="Ver historial"><i class="fa fa-book"></i></a></td>
 				    @else
@@ -73,8 +81,11 @@ $item_subproceso_activo = $subProceso->Nombre;
 				    <td>{{ $documento->get('FechaEmisionDocumento') }}</td>
 				    <td>{{ $documento->get('FechaAprobacionDocumento') }}</td>
 				    <td>{{ $documento->get('VersionDocumento') }}</td>
-				    @if ($documento->get('EstadoDocumento') === 1)
-					<td class="text-center"><button type="button" class="btn btn-success" title="Activo"><i class="fa fa-check"></i></button></td>
+				    @if ($documento->get('EstadoDocumento') !== 0)
+					@php
+					$infoEstado = $data[$documento->get('EstadoDocumento') - 1];
+					@endphp
+					<td class="text-center"><span class="badge {{ $infoEstado[0] }}">{{ $infoEstado[1] }}</span></td>
 					<td class="text-center">
 					    <div class="btn-group">
 						<a href="{{ route('documentos-descargar', $documento->get('IdDocumento')) }}" type="button" class="btn btn-secondary" title="Descargar la versión actual"><i class="fa fa-arrow-down"></i></a>

@@ -2,14 +2,14 @@
 
 $item_proceso_activo = '';
 $item_subproceso_activo = '';
-$item_docestandar = ''; // Simplemente se usa como bandera para iluminar el item del menu
+$item_docprocesos = ''; // Simplemente se usa como bandera para iluminar el item del menu
 
 @endphp
 
 @extends('esqueleto/esqueleto')
 
 @section('titulo-pagina')
-    Documentos del estandar {{ $estandar->get('NombreEstandar') }}
+    Documentos de {{ $proceso->get('NombreProceso') }}
 @endsection()
 
 @section('contenido')
@@ -19,7 +19,7 @@ $item_docestandar = ''; // Simplemente se usa como bandera para iluminar el item
             <div class="card">
 		<div class="card-header">
 		    <h3 class="card-title">
-			<a href="{{ route('docestandar-todos') }}" class="btn btn-secondary">
+			<a href="{{ route('docprocesos-inicio') }}" class="btn btn-secondary">
 			    <i class="fa fa-angle-left"></i> Volver
 			</a>
 		    </h3>
@@ -56,7 +56,7 @@ $item_docestandar = ''; // Simplemente se usa como bandera para iluminar el item
 				<tr>
 				    <td>
 					<div class="btn-group">
-					    <a href="{{ route('docestandar-ver', [$documento->get('IdDocumento'), $estandar->get('IdEstandar')]) }}" type="button" class="btn btn-primary btn-block" title="Ver documento"><i class="fa fa-eye"></i></a>
+					    <a href="{{ route('docprocesos-ver', [$documento->get('IdDocumento'), $proceso->get('IdProceso')]) }}" type="button" class="btn btn-primary btn-block" title="Ver documento"><i class="fa fa-eye"></i></a>
 					</div>
 				    </td>
 				    <td>{{ $documento->get('CodigoDocumento') }}</td>

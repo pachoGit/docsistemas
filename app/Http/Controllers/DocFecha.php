@@ -40,7 +40,7 @@ class DocFecha extends Controller
     /**
      * Obtiene los documentos de acuerdo a la entrada del usuario
      *
-     * @return string : formato JSON
+     * @return view - String
      */
     public function documentos(Request $solicitud)
     {

@@ -9,6 +9,7 @@ use App\Http\Controllers\Documentos;
 use App\Http\Controllers\Archivos;
 use App\Http\Controllers\DocEstandar;
 use App\Http\Controllers\DocFecha;
+use App\Http\Controllers\DocProcesos;
 
 // Debug
 use App\Http\Controllers\Prueba;
@@ -26,7 +27,7 @@ use App\Http\Controllers\Prueba;
 
 Route::get('/', [Inicio::class, 'index'])->name('inicio');
 
-Route::get('subproceso', [SubProceso::class, 'index']);
+Route::get('subproceso',                [SubProceso::class, 'index']);
 Route::get('subproceso/{IdSubProceso}', [SubProceso::class, 'verGrupoDocumentos'])->name('subproceso-versubprocesos');
 
 Route::post('grupo/crear/{IdSubProceso}',       [GrupoDocumentos::class, 'crear'])->name('grupo-crear');
@@ -70,6 +71,12 @@ Route::get('docestandar/ver/{IdDocumento}/{IdEstandar}', [DocEstandar::class, 'v
 Route::get('docfecha/inicio',            [DocFecha::class, 'inicio'])->name('docfecha-inicio');
 Route::post('docfecha/documentos',       [DocFecha::class, 'documentos'])->name('docfecha-documentos');
 Route::get('docfecha/ver/{IdDocumento}', [DocFecha::class, 'ver'])->name('docfecha-ver');
+
+/* Documentos por Procesos */
+Route::get('docprocesos/inicio',                        [DocProcesos::class, 'inicio'])->name('docprocesos-inicio');
+Route::get('docprocesos/documentos/{IdProceso}',        [DocProcesos::class, 'documentos'])->name('docprocesos-documentos');
+Route::get('docprocesos/ver/{IdDocumento}/{IdProceso}', [DocProcesos::class, 'ver'])->name('docprocesos-ver');
+
 
 // Una ruta para pruebas :D
 Route::get('pruebas', [Prueba::class, 'index'])->name('pruebas');

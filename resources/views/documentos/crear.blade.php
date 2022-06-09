@@ -118,18 +118,34 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		</div>
 
-                <div class="form-group">
-		    <label for="exampleInputFile">Subir archivo *</label>
-		    <div class="input-group">
-			<div class="custom-file">
-			    <input name="archivo" type="file" class="custom-file-input" id="exampleInputFile" accept="application/pdf, application/msword, .doc, .docx .pdf" required>
-			    <label class="custom-file-label" for="exampleInputFile">Elija el archivo</label>
-			</div>
-			<div class="input-group-append">
-			    <span class="input-group-text">Subir</span>
+		<div class="row">
+		    <div class="col-md-8">
+			<div class="form-group">
+			    <label for="exampleInputFile">Subir archivo *</label>
+			    <div class="input-group">
+				<div class="custom-file">
+				    <input name="archivo" type="file" class="custom-file-input" id="exampleInputFile" accept="application/pdf, application/msword, .doc, .docx .pdf" required>
+				    <label class="custom-file-label" for="exampleInputFile">Elija el archivo</label>
+				</div>
+				<div class="input-group-append">
+				    <span class="input-group-text">Subir</span>
+				</div>
+			    </div>
 			</div>
 		    </div>
-                </div>
+
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <label>Estado</label>
+			    <select name="estado" class="form-control select2bs4" style="width: 100%;" required>
+				<option value="1" selected>25%</option>
+				<option value="2">50%</option>
+				<option value="3">75%</option>
+				<option value="4">100%</option>
+			    </select>
+			</div>
+		    </div>
+		</div>
 
 	    </div>
 

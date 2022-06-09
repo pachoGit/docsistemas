@@ -156,6 +156,24 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		</div>
 
+		<div class="row">
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <label>Estado</label>
+			    <select name="estado" class="form-control select2bs4" style="width: 100%;" required>
+				@php
+				$seleccionado = ['', '', '', ''];
+				$seleccionado[$documento->get('EstadoDocumento') - 1] = 'selected';
+				@endphp
+				<option value="1" {{ $seleccionado[0] }}>25%</option>
+				<option value="2" {{ $seleccionado[1] }}>50%</option>
+				<option value="3" {{ $seleccionado[2] }}>75%</option>
+				<option value="4" {{ $seleccionado[3] }}>100%</option>
+			    </select>
+			</div>
+		    </div>
+		</div>
+
 	    </div>
 
             <div class="card-footer">

@@ -15,7 +15,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 
     <div class="row">
         <div class="col-12">
-	    @if ($documento->Estado === 1)
+	    @if ($documento->Estado !== 0)
 		<div class="callout callout-info">
 		    <h5>
 			<i class="fas fa-info"></i> Versión actual: {{ $documento->Version }}
@@ -37,7 +37,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 
             <div class="card">
 		<div class="card-header">
-		    @if ($documento->Estado === 1)
+		    @if ($documento->Estado !== 0)
 			<h3 class="card-title">
 			    <a href="{{ route('archivos-vcrear', $documento->IdDocumento) }}" type="button" class="btn btn-block btn-primary" title="Crear una nueva versión del documento">
 				<i class="fa fa-plus"></i> Nueva Versión
@@ -77,7 +77,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			<tbody>
 			    @foreach ($archivos as $archivo)
 				<tr>
-				    @if ($documento->Estado == 1)
+				    @if ($documento->Estado !== 0)
 					@if ($archivo->get('EstadoArchivo') === 1)
 					    @if ($archivo->get('VersionArchivo') !== $documento->Version)
 						<td><a href="{{ route('archivos-haceractual', $archivo->get('IdArchivo')) }}" type="button" class="btn btn-primary btn-block" title="Convertir en la versión actual"><i class="fa fa-arrow-up"></i></a></td>
@@ -98,14 +98,14 @@ $item_subproceso_activo = $subProceso->Nombre;
 				    <td>{{ $archivo->get('VersionArchivo') }}</td>
 				    @if ($archivo->get('EstadoArchivo') === 1)
 					<td class="text-center">
-					    @if ($documento->Estado === 1)
+					    @if ($documento->Estado !== 0)
 						<button type="button" class="btn btn-success" title="Activo"><i class="fa fa-check"></i></button>
 					    @else
 						<button type="button" class="btn btn-danger" title="Eliminado"><i class="fa fa-ban"></i></button>
 					    @endif
 					</td>
 					<td class="text-center">
-					    @if ($documento->Estado === 1)
+					    @if ($documento->Estado !== 0)
 					    <div class="btn-group">
 						<a href="{{ route('archivos-descargar', $archivo->get('IdArchivo')) }}" type="button" class="btn btn-secondary" title="Descargar esta versión"><i class="fa fa-arrow-down"></i></a>
 						<a href="{{ route('archivos-veditar',  $archivo->get('IdArchivo')) }}" type="button" class="btn btn-warning" title="Editar archivo"><i class="fas fa-pencil-alt"></i></a>
