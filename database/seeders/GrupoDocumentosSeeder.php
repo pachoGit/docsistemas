@@ -47,7 +47,7 @@ class GrupoDocumentosSeeder extends Seeder
         
         $grupos = DB::table('GrupoDocumentos')->get();
         foreach ($grupos as $grupo)
-            if (!Util::crearCarpeta($grupo->Ubicacion)
+            if (!Util::crearCarpeta($grupo->Ubicacion))
                 echo 'No se ha creado la carpeta ' . 'raiz/' . $grupo->Ubicacion . "\n";
     }
 }

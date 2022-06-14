@@ -147,6 +147,15 @@ $item_subproceso_activo = $subProceso->Nombre;
 		    </div>
 		</div>
 
+		<div class="row">
+		    <div class="col-md-12">
+			<div class="form-group">
+			    <label for="observacion">Observaciones</label>
+			    <textarea id="observacion" class="form-control" cols="30" name="observacion" rows="5" maxlength="400"></textarea>
+			</div>
+		    </div>
+		</div>
+
 	    </div>
 
             <div class="card-footer">

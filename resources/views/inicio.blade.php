@@ -12,11 +12,6 @@ $item_subproceso_activo = '';
 
 @section('contenido')
 
-    @php
-    $tiposTarjeta = ['info', 'success', 'warning', 'danger'];
-    $itipo = 0;
-    @endphp
-
     <div class="row">
 	<div class="col-lg-3 col-6">                                             
 	    <!-- small box -->
@@ -33,15 +28,9 @@ $item_subproceso_activo = '';
         </div> 
 	
 	@foreach ($todos as $llave => $valor)
-	    @if ($itipo >= count($tiposTarjeta))
-		@php
-		$itipo = 0;
-		@endphp
-	    @endif
-
 	    <div class="col-lg-3 col-6">                                             
 		<!-- small box -->
-		<div class="small-box bg-{{ $tiposTarjeta[$itipo++] }}">
+		<div class="small-box bg-info">
 		    <div class="inner">
 			<h3>{{ $valor }}</h3>
 			<p>{{ $llave }}</p>

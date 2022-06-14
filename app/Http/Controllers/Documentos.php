@@ -117,6 +117,7 @@ class Documentos extends Controller
             'Version'          => $solicitud->input('version'),
             'FechaAprobacion'  => $solicitud->input('fecha-aprobacion'),
             'FechaEmision'     => $solicitud->input('fecha-documento'),
+            'Observacion'      => $solicitud->input('observacion'),
             'FechaCreacion'    => Util::retFechaCreacion(),
             'Estado'           => $solicitud->input('estado')
         ];
@@ -172,6 +173,7 @@ class Documentos extends Controller
         $documento->IdUnidad =        $solicitud->input('unidad');
         $documento->UbicacionFisica = $solicitud->input('ubicacion-fisica');
         $documento->Estado =          $solicitud->input('estado');
+        $documento->Observacion =     $solicitud->input('observacion');
         $documento->save();
 
         // Modificacion de los estandares

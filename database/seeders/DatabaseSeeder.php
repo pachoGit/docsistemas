@@ -4,6 +4,13 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
+use Database\Seeders\ProcesosSeeder;
+use Database\Seeders\SubProcesosSeeder;
+use Database\Seeders\UnidadesSeeder;
+use Database\Seeders\EstandaresSeeder;
+use Database\Seeders\TipoDocumentoSeeder;
+use Database\Seeders\GrupoDocumentosSeeder;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -13,6 +20,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call([
+            ProcesosSeeder::class,
+            SubProcesosSeeder::class,
+            UnidadesSeeder::class,
+            EstandaresSeeder::class,
+            TipoDocumentoSeeder::class,
+            GrupoDocumentosSeeder::class
+        ]);
     }
 }

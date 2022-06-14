@@ -166,6 +166,18 @@ $item_subproceso_activo = $subProceso->Nombre;
 		</div>
 
 		@if ($documento->get('EstadoDocumento') !== 0)
+
+		    <div class="row">
+			<div class="col-md-12">
+			    <div class="form-group">
+				<label for="observacion">Observaciones</label>
+				<textarea id="observacion" class="form-control" cols="30" id="" rows="5" disabled>
+{{ $documento->get('ObservacionDocumento') }}
+				</textarea>
+			    </div>
+			</div>
+		    </div>
+
 		    <div class="row">
 			<div class="col-md-4">
 			    <div class="form-group">
@@ -177,6 +189,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			    </div>
 			</div>
 		    </div>
+
 		@endif
 
 	    </div>
