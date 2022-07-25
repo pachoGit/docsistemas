@@ -33,6 +33,7 @@ class Documentos extends Migration
             $tabla->date('FechaCreacion')->nullable();
             $tabla->date('FechaEmision')->nullable(); // Fecha que se encuentra en el documento
             $tabla->string('Observacion', 510)->nullable();
+            $tabla->string('IdUsuario')->nullable();
             $tabla->integer('Estado')->default(1);
 
             $tabla->foreign('IdGrupoDocumento')->references('IdGrupoDocumento')->on('GrupoDocumentos');

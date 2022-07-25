@@ -90,6 +90,13 @@ class Archivos extends Controller
             'FechaEmision'      => $solicitud->input('fecha-emision'),
             'FechaModificacion' => Util::retFechaCreacion()
         ];
+
+        if ($solicitud->session()->exists('dni'))
+            $data['IdUsuario'] = $solicitud->session()->get('dni');
+        else
+            return redirect()->route('documentos-todos', $idGrupoDocumento)
+                    ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'Error en la verificación de usuario. Inicie sesión nuevamente']);
+
         $this->moArchivos->create($data);
         // Modificamos la informacion del documento
         $documento->Version = $version;

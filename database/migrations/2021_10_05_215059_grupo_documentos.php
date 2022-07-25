@@ -25,6 +25,7 @@ class GrupoDocumentos extends Migration
             $tabla->text('Descripcion')->nullable();
             $tabla->string('Ubicacion')->nullable();
             $tabla->date('FechaCreacion')->nullable();
+            $tabla->string('IdUsuario')->nullable();
             $tabla->integer('Estado')->default(1);
 
             $tabla->foreign('IdSubProceso')->references('IdSubProceso')->on('SubProcesos');

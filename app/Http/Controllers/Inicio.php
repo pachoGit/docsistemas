@@ -22,11 +22,25 @@ class Inicio extends Controller
                
     public function index()
     {
+        if (session('dni') == null)
+            return redirect()->away('http://ssysmefisi.unsm.edu.pe/');
         $this->generarDataDefecto();
         $ndocumentos = $this->moDocumentos->todo()->count();
         $todos = $this->contarDocumentos(); // Cuenta los documentos por proceso y todo en general
         $data = ['ndocumentos' => $ndocumentos, 'todos' => $todos];
         return view('inicio', $data);
+    }
+
+    public function realInicio($dni)
+    {
+        session(['dni' => $dni]);
+        return redirect()->route('inicio');
+    }
+
+    public function salir()
+    {
+        session()->flush();
+        return redirect()->away('http://ssysmefisi.unsm.edu.pe/');
     }
 
     /**

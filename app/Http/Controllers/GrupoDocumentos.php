@@ -38,6 +38,12 @@ class GrupoDocumentos extends Controller
                  'Ubicacion'     => $ubicacion,
                  'FechaCreacion' => Util::retFechaCreacion()];
 
+        if ($solicitud->session()->exists('dni'))
+            $data['IdUsuario'] = $solicitud->session()->get('dni');
+        else
+            return redirect()->route('subproceso-versubprocesos', $idSubProceso)
+                    ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'Error en la verificación de usuario. Inicie sesión nuevamente']);
+
         // TODO: Gestionar errores
         Util::crearCarpeta($ubicacion);
         $this->moGrupoDocumentos->create($data);

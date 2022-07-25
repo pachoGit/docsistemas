@@ -121,6 +121,14 @@ class Documentos extends Controller
             'FechaCreacion'    => Util::retFechaCreacion(),
             'Estado'           => $solicitud->input('estado')
         ];
+
+        if ($solicitud->session()->exists('dni'))
+            $data['IdUsuario'] = $solicitud->session()->get('dni');
+        else
+            return redirect()->route('documentos-todos', $idGrupoDocumento)
+                    ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'Error en la verificación de usuario. Inicie sesión nuevamente']);
+
+
         $documento = $this->moDocumentos->create($data);
 
         /* Estandares */
@@ -142,6 +150,7 @@ class Documentos extends Controller
             'FechaEmision'      => $documento->FechaEmision,
             'FechaModificacion' => Util::retFechaCreacion()
         ];
+        $data['IdUsuario'] = $solicitud->session()->get('dni');
 
         // Guardamos el archivo fisico en el sistema de archivos
         $archivo->storeAs($documento->UbicacionVirtual, $nombreArchivo, 'public');

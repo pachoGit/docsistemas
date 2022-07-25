@@ -15,7 +15,7 @@ class GrupoDocumentosModelo extends Model
     protected $primaryKey = 'IdGrupoDocumento';
     
     protected $fillable = ['IdSubProceso', 'Nombre', 'Ubicacion',
-                           'Descripcion', 'FechaCreacion', 'Estado'];
+                           'Descripcion', 'FechaCreacion', 'IdUsuario', 'Estado'];
 
     public $timestamps = false;
 

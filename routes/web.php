@@ -25,7 +25,10 @@ use App\Http\Controllers\Prueba;
 |
 */
 
-Route::get('/', [Inicio::class, 'index'])->name('inicio');
+Route::get('/',            [Inicio::class, 'index'])->name('inicio');
+Route::get('/{dni}',       [Inicio::class, 'realInicio'])->name('real-inicio');
+// Para que evite conflictos con la ruta anterior :D
+Route::get('/salir/salir', [Inicio::class, 'salir'])->name('salir');
 
 Route::get('subproceso',                [SubProceso::class, 'index']);
 Route::get('subproceso/{IdSubProceso}', [SubProceso::class, 'verGrupoDocumentos'])->name('subproceso-versubprocesos');

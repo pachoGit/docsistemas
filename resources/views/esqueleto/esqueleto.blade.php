@@ -98,7 +98,7 @@
 			    <img src="{{ asset('docsistemas/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
 			</div>
 			<div class="info">
-			    <a href="#" class="d-block">Alexander Pierce</a>
+			    <a href="#" class="d-block">{{ session('dni') }}</a>
 			</div>
 		    </div>
 
@@ -195,6 +195,13 @@
 				    <i class="nav-icon fa fa-retweet"></i><p> Documentos por Procesos</p>
 				</a>
 			    </li>
+
+			    <li class="nav-item">
+				<a href="{{ route('salir') }}" class="nav-link">
+				    <i class="nav-icon fa fa-angle-left"></i><p> SALIR </p>
+				</a>
+			    </li>
+
 
 			</ul>
 		    </nav>
