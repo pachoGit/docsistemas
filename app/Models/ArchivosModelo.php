@@ -19,6 +19,7 @@ class ArchivosModelo extends Model
 
     protected $fillable = ['IdDocumento', 'Nombre', 'UbicacionVirtual', 'Version',
                            'FechaCreacion', 'FechaAprobacion', 'FechaModificacion',
+                           'ResolucionAprobacion', 'ResolucionRectificacion', 'FechaRectificacion', 'DocumentoReferencia',
                            'MotivoCambio', 'FechaEmision', 'IdUsuario', 'Estado'];
 
     public $timestamps = false;
@@ -80,6 +81,12 @@ class ArchivosModelo extends Model
             'FechaAprobacionArchivo'    => $archivo->FechaAprobacion,
             'FechaModificacionArchivo'  => $archivo->FechaModificacion,
             'FechaEmisionArchivo'       => $archivo->FechaEmision,
+
+            'ResolucionAprobacionArchivo'    => $archivo->ResolucionAprobacion,
+            'ResolucionRectificacionArchivo' => $archivo->ResolucionRectificacion,
+            'FechaRectificacionArchivo'      => $archivo->FechaRectificacion,
+            'DocumentoReferenciaArchivo'     => $archivo->DocumentoReferencia,
+
             'EstadoArchivo'             => $archivo->Estado,
         ])->merge($documento);
     }

@@ -26,7 +26,9 @@ class DocumentosModelo extends Model
 
     protected $fillable = ['IdGrupoDocumento', 'IdTipoDocumento', 'IdUnidad', 'Codigo',
                            'Nombre', 'UbicacionVirtual', 'UbicacionFisica', 'Version', 'MotivoEliminado',
-                           'FechaAprobacion', 'FechaCreacion', 'FechaEmision', 'Observacion', 'IdUsuario', 'Estado'];
+                           'FechaAprobacion', 'FechaCreacion', 'FechaEmision', 'Observacion',
+                           'ResolucionAprobacion', 'ResolucionRectificacion', 'FechaRectificacion',
+                           'DocumentoReferencia', 'IdUsuario', 'Estado'];
 
     public $timestamps = false;
     
@@ -160,6 +162,12 @@ class DocumentosModelo extends Model
             'FechaCreacionDocumento'      => $documento->FechaCreacion,
             'FechaEmisionDocumento'       => $documento->FechaEmision,
             'ObservacionDocumento'        => $documento->Observacion,
+
+            'ResolucionAprobacionDocumento'    => $documento->ResolucionAprobacion,
+            'ResolucionRectificacionDocumento' => $documento->ResolucionRectificacion,
+            'FechaRectificacionDocumento'       => $documento->FechaRectificacion,
+            'DocumentoReferenciaDocumento'        => $documento->DocumentoReferencia,
+
             'EstadoDocumento'             => $documento->Estado,
             'EstandaresDocumento'         => $estandaresUsuario,
         ])->merge($grupo)->merge($tipo)->merge($unidad);

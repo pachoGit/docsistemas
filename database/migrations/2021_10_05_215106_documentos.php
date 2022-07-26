@@ -33,6 +33,10 @@ class Documentos extends Migration
             $tabla->date('FechaCreacion')->nullable();
             $tabla->date('FechaEmision')->nullable(); // Fecha que se encuentra en el documento
             $tabla->string('Observacion', 510)->nullable();
+            $tabla->string('ResolucionAprobacion')->nullable();
+            $tabla->string('ResolucionRectificacion')->nullable();
+            $tabla->date('FechaRectificacion')->nullable();
+            $tabla->string('DocumentoReferencia')->nullable();
             $tabla->string('IdUsuario')->nullable();
             $tabla->integer('Estado')->default(1);
 

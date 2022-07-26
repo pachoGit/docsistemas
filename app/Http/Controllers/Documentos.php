@@ -118,6 +118,12 @@ class Documentos extends Controller
             'FechaAprobacion'  => $solicitud->input('fecha-aprobacion'),
             'FechaEmision'     => $solicitud->input('fecha-documento'),
             'Observacion'      => $solicitud->input('observacion'),
+
+            'ResolucionAprobacion'    => $solicitud->input('resolucion-aprobacion'),
+            'ResolucionRectificacion' => $solicitud->input('resolucion-rectificacion'),
+            'FechaRectificacion'      => $solicitud->input('fecha-rectificacion'),
+            'DocumentoReferencia'     => $solicitud->input('documento-referencia'),
+
             'FechaCreacion'    => Util::retFechaCreacion(),
             'Estado'           => $solicitud->input('estado')
         ];
@@ -148,6 +154,12 @@ class Documentos extends Controller
             'FechaCreacion'     => Util::retFechaCreacion(),
             'FechaAprobacion'   => $documento->FechaAprobacion,
             'FechaEmision'      => $documento->FechaEmision,
+
+            'ResolucionAprobacion'    => $solicitud->input('resolucion-aprobacion'),
+            'ResolucionRectificacion' => $solicitud->input('resolucion-rectificacion'),
+            'FechaRectificacion'      => $solicitud->input('fecha-rectificacion'),
+            'DocumentoReferencia'     => $solicitud->input('documento-referencia'),
+
             'FechaModificacion' => Util::retFechaCreacion()
         ];
         $data['IdUsuario'] = $solicitud->session()->get('dni');
@@ -165,13 +177,13 @@ class Documentos extends Controller
     {
         // No uso la funcion validar, por que ahi valido tambien el archivo :(
         $solicitud->validate([
-            'codigo'           => ['required', 'max:255', 'min:1'],
+            'codigo'           => ['max:255'],
             'nombre'           => ['required', 'max:255', 'min:3'],
             'tipo'             => ['required'],
             'fecha-documento'  => ['date'],
             'unidad'           => ['required'],
             'version'          => ['required'],
-            'ubicacion-fisica' => ['max:255', 'min:3']
+            'ubicacion-fisica' => ['max:255']
         ]);
         $documento = $this->moDocumentos->retDocumento($idDocumento);
 
@@ -264,13 +276,13 @@ class Documentos extends Controller
     private function validar(Request $solicitud)
     {
         return $solicitud->validate([
-            'codigo'           => ['required', 'max:255', 'min:1'],
+            'codigo'           => ['max:255'],
             'nombre'           => ['required', 'max:255', 'min:3'],
             'fecha-documento'  => ['required', 'date'],
             'tipo'             => ['required'],
             'unidad'           => ['required'],
-            'ubicacion-fisica' => ['max:255', 'min:3'],
-            'fecha-aprobacion' => ['date'],
+            'ubicacion-fisica' => ['max:255'],
+            //'fecha-aprobacion' => ['date'],
             'version'          => ['required'],
             'archivo'          => ['required']
         ]);

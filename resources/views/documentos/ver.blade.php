@@ -124,6 +124,46 @@ $item_subproceso_activo = $subProceso->Nombre;
 
 		</div>
 
+
+		<div class="row">
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <label for="resolucion-aprobacion">Resolución de aprobación</label>
+			    <input type="text" value="{{ $documento->get("ResolucionAprobacionDocumento") }}" class="form-control" id="resolucion-aprobacion" placeholder="Ingrese la resolución de aprobación" maxlength="255" name="resolucion-aprobacion" disabled>
+			</div>
+		    </div>
+
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <label for="resolucion-rectificacion">Resolución de rectificación</label>
+			    <input type="text" value="{{ $documento->get("ResolucionRectificacionDocumento") }}" class="form-control" id="resolucion-rectificacion"  placeholder="Ingrese la resolución de rectificación" maxlength="255" name="resolucion-rectificacion" disabled>
+			</div>
+		    </div>
+
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <label> Fecha de rectificación</label>
+			    <div class="input-group date" id="reservationdate3" data-target-input="nearest">
+				<input type="date" name="fecha-rectificacion" class="form-control datetimepicker-input" data-target="#reservationdate3" value="{{ $documento->get("FechaRectificacionDocumento") }}" max="{{ date('Y-m-d') }}" disabled/>
+				<div class="input-group-append" data-target="#reservationdate3" data-toggle="datetimepicker">
+				    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				</div>
+			    </div>
+			</div>
+		    </div>
+
+		</div>
+
+		<div class="row">
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <label for="documento-referencia">Documento referencia</label>
+			    <input type="text" class="form-control" value="{{ $documento->get("DocumentoReferenciaDocumento") }}" id="documento-referencia" placeholder="Ingrese el informe, acta o documento de referencia" maxlength="255" name="documento-referencia" disabled>
+			</div>
+		    </div>
+
+		</div>
+
 		<div class="row">
 
 		    @if ($documento->get('EstadoDocumento') !== 0)

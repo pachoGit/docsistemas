@@ -88,6 +88,12 @@ class Archivos extends Controller
             'FechaCreacion'     => Util::retFechaCreacion(),
             'FechaAprobacion'   => $solicitud->input('fecha-aprobacion'),
             'FechaEmision'      => $solicitud->input('fecha-emision'),
+
+            'ResolucionAprobacion'    => $solicitud->input('resolucion-aprobacion'),
+            'ResolucionRectificacion' => $solicitud->input('resolucion-rectificacion'),
+            'FechaRectificacion'      => $solicitud->input('fecha-rectificacion'),
+            'DocumentoReferencia'     => $solicitud->input('documento-referencia'),
+
             'FechaModificacion' => Util::retFechaCreacion()
         ];
 
@@ -102,6 +108,11 @@ class Archivos extends Controller
         $documento->Version = $version;
         $documento->FechaAprobacion = $data['FechaAprobacion'];
         $documento->FechaEmision = $data['FechaEmision'];
+        $documento->ResolucionAprobacion =    $solicitud->input('resolucion-aprobacion');
+        $documento->ResolucionRectificacion = $solicitud->input('resolucion-rectificacion');
+        $documento->FechaRectificacion =      $solicitud->input('fecha-rectificacion');
+        $documento->DocumentoReferencia =     $solicitud->input('documento-referencia');
+
         $documento->save();
 
         $archivo->storeAs($documento->UbicacionVirtual, $nombreArchivo, 'public');
@@ -140,6 +151,12 @@ class Archivos extends Controller
             $documento->Version = $version;
             $documento->FechaAprobacion = $fechaAprobacion;
             $documento->FechaEmision = $fechaEmision;
+
+            $documento->ResolucionAprobacion =    $solicitud->input('resolucion-aprobacion');
+            $documento->ResolucionRectificacion = $solicitud->input('resolucion-rectificacion');
+            $documento->FechaRectificacion =      $solicitud->input('fecha-rectificacion');
+            $documento->DocumentoReferencia =     $solicitud->input('documento-referencia');
+
             $documento->save();
         }
 
@@ -147,6 +164,12 @@ class Archivos extends Controller
         $archivo->FechaAprobacion = $fechaAprobacion;
         $archivo->FechaEmision = $fechaEmision;
         $archivo->MotivoCambio = $solicitud->input('motivo');
+
+        $archivo->ResolucionAprobacion =    $solicitud->input('resolucion-aprobacion');
+        $archivo->ResolucionRectificacion = $solicitud->input('resolucion-rectificacion');
+        $archivo->FechaRectificacion =      $solicitud->input('fecha-rectificacion');
+        $archivo->DocumentoReferencia =     $solicitud->input('documento-referencia');
+
         $archivo->save();
 
         return redirect()->route('archivos-todos', $documento->IdDocumento)
@@ -184,6 +207,11 @@ class Archivos extends Controller
                 $documento->Version = $actual->Version;
                 $documento->FechaAprobacion = $actual->FechaAprobacion;
                 $documento->FechaEmision = $actual->FechaEmision;
+
+                $documento->ResolucionAprobacion = $actual->ResolucionAprobacion;
+                $documento->ResolucionRectificacion = $actual->ResolucionRectificacion;
+                $documento->FechaRectificacion = $actual->FechaRectificacion;
+                $documento->DocumentoReferencia = $actual->DocumentoRefencia;
             };
         }
         $documento->save();
@@ -208,9 +236,9 @@ class Archivos extends Controller
     /**
      * Convertir a un archivo a la version actual del documento
      *
-     * @var $idArchivo - Id del archivo a descargar
+     * @var $idArchivo - Id del archivo
      *
-     * @return Response
+     * @return Redirect
      */
     public function hacerActual($idArchivo)
     {
@@ -219,6 +247,12 @@ class Archivos extends Controller
         $documento->Version = $archivo->Version;
         $documento->FechaAprobacion = $archivo->FechaAprobacion;
         $documento->FechaEmision = $archivo->FechaEmision;
+
+        $documento->ResolucionAprobacion =    $archivo->ResolucionAprobacion;
+        $documento->ResolucionRectificacion = $archivo->ResolucionRectificacion;
+        $documento->FechaRectificacion =      $archivo->FechaRectificacion;
+        $documento->DocumentoReferencia =     $archivo->DocumentoReferencia;
+
         $documento->save();
         return redirect()->route('archivos-todos', $archivo->IdDocumento)
                          ->with('Informacion', ['Estado' => 'Correcto', 'Mensaje' => 'Se ha cambiado la versión correctamente']);
