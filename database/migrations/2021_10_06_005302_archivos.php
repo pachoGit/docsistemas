@@ -22,7 +22,7 @@ class Archivos extends Migration
             $tabla->id('IdArchivo');
             $tabla->unsignedBigInteger('IdDocumento')->nullable();
             $tabla->string('Nombre')->nullable();
-            $tabla->string('UbicacionVirtual', 510)->nullable();
+            $tabla->text('UbicacionVirtual')->nullable();
             $tabla->unsignedInteger('Version')->nullable();
             $tabla->string('MotivoCambio', 510)->nullable();
             $tabla->date('FechaCreacion')->nullable();

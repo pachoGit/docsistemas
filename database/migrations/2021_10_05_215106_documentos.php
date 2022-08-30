@@ -25,7 +25,7 @@ class Documentos extends Migration
             $tabla->unsignedBigInteger('IdUnidad')->nullable();
             $tabla->string('Codigo')->nullable();
             $tabla->string('Nombre')->nullable();
-            $tabla->string('UbicacionVirtual', 510)->nullable();
+            $tabla->text('UbicacionVirtual')->nullable();
             $tabla->string('UbicacionFisica')->nullable();
             $tabla->unsignedInteger('Version')->nullable();
             $tabla->string('MotivoEliminado', 510)->nullable();
