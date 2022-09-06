@@ -88,19 +88,18 @@ class Archivos extends Controller
             'FechaCreacion'     => Util::retFechaCreacion(),
             'FechaAprobacion'   => $solicitud->input('fecha-aprobacion'),
             'FechaEmision'      => $solicitud->input('fecha-emision'),
-
             'ResolucionAprobacion'    => $solicitud->input('resolucion-aprobacion'),
             'ResolucionRectificacion' => $solicitud->input('resolucion-rectificacion'),
             'FechaRectificacion'      => $solicitud->input('fecha-rectificacion'),
             'DocumentoReferencia'     => $solicitud->input('documento-referencia'),
-
+            'Extension'               => $archivo->extension(),
             'FechaModificacion' => Util::retFechaCreacion()
         ];
 
         if ($solicitud->session()->exists('dni'))
             $data['IdUsuario'] = $solicitud->session()->get('dni');
         else
-            return redirect()->route('documentos-todos', $idGrupoDocumento)
+            return redirect()->route('documentos-todos', $idDocumento)
                     ->with('Informacion', ['Estado' => 'Error', 'Mensaje' => 'Error en la verificación de usuario. Inicie sesión nuevamente']);
 
         $this->moArchivos->create($data);

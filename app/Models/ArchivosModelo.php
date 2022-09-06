@@ -20,7 +20,7 @@ class ArchivosModelo extends Model
     protected $fillable = ['IdDocumento', 'Nombre', 'UbicacionVirtual', 'Version',
                            'FechaCreacion', 'FechaAprobacion', 'FechaModificacion',
                            'ResolucionAprobacion', 'ResolucionRectificacion', 'FechaRectificacion', 'DocumentoReferencia',
-                           'MotivoCambio', 'FechaEmision', 'IdUsuario', 'Estado'];
+                           'MotivoCambio', 'FechaEmision', 'IdUsuario', 'Extension', 'Estado'];
 
     public $timestamps = false;
 

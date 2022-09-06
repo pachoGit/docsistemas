@@ -154,12 +154,11 @@ class Documentos extends Controller
             'FechaCreacion'     => Util::retFechaCreacion(),
             'FechaAprobacion'   => $documento->FechaAprobacion,
             'FechaEmision'      => $documento->FechaEmision,
-
             'ResolucionAprobacion'    => $solicitud->input('resolucion-aprobacion'),
             'ResolucionRectificacion' => $solicitud->input('resolucion-rectificacion'),
             'FechaRectificacion'      => $solicitud->input('fecha-rectificacion'),
             'DocumentoReferencia'     => $solicitud->input('documento-referencia'),
-
+            'Extension'               => $archivo->extension(),
             'FechaModificacion' => Util::retFechaCreacion()
         ];
         $data['IdUsuario'] = $solicitud->session()->get('dni');

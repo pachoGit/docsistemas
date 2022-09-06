@@ -123,7 +123,7 @@ $item_subproceso_activo = $subProceso->Nombre;
 			    <label for="exampleInputFile">Subir archivo *</label>
 			    <div class="input-group">
 				<div class="custom-file">
-				    <input name="archivo" type="file" class="custom-file-input" id="exampleInputFile" accept="application/pdf, application/msword, .doc, .docx .pdf" required>
+				    <input name="archivo" type="file" class="custom-file-input" id="exampleInputFile" accept="application/pdf, application/msword, .doc, .docx .pdf, , .xlsx, .ods, application/vnd.openxmlformats-officedocument.wordprocessingml.document, .xlsx, .ods, application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
 				    <label class="custom-file-label" for="exampleInputFile">Elija el archivo</label>
 				</div>
 				<div class="input-group-append">
